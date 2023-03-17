@@ -31,6 +31,16 @@
   src: local('Asap-Bold'),  url('./fonts/Asap-Bold.ttf');
 }
 
+:root {
+  --color-primary: #FF9B26;
+  --color-primary-light: #FFC16B;
+  --color-secondary: #56BEEC;
+  --white-color: #ffff;
+  --color-ivory: #FFFAF2;
+  --color-dark-ivory: #FFF4E3;
+  --color-black: #424242;
+}
+
 body {
   margin: 0;
   font-family: 'Asap', sans-serif;
@@ -112,19 +122,20 @@ a {
   line-height: 24px;
 }
 
-.ant-btn-primary {
-  background-color: $color-primary !important;
-  font-family: 'Asap-Bold', sans-serif;
-  border-color: $color-primary !important;
-}
+/* Button */
+// .ant-btn-primary {
+//   background-color: $color-primary !important;
+//   font-family: 'Asap-Bold', sans-serif;
+//   border-color: $color-primary !important;
+// }
 
-.ant-btn-primary:hover,
-.ant-btn-primary:focus,
-.ant-btn-primary:active,
-.ant-btn-primary.active {
-  background-color: $color-primary-light !important;
-  border-color: $color-primary-light !important;
-}
+// .ant-btn-primary:hover,
+// .ant-btn-primary:focus,
+// .ant-btn-primary:active,
+// .ant-btn-primary.active {
+//   background-color: $color-primary-light !important;
+//   border-color: $color-primary-light !important;
+// }
 
 /* Navbar */
 
@@ -149,6 +160,7 @@ a {
 .logo {
   width: 200px;
   float: left;
+  margin-top: auto;
 }
 
 .logo a {

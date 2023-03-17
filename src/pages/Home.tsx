@@ -7,9 +7,7 @@ import Navbar from '../components/Navbar';
 export default function Home() {
   return (
     <>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style={{ position: "absolute", zIndex: "-1" }}>
-        <path fill="#56BEEC" fillOpacity="1" d="M0,160L48,138.7C96,117,192,75,288,101.3C384,128,480,224,576,245.3C672,267,768,213,864,192C960,171,1056,181,1152,197.3C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-      </svg>
+      <Navbar />
       {/* <Navbar />
       <div style={{ backgroundColor: "#f9f9f9", minHeight: "100vh", position: "relative" }}>
       <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", zIndex: "-1", bottom: 0 }}>

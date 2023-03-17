@@ -25,7 +25,11 @@ const Navbar = () => {
       <Layout>
         <Layout.Header className="nav-header">
           <div className="logo">
-            <h2 className="brand-font">ITER</h2>
+            <a className="brand-font" href="/" style={{ textDecoration: 'none' }}>
+              <h2 style={{ margin: 10, color: 'var(--color-black)' }}>
+                ITER
+              </h2>
+            </a>
           </div>
           <div className="navbar-menu">
             <div className="leftMenu">
