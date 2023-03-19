@@ -6,10 +6,27 @@ import Navbar from '../components/Navbar';
 import QuestionModal from '../components/QuestionModal';
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Navbar />
-      <QuestionModal visible={true} onCancel={()=>{}}/>
+      <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button>
+      <QuestionModal visible={isModalOpen} onCancel={handleCancel}/>
       {/* <Navbar />
       <div style={{ backgroundColor: "#f9f9f9", minHeight: "100vh", position: "relative" }}>
       <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", zIndex: "-1", bottom: 0 }}>

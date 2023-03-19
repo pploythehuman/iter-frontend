@@ -43,7 +43,7 @@ const Navbar = () => {
             </div>
 
             <Drawer
-              title={"Brand Here"}
+              title={"Iter"}
               placement="right"
               closable={true}
               onClose={showDrawer}
