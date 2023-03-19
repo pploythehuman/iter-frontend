@@ -1,8 +1,8 @@
 import React from "react";
+import "../pages/styles/auth.scss";
 import { Input, Button, Divider } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
-import "../pages/styles/auth.scss";
 
 const SignInPage = () => {
   return (

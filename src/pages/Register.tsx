@@ -1,10 +1,15 @@
 import React from "react";
-import { Input, Button, Divider } from "antd";
+import "../pages/styles/auth.scss";
+import { Input, Button, Divider, DatePicker } from "antd";
 import { MailOutlined, LockOutlined, CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
-import "../pages/styles/auth.scss";
+import type { DatePickerProps } from 'antd';
 
 const SignInPage = () => {
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
   return (
     <div className="main-container" style={{ backgroundColor: 'var(--color-secondary)'}}>
       <div className="main-row">
@@ -42,14 +47,11 @@ const SignInPage = () => {
               className="sign-in-input"
             />
             {/* <Input
-              placeholder="Gender"
-              className="sign-in-input"
-            /> */}
-            <Input
               prefix={<CalendarOutlined />}
               placeholder="Birthdate"
               className="sign-in-input"
-            />
+            /> */}
+            <DatePicker className="sign-in-input custom-date-picker" placeholder="Birthdate" onChange={onChange} />
             <Input
               prefix={<MailOutlined />}
               placeholder="Email"

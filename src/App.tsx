@@ -10,6 +10,7 @@ import SignupPage from './pages/Register';
 function App() {
   return (
     <BrowserRouter>
+    <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<SignInPage />} />
@@ -21,6 +22,7 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Route> */}
       </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Carousel, Col, Divider, Image, Row } from "antd";
+import { Button, Carousel, Col, Divider, Image, Row, DatePicker } from "antd";
 import { EnvironmentOutlined, GiftOutlined, ThunderboltOutlined } from "@ant-design/icons";
 
 import Navbar from '../components/Navbar';
+import QuestionModal from '../components/QuestionModal';
 
 export default function Home() {
   return (
     <>
       <Navbar />
+      <QuestionModal visible={true} onCancel={()=>{}}/>
       {/* <Navbar />
       <div style={{ backgroundColor: "#f9f9f9", minHeight: "100vh", position: "relative" }}>
       <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", zIndex: "-1", bottom: 0 }}>

@@ -59,6 +59,7 @@
 
 .sign-in-input {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .sign-in-button {
@@ -165,3 +166,11 @@
   }
 }
   
+//Date Picker
+.custom-date-picker .ant-picker-input > span.ant-picker-suffix,
+.custom-date-picker .ant-picker-range > span.ant-picker-suffix {
+  margin-left: 1px;
+  margin-right: 10px;
+  order: -1;
+  color: #000000;
+}
