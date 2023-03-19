@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Button, Steps, Slider } from "antd";
+import { Modal, Button, Steps, Slider, Input, InputNumber } from "antd";
 import "../index.scss";
-// import 'antd/dist/antd.css';
 
 const { Step } = Steps;
 
@@ -51,6 +50,8 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // new state to store selected options for each question
   // const currentQuestion = questionData[currentStep];
+  const [sliderInputMinValue, setSliderInputMinValue] = useState(20);
+  const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -60,7 +61,7 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleOptionSelect = (option: string) => {
+  const handleOptionSelect = (option: any ) => {
     const selected = [...selectedOptions];
     if (selected.includes(option)) {
       // deselect option if already selected
@@ -76,10 +77,15 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   const handleSubmit = () => {
     // do something with the selected options, e.g. send them to a server
     console.log(selectedOptions);
-    // alert(selectedOptions);
+    alert(selectedOptions);
     onCancel();
   };
 
+  const handleSliderAfterChange = (value: number | [number, number]) => {
+    handleOptionSelect(value)
+    console.log('onAfterChange: ', value); 
+  };
+  
   return (
     <Modal
       className="question-modal"
@@ -123,7 +129,34 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
         <h4 style={{ color: 'var(--color-black)' }}>{questionData[currentStep].label}</h4>
         {questionData[currentStep].slider ? (
           <div className="question-modal-slider">
-            <Slider range defaultValue={[20, 50]} disabled={false} />
+            <div style={{ display: 'flex', alignItems: 'center'}}>
+            Price range:
+              <Input
+                prefix="$"
+                suffix="k"
+                style={{ margin: '0 16px', width: '75px'}}
+                value={sliderInputMinValue}
+                onChange={(e)=>{ setSliderInputMinValue(Number(e.target.value))}}
+              />
+              -
+              <Input
+                prefix="$"
+                suffix="k"
+                style={{ margin: '0 16px', width: '75px'}}
+                value={sliderInputMaxValue}
+                onChange={(e)=>{ setSliderInputMaxValue(Number(e.target.value))}}
+              />
+            </div>
+            <Slider
+              range
+              value={[sliderInputMinValue, sliderInputMaxValue]}
+              onChange={(newValue) => { 
+                setSliderInputMinValue(newValue[0])
+                setSliderInputMaxValue(newValue[1])
+              }}
+              style={{ margin: '20px 16px' }}
+              onAfterChange={handleSliderAfterChange}
+            />
           </div>
         ) : (
           <div className="question-modal-answers">

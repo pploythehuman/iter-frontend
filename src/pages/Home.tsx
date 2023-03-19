@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Carousel, Col, Divider, Image, Row, DatePicker } from "antd";
+import { Button, Carousel, Col, Divider, Image, Row, Slider, Modal } from "antd";
 import { EnvironmentOutlined, GiftOutlined, ThunderboltOutlined } from "@ant-design/icons";
 
 import Navbar from '../components/Navbar';
@@ -12,10 +12,6 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -24,9 +20,10 @@ export default function Home() {
     <>
       <Navbar />
       <Button type="primary" onClick={showModal}>
-        Open Modal
+        Continue to Questions
       </Button>
       <QuestionModal visible={isModalOpen} onCancel={handleCancel}/>
+
       {/* <Navbar />
       <div style={{ backgroundColor: "#f9f9f9", minHeight: "100vh", position: "relative" }}>
       <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", zIndex: "-1", bottom: 0 }}>
