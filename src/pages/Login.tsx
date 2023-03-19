@@ -52,12 +52,15 @@ const SignInPage = () => {
             <a href="/" className="forgot-password-link" style={{ fontSize: '13px'}}>
               forgot password?
             </a>
+            <Divider style={{ color: 'var(--color-secondary)', borderColor: 'var(--color-secondary)', fontSize: '13px'}}>or login using</Divider>
             <Button className="third-party-button google-button">Sign In with Google</Button>
             <Button className="third-party-button facebook-button">Sign In with Facebook</Button>
           </div>
           <div className="join-us-button">
-            <p>Don't have an account?</p>
-            <Button className="mobile-join-us-button" type="primary">Sign up</Button>
+            <p style={{ color: 'var(--color-secondary)'}}>Don't have an account?</p>
+            <a href="/register" style={{ color: 'var(--color-secondary)', marginLeft: '5px'}}>
+              Sign up
+            </a>
           </div>
         </div>
         <div className="image-col">
@@ -69,7 +72,9 @@ const SignInPage = () => {
             >
             Don't have an account?
           </h5>
-          <Button className="mobile-join-us-button" type="primary">Sign up</Button>
+          <a href="/register">
+            <Button className="mobile-join-us-button" type="primary">Sign up</Button>
+          </a>
         </div>
       </div>
     </div>
