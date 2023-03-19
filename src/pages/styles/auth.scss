@@ -76,6 +76,38 @@
   margin-bottom: 10px;
 }
 
+.google-button {
+  background-color: #DB4437;
+  border: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #C53E31;
+    color: #FFFFFF !important;
+  }
+}
+
+.facebook-button {
+  background-color: #3B5998;
+  border: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #2E458C;
+    color: #FFFFFF !important;
+  }
+}
+
 .image-col {
   background-color: $color-secondary;
   display: flex;
@@ -129,7 +161,7 @@
   }
 
   .iter-text {
-    margin-left: auto;
+    margin-left: 0;
   }
 }
   

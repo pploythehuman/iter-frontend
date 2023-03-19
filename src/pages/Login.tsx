@@ -57,13 +57,19 @@ const SignInPage = () => {
           </div>
           <div className="join-us-button">
             <p>Don't have an account?</p>
-            <Button className="mobile-join-us-button">Sign up</Button>
+            <Button className="mobile-join-us-button" type="primary">Sign up</Button>
           </div>
         </div>
         <div className="image-col">
           <SignInImage className="image" />
-          <p>Don't have an account?</p>
-          <Button className="mobile-join-us-button">Sign up</Button>
+          <h5 
+            style={{ 
+              color: 'var(--color-white)', 
+              margin: '0px 0px 5px 0px'}}
+            >
+            Don't have an account?
+          </h5>
+          <Button className="mobile-join-us-button" type="primary">Sign up</Button>
         </div>
       </div>
     </div>
