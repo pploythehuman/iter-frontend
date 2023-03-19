@@ -1,5 +1,5 @@
 @import './pages/styles/variable.scss';
-
+//Asap font
 @font-face {
   font-style: normal;
   font-weight: 300;
@@ -30,12 +30,43 @@
   font-family: 'Asap-Bold';
   src: local('Asap-Bold'),  url('./fonts/Asap-Bold.ttf');
 }
+//Montserrat font
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+  font-family: 'Montserrat-Regular';
+  src: local('Montserrat-Regular'),  url('./fonts/Montserrat-Regular.ttf');
+}
+@font-face {
+  font-style: normal;
+  font-weight: 600;
+  font-family: 'Montserrat-SemiBold';
+  src: local('Montserrat-SemiBold'),  url('./fonts/Montserrat-SemiBold.ttf');
+}
+@font-face {
+  font-style: normal;
+  font-weight: 700;
+  font-family: 'Montserrat-Bold';
+  src: local('Montserrat-Bold'),  url('./fonts/Montserrat-Bold.ttf');
+}
+@font-face {
+  font-style: normal;
+  font-weight: 800;
+  font-family: 'Montserrat-ExtraBold';
+  src: local('Montserrat-ExtraBold'),  url('./fonts/Montserrat-ExtraBold.ttf');
+}
+@font-face {
+  font-style: normal;
+  font-weight: 900;
+  font-family: 'Montserrat-Black';
+  src: local('Montserrat-Black'),  url('./fonts/Montserrat-Black.ttf');
+}
 
 :root {
   --color-primary: #FF9B26;
   --color-primary-light: #FFC16B;
   --color-secondary: #56BEEC;
-  --white-color: #ffff;
+  --color-white: #ffff;
   --color-ivory: #FFFAF2;
   --color-dark-ivory: #FFF4E3;
   --color-black: #424242;
@@ -92,14 +123,14 @@ h4 {
   font-size: 20px;
   line-height: 24px;
   &.stroke {
-    color: $white-color;
+    color: $color-white;
     -webkit-text-stroke: 1px $color-primary;
   }
   &.upper {
     text-transform: uppercase;
   }
   &.white {
-    color: $white-color;
+    color: $color-white;
   }
 }
 
@@ -123,28 +154,27 @@ a {
 }
 
 /* Button */
-// .ant-btn-primary {
-//   background-color: $color-primary !important;
-//   font-family: 'Asap-Bold', sans-serif;
-//   border-color: $color-primary !important;
-// }
+.ant-btn-primary {
+  background-color: $color-primary !important;
+  font-family: 'Asap-Bold', sans-serif;
+  border-color: $color-primary !important;
+}
 
-// .ant-btn-primary:hover,
-// .ant-btn-primary:focus,
-// .ant-btn-primary:active,
-// .ant-btn-primary.active {
-//   background-color: $color-primary-light !important;
-//   border-color: $color-primary-light !important;
-// }
+.ant-btn-primary:hover,
+.ant-btn-primary:focus,
+.ant-btn-primary:active,
+.ant-btn-primary.active {
+  background-color: $color-primary-light !important;
+  border-color: $color-primary-light !important;
+}
 
 /* Navbar */
-
 .navbar {
   padding-bottom: 1px;
-  border-bottom: solid 1px #e8e8e8;
+  // border-bottom: solid 1px #e8e8e8;
   background-color: white;
-  box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.12),
-    0 6px 16px -11px rgba(0, 0, 0, 0.08);
+  // box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.12),
+  //   0 6px 16px -11px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   margin-bottom: 20px;

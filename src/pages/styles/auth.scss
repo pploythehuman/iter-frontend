@@ -1,0 +1,135 @@
+@import './variable.scss';
+
+.main-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
+}
+  
+.main-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.form-container {
+  background-color: $color-white;
+  padding: 0px 40px 0px 40px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // align-items: flex-start;
+  width: 50%;
+  height: 100%;
+}
+
+.form-container-element {
+  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  @media only screen and (max-width: 767px) {
+    width: 60%;
+  }
+  
+  @media only screen and (min-width: 768px) {
+    width: 40%;
+  }
+}
+
+.iter-text {
+  align-self: flex-start;
+  margin-left: 0;
+}  
+
+.a {
+  text-align: left;
+  margin-left: 0;
+  font-family: 'Montserrat-ExtraBold';
+}
+
+.sign-in-input {
+  margin-bottom: 20px;
+}
+
+.sign-in-button {
+  margin-top: 10px;
+  width: 150px;
+}
+
+.forgot-password-link {
+  // margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.third-party-button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.image-col {
+  background-color: $color-secondary;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%; /* added height property */
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.join-us-button {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .main-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-container {
+    width: 80%;
+  }
+
+  .form-container {
+    width: 80%;
+  }
+
+  .image-col {
+    display: none;
+  }
+
+  .mobile-join-us-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .join-us-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .iter-text {
+    margin-left: auto;
+  }
+}
+  

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Button, Drawer } from "antd";
+import { Layout, Button, Drawer, Input } from "antd";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import { MenuOutlined } from "@ant-design/icons";
@@ -26,7 +26,7 @@ const Navbar = () => {
         <Layout.Header className="nav-header">
           <div className="logo">
             <a className="brand-font" href="/" style={{ textDecoration: 'none' }}>
-              <h2 style={{ margin: 10, color: 'var(--color-black)' }}>
+              <h2 style={{ margin: 10, color: 'var(--color-black)', fontFamily: 'Montserrat-ExtraBold' }}>
                 ITER
               </h2>
             </a>
