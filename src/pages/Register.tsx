@@ -15,7 +15,7 @@ const SignInPage = () => {
       <div className="main-row">
         <div className="form-container" style={{ backgroundColor: 'var(--color-secondary)'}}>
           <a href="/" style={{ textDecoration: 'none' }}>
-            <h2 style={{ color: 'var(--color-white)', fontFamily: 'Montserrat-ExtraBold', display: 'flex' }}>
+            <h2 style={{ color: 'var(--color-white)', marginBottom: '10px', fontFamily: 'Montserrat-ExtraBold', display: 'flex' }}>
               <span className="iter-text">ITER</span>
             </h2>
           </a>          
@@ -67,7 +67,7 @@ const SignInPage = () => {
               placeholder="Confirm Password"
               className="sign-in-input"
             />
-            <Button type="primary" className="sign-in-button">
+            <Button type="primary" className="sign-in-button" style={{ margin: '0px'}}>
               Sign Up
             </Button>
             <Divider style={{ color: 'var(--color-white)', borderColor: 'var(--color-white)', fontSize: '13px'}}>or login using</Divider>
