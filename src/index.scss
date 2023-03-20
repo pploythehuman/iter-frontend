@@ -179,9 +179,8 @@ a {
   //   0 6px 16px -11px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   z-index: 999;
-  // z-index: 99990;
 }
 
 .nav-header {
@@ -342,5 +341,203 @@ a {
   justify-content: center;
   margin-bottom: 10px;
 }
-
 /* Question Modal End */
+
+/* Homepage */
+.top-home-page {
+  background-image: url('https://imgproxy.natucate.com/Z5ipAjRJjEgBTob1Rwunj7CvXd-lFlluD7UJ3s2LAVA/rs:fill/g:ce/w:3840/h:2160/aHR0cHM6Ly93d3cubmF0dWNhdGUuY29tL21lZGlhL3BhZ2VzL3JlaXNlemllbGUvYzQ3YmM2MzAtOWY5Yi00NjYwLTkyMzctYzc0ODg1ZjkwNTI3L2RjM2MzNDNjNzUtMTU1OTY1OTM2NC90aGFpbGFuZC1sYWVuZGVyaW5mb3JtYXRpb25lbi1pbnNlbC10aGFpLW1lZXItZ3J1ZW4tbmF0dWNhdGUuanBn');
+  background-color: var(--color-light);
+  padding: 50px;
+  text-align: center;
+  font-size: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  .top-home-page {
+    padding: 20px;
+    font-size: 16px;
+  }
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 60%;
+  margin: 0 auto;
+  padding: 50px;
+  background-color: var(--color-white);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  margin-top: 50px;
+
+  .ant-input {
+    flex-basis: calc(100% - 16px);
+    margin-right: 16px;
+    margin-bottom: 6px;
+    // margin-bottom: 16px;
+  }
+
+  .ant-picker {
+    flex-basis: calc(65% - 16px);
+    margin-bottom: 16px;
+  }
+
+  .ant-input-number {
+    flex-basis: calc(35% - 16px);
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+
+  .ant-btn {
+    flex-basis: calc(50% - 16px);
+    margin-bottom: 16px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .search-box {
+    padding: 20px;
+    width: 80%;
+  }
+}
+
+// .top-home-page {
+//   position: relative;
+
+//   .search-box {
+//     background-color: $color-white;
+//     align-items: center;
+//     padding: 40px 40px 40px 40px;
+//     border-radius: 8px;
+//     position: absolute;
+//     top: 45vh;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     z-index: 1;
+//     display: flex;
+//     flex-wrap: wrap;
+//     justify-content: space-between;
+//     align-items: center;
+//     margin-bottom: 24px;
+
+//     .ant-input {
+//       flex-basis: calc(100% - 16px);
+//       margin-right: 16px;
+//       margin-bottom: 6px;
+//       // margin-bottom: 16px;
+//     }
+
+//     .ant-picker {
+//       flex-basis: calc(65% - 16px);
+//       margin-bottom: 16px;
+//     }
+
+//     .ant-input-number {
+//       flex-basis: calc(35% - 16px);
+//       margin-right: 16px;
+//       margin-bottom: 16px;
+//     }
+
+//     .ant-btn {
+//       flex-basis: calc(50% - 16px);
+//       margin-bottom: 16px;
+//     }
+//   }
+// }
+
+.home-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+
+  .search-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .ant-input {
+      flex-basis: calc(50% - 16px);
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
+
+    .ant-picker {
+      flex-basis: calc(50% - 16px);
+      margin-bottom: 16px;
+    }
+
+    .ant-input-number {
+      flex-basis: calc(50% - 16px);
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
+
+    .ant-btn {
+      flex-basis: calc(50% - 16px);
+      margin-bottom: 16px;
+    }
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    background-color: $color-dark-ivory;
+    border-radius: 8px;
+    text-align: center;
+
+    @media only screen and (max-width: 768px) {
+      min-height: 290px;
+  
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      color: #1890ff;
+      margin-bottom: 0px;
+    }
+
+    h3 {
+      margin-top: 10px;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #999;
+    }
+  }
+
+  .slider-container {
+    h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .ant-carousel {
+      .slick-slide {
+        text-align: center;
+        // height: 250px;
+        overflow: hidden;
+
+        h3 {
+          font-size: 20px;
+          margin-top: 16px;
+          margin-bottom: 8px;
+        }
+
+        .ant-btn {
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+}
+/* Homepage End */
+

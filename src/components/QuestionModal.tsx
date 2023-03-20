@@ -76,13 +76,14 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
 
   const handleSubmit = () => {
     // do something with the selected options, e.g. send them to a server
-    console.log(selectedOptions);
-    alert(selectedOptions);
+    let resultArray = [[sliderInputMinValue, sliderInputMaxValue], ...selectedOptions]
+    console.log(resultArray);
+    alert(resultArray);
     onCancel();
   };
 
   const handleSliderAfterChange = (value: number | [number, number]) => {
-    handleOptionSelect(value)
+    // handleOptionSelect(value)
     console.log('onAfterChange: ', value); 
   };
   
