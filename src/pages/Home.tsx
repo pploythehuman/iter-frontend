@@ -1,9 +1,42 @@
 import React, { useState } from 'react';
-import { Button, Carousel, Col, Divider, Image, Row, Slider, Modal, Input, DatePicker, InputNumber } from "antd";
-import { EnvironmentOutlined, GiftOutlined, ThunderboltOutlined, UsergroupAddOutlined, CloseOutlined } from "@ant-design/icons";
+import { 
+  Button, 
+  Carousel, 
+  Col, 
+  Divider, 
+  Image, 
+  Row, 
+  Slider, 
+  Input, 
+  DatePicker, 
+  InputNumber 
+} from "antd";
+import type { RangePickerProps } from 'antd/es/date-picker';
+import { 
+  EnvironmentOutlined, 
+  GiftOutlined, 
+  ThunderboltOutlined, 
+  UsergroupAddOutlined, 
+  CloseOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Navbar from '../components/Navbar';
 import QuestionModal from '../components/QuestionModal';
+import MultiCarousel from '../components/MultiCarousel';
+
+dayjs.extend(customParseFormat);
+const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+  // Can not select days before today and today
+  // return current && current <= dayjs().endOf('day');
+
+  // Can not select days before today and today
+  return current && current.isBefore(dayjs().startOf('day'), 'day');
+};
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,6 +99,7 @@ export default function Home() {
           <DatePicker.RangePicker
             placeholder={["Start Date", "End Date"]}
             onChange={handleDateRangeChange}
+            disabledDate={disabledDate}
           />
           <InputNumber
             placeholder="Number of Travellers"
@@ -81,68 +115,62 @@ export default function Home() {
           </Button>
         </div>
       </div>
-      {/* <div style={{ height: "100vh", overflow: "hidden", backgroundColor: 'var(--color-ivory)' }}>
-        <Image
-          preview={false}
-          style={{ opacity: '90%' }}
-          src="https://imgproxy.natucate.com/Z5ipAjRJjEgBTob1Rwunj7CvXd-lFlluD7UJ3s2LAVA/rs:fill/g:ce/w:3840/h:2160/aHR0cHM6Ly93d3cubmF0dWNhdGUuY29tL21lZGlhL3BhZ2VzL3JlaXNlemllbGUvYzQ3YmM2MzAtOWY5Yi00NjYwLTkyMzctYzc0ODg1ZjkwNTI3L2RjM2MzNDNjNzUtMTU1OTY1OTM2NC90aGFpbGFuZC1sYWVuZGVyaW5mb3JtYXRpb25lbi1pbnNlbC10aGFpLW1lZXItZ3J1ZW4tbmF0dWNhdGUuanBn"
-        />
-      </div> */}
       <Divider />
+
       <div className="home-page">
-        <Carousel autoplay slidesToShow={3}>
-          <div style={{ }}>
-            <Image
-              preview={false}
-              src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-            />
-            <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
+        <div className="slider-container">
+            <h2>Saved Destinations</h2>
+            
+            <Carousel
+              infinite={true}
+              speed={1000}
+              slidesToShow={3}
+              slidesToScroll={1}
+              autoplay
+              dots={false}
+            >
+              <div>
+                <Image
+                  preview={false}
+                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
+                />
+                <h3>Bangkok</h3>
+                <Button type="primary" onClick={showModal}>
+                  Book now
+                </Button>
+              </div>
+              <div>
+                <Image
+                  preview={false}
+                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
+                />
+                <h3>Bangkok</h3>
+                <Button type="primary" onClick={showModal}>
+                  Book now
+                </Button>
+              </div>
+              <div>
+                <Image
+                  preview={false}
+                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
+                />
+                <h3>Bangkok</h3>
+                <Button type="primary" onClick={showModal}>
+                  Book now
+                </Button>
+              </div>
+              <div>
+                <Image 
+                  preview={false} 
+                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg" />
+                <h3>Bangkok</h3>
+                <Button type="primary" onClick={showModal}>
+                  Book now
+                </Button>
+              </div>
+            </Carousel>
           </div>
-          <div style={{ borderRadius: '8px', backgroundColor: 'var(--color-white)'}}>
-            <Image
-              preview={false}
-              src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-            />
-            <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-          </div>
-          <div style={{ borderRadius: '8px', backgroundColor: 'var(--color-white)'}}>
-            <Image
-              preview={false}
-              src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-            />
-            <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-          </div>
-          <div style={{ borderRadius: '8px', backgroundColor: 'var(--color-white)'}}>
-            <Image
-              preview={false}
-              src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-            />
-            <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-          </div>
-          <div style={{ borderRadius: '8px', backgroundColor: 'var(--color-white)'}}>
-            <Image
-              preview={false}
-              src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-            />
-            <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-          </div>
-        </Carousel>
-        <Divider />
+          <Divider />
         <Row gutter={[16, 16]}>
           <Col span={8}>
             <div className="feature">
@@ -217,7 +245,6 @@ export default function Home() {
             </div>
           </Carousel>
         </div>
-        {/* <QuestionModal visible={isModalOpen} handleCancel={handleCancel} /> */}
       </div>
     </>
   );
