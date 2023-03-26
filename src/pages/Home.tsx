@@ -6,7 +6,7 @@ import {
   Divider, 
   Image, 
   Row, 
-  Slider, 
+  Space, 
   Input, 
   DatePicker, 
   InputNumber 
@@ -142,26 +142,28 @@ export default function Home() {
 
       <div className="home-page">
         <div className="slider-container">
-            <h2>Saved Destinations</h2>
-            <Carousel
-              infinite={true}
-              speed={1000}
-              slidesToShow={3}
-              slidesToScroll={1}
-              autoplay
-              dots={false}
-            >
-              {destinationData.map((destination, index) => (
-                <div style={{ }}>
-                  <Image preview={false} src={destination.image} />
+          <h2>Saved Destinations</h2>
+          <Carousel
+            infinite={true}
+            speed={1000}
+            slidesToShow={3}
+            slidesToScroll={1}
+            autoplay
+            dots={false}
+          >
+            {destinationData.map((destination, index) => (
+              <div>
+                <Image preview={false} src={destination.image} />
+                <div style={{ padding: '10px'}}>
                   <h3>{destination.title}</h3>
                   <Button type="primary" onClick={()=>{}}>
                     Book now
                   </Button>
                 </div>
-              ))}
-            </Carousel>
-          </div>
+              </div>
+            ))}
+          </Carousel>
+        </div>
         <Divider />
         <Row gutter={[16, 16]}>
           <Col span={8}>
@@ -189,27 +191,30 @@ export default function Home() {
         </Row>
         <Divider />
         <div className="slider-container">
-            <h2>Saved Destinations</h2>
-            <Carousel
-              infinite={true}
-              speed={1000}
-              slidesToShow={3}
-              slidesToScroll={1}
-              autoplay
-              dots={false}
-            >
-              {destinationData.map((destination, index) => (
-                <div className="carousel-item" style={{ marginLeft: '10px'}}>
-                  <Image preview={false} src={destination.image} />
+          <h2>Saved Destinations</h2>
+          <Carousel
+            infinite={true}
+            speed={1000}
+            slidesToShow={3}
+            slidesToScroll={1}
+            autoplay
+            dots={false}
+          >
+            {destinationData.map((destination, index) => (
+              <div>
+                <Image preview={false} src={destination.image} />
+                <div style={{ padding: '10px'}}>
                   <h3>{destination.title}</h3>
                   <Button type="primary" onClick={()=>{}}>
                     Book now
                   </Button>
                 </div>
-              ))}
-            </Carousel>
-          </div>
+              </div>
+            ))}
+          </Carousel>
         </div>
+        <Divider />
+      </div>
     </>
   );
 }
