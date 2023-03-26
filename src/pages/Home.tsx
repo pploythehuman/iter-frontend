@@ -38,6 +38,29 @@ const disabledDate: RangePickerProps['disabledDate'] = (current) => {
   return current && current.isBefore(dayjs().startOf('day'), 'day');
 };
 
+const destinationData = [
+  {
+    title: 'Bangkok',
+    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+  {
+    title: 'Bangkok',
+    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+  {
+    title: 'Bangkok',
+    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+  {
+    title: 'Bangkok',
+    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+  {
+    title: 'Bangkok',
+    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+];
+
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [destinations, setDestinations] = useState(['']);
@@ -120,7 +143,6 @@ export default function Home() {
       <div className="home-page">
         <div className="slider-container">
             <h2>Saved Destinations</h2>
-            
             <Carousel
               infinite={true}
               speed={1000}
@@ -129,48 +151,18 @@ export default function Home() {
               autoplay
               dots={false}
             >
-              <div>
-                <Image
-                  preview={false}
-                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-                />
-                <h3>Bangkok</h3>
-                <Button type="primary" onClick={showModal}>
-                  Book now
-                </Button>
-              </div>
-              <div>
-                <Image
-                  preview={false}
-                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-                />
-                <h3>Bangkok</h3>
-                <Button type="primary" onClick={showModal}>
-                  Book now
-                </Button>
-              </div>
-              <div>
-                <Image
-                  preview={false}
-                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-                />
-                <h3>Bangkok</h3>
-                <Button type="primary" onClick={showModal}>
-                  Book now
-                </Button>
-              </div>
-              <div>
-                <Image 
-                  preview={false} 
-                  src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg" />
-                <h3>Bangkok</h3>
-                <Button type="primary" onClick={showModal}>
-                  Book now
-                </Button>
-              </div>
+              {destinationData.map((destination, index) => (
+                <div className="carousel-item" style={{ }}>
+                  <Image preview={false} src={destination.image} />
+                  <h3>{destination.title}</h3>
+                  <Button type="primary" onClick={()=>{}}>
+                    Book now
+                  </Button>
+                </div>
+              ))}
             </Carousel>
           </div>
-          <Divider />
+        <Divider />
         <Row gutter={[16, 16]}>
           <Col span={8}>
             <div className="feature">
@@ -197,55 +189,27 @@ export default function Home() {
         </Row>
         <Divider />
         <div className="slider-container">
-          <h2>Featured Destinations</h2>
-          <Carousel
-            infinite={true}
-            speed={500}
-            slidesToShow={3}
-            slidesToScroll={1}
-          >
-            <div>
-              <Image
-                preview={false}
-                src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-              />
-              <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-            </div>
-            <div>
-              <Image
-                preview={false}
-                src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-              />
-              <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-            </div>
-            <div>
-              <Image
-                preview={false}
-                src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg"
-              />
-              <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-            </div>
-            <div>
-              <Image 
-                preview={false} 
-                src="https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg" />
-              <h3>Bangkok</h3>
-              <Button type="primary" onClick={showModal}>
-                Book now
-              </Button>
-            </div>
-          </Carousel>
+            <h2>Saved Destinations</h2>
+            <Carousel
+              infinite={true}
+              speed={1000}
+              slidesToShow={3}
+              slidesToScroll={1}
+              autoplay
+              dots={false}
+            >
+              {destinationData.map((destination, index) => (
+                <div className="carousel-item" style={{ marginLeft: '10px'}}>
+                  <Image preview={false} src={destination.image} />
+                  <h3>{destination.title}</h3>
+                  <Button type="primary" onClick={()=>{}}>
+                    Book now
+                  </Button>
+                </div>
+              ))}
+            </Carousel>
+          </div>
         </div>
-      </div>
     </>
   );
 }

@@ -4,6 +4,8 @@ import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import { MenuOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
+import { ReactComponent as IterLogo } from "../assets/IterLogo.svg";
+
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -26,6 +28,7 @@ const Navbar = () => {
         <Layout.Header className="nav-header">
           <div className="logo">
             <a className="brand-font" href="/" style={{ textDecoration: 'none' }}>
+               {/* <IterLogo className="image" style={{ width: '50px', height: '50px'}} /> */}
               <h2 style={{ margin: 10, color: 'var(--color-black)', fontFamily: 'Montserrat-ExtraBold' }}>
                 ITER
               </h2>
