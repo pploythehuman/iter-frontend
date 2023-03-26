@@ -478,13 +478,6 @@ a {
       font-size: 24px;
       margin-bottom: 16px;
     }
-
-    .carousel-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: auto;
-    }
     
     .ant-carousel {
       height: 300px;
@@ -492,9 +485,8 @@ a {
         height: 220px;
       }
       
-      
       .slick-slide {
-        padding-bottom: 10px;
+        padding-bottom: 20px;
         margin-right: 15px;
         background-color: $color-white;
         box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.12),
@@ -502,14 +494,16 @@ a {
         border-radius: 8px;
         text-align: center;
         overflow: hidden;
+
         h3 {
           font-size: 20px;
-          margin-top: 16px;
-          margin-bottom: 8px;
+          // margin-top: 16px;
+          // margin-bottom: 8px;
+          line-height: 0;
         }
 
         .ant-btn {
-          margin-top: 8px;
+          margin-top: 10px;
         }
       }
     }

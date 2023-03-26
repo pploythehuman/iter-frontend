@@ -152,7 +152,7 @@ export default function Home() {
               dots={false}
             >
               {destinationData.map((destination, index) => (
-                <div className="carousel-item" style={{ }}>
+                <div style={{ }}>
                   <Image preview={false} src={destination.image} />
                   <h3>{destination.title}</h3>
                   <Button type="primary" onClick={()=>{}}>
