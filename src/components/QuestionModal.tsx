@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal, Button, Steps, Slider, Input, InputNumber } from "antd";
 import "../index.scss";
 
@@ -47,6 +48,8 @@ const questionData: QuestionData[] = [
 ];
 
 const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
+  const navigate = useNavigate();
+  
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // new state to store selected options for each question
   // const currentQuestion = questionData[currentStep];
@@ -80,6 +83,7 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
     console.log(resultArray);
     alert(resultArray);
     onCancel();
+    navigate('/itinerary/001');
   };
 
   const handleSliderAfterChange = (value: number | [number, number]) => {

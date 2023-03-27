@@ -45,7 +45,7 @@ const destinationData = [
   },
   {
     title: 'Bangkok',
-    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+    image: 'https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840'
   },
   {
     title: 'Bangkok',
@@ -53,11 +53,15 @@ const destinationData = [
   },
   {
     title: 'Bangkok',
-    image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+    image: 'https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840'
   },
   {
     title: 'Bangkok',
     image: 'https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg',
+  },
+  {
+    title: 'Bangkok',
+    image: 'https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840'
   },
 ];
 
@@ -191,7 +195,7 @@ export default function Home() {
         </Row>
         <Divider />
         <div className="slider-container">
-          <h2>Saved Destinations</h2>
+          <h2>Trending Destinations</h2>
           <Carousel
             infinite={true}
             speed={1000}
@@ -213,7 +217,7 @@ export default function Home() {
             ))}
           </Carousel>
         </div>
-        <Divider />
+        <div style={{ height: '80px'}} />
       </div>
     </>
   );
