@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from 'react-router-dom';
 import ItineraryNavbar from '../components/itinerary/ItineraryNavbar';
 import ItineraryCard from '../components/itinerary/ItineraryCard'
-import GoogleMap from "../components/itinerary/GoogleMaps";
+import GoogleMap from "../components/maps/GoogleMaps";
 import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
 
 import { Card, Tabs } from "antd";
@@ -52,11 +52,23 @@ const itineraryData = [
   },
 ];
 
+const location = {
+  address: '1600 Amphitheatre Parkway, Mountain View, california.',
+  lat: 37.42216,
+  lng: -122.08427,
+} 
+
 const Itinerary = () => {
   const { itineraryId } = useParams();
-  const itinerary = itineraryData;
+  const [itinerary, setItineraryData] = useState(itineraryData);
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleDelete = (id: number) => {
+    const updatedItinerary = itinerary.filter((item) => item.id !== id);
+    setItineraryData(updatedItinerary);
+  };
+
 
   return (
     <div className="itinerary-page">
@@ -72,12 +84,15 @@ const Itinerary = () => {
         <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map View" key="map" >
-          <GoogleMap />
+          <div style={{ borderRadius: '10px', padding: '25px'}}> 
+            <GoogleMap />
+          </div>
+
         </TabPane>
       </Tabs>
       <div className="itinerary-content">
         {activeTab === "timeline" &&
-          itineraryData.map((itinerary, index) => (
+          itinerary.map((itinerary, index) => (
             <div key={index} style={{ margin: "20px" }}>
               <ItineraryCard
                 name={itinerary.name}
@@ -87,6 +102,8 @@ const Itinerary = () => {
                 tags={itinerary.tags}
                 date={itinerary.date}
                 time={itinerary.time}
+                itineraryId={itinerary.id}
+                onDelete={handleDelete}
               />
             </div>
         ))}

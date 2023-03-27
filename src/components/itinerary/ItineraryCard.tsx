@@ -10,6 +10,8 @@ interface ItineraryCardProps {
   tags: string[];
   date: string;
   time: string;
+  onDelete: Function; 
+  itineraryId: number; 
 }
 
 const ItineraryCard: React.FC<ItineraryCardProps> = ({
@@ -20,6 +22,8 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   tags,
   date,
   time,
+  onDelete,
+  itineraryId,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const info = () => {
@@ -29,7 +33,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   const menu = (
     <Menu>
       <Menu.Item key="1">Edit</Menu.Item>
-      <Menu.Item key="2">Delete</Menu.Item>
+      <Menu.Item key="2" onClick={() => onDelete(itineraryId)}>Delete</Menu.Item>
     </Menu>
   );
 
