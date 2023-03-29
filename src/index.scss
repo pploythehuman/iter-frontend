@@ -608,9 +608,12 @@ a {
   .date-time {
     color: gray;
     font-size: 0.9rem;
+    margin-bottom: 0px;
   }
 
   p {
+    font-family: 'Asap-Regular';
+    font-size: 0.9rem;
     margin-bottom: 0.5rem;
   }
 
@@ -636,6 +639,15 @@ a {
     // }
   }
 }
+
+.show-more-less-button {
+  cursor: pointer;
+  color: gray;
+  margin: 0;
+  margin-left: 5px;
+  display: inline-block;
+}
+
 /* Itineray End */
 
 /* Map */

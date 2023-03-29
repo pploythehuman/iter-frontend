@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Rate, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 
@@ -26,6 +26,8 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   itineraryId,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
+  const [showMore, setShowMore] = useState(false);
+  
   const info = () => {
     messageApi.success('Booked Successfully');
   };
@@ -36,6 +38,37 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
       <Menu.Item key="2" onClick={() => onDelete(itineraryId)}>Delete</Menu.Item>
     </Menu>
   );
+
+  const renderDescription = () => {
+    if (description.length > 150) {
+      return showMore
+        ? (
+          <>
+            {description}
+            <p 
+              className="show-more-less-button"
+              // type="link" 
+              onClick={() => setShowMore(!showMore)}
+            > 
+              Show less
+            </p>
+          </>
+        )
+        : (
+          <>
+            {description.substring(0, 150)}
+            <p 
+              className="show-more-less-button"
+              onClick={() => setShowMore(!showMore)}
+            > 
+              ... Show more
+            </p>
+          </>
+        );
+    } else {
+      return description;
+    }
+  };
 
   return (
     <div className="itinerary-card">
@@ -60,7 +93,9 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
           ))}
         </div>
         <p className="date-time">{date} - {time}</p>
-        <p>{description}</p>
+        <p style={{ marginTop: '0px' }}>
+          {renderDescription()}
+        </p>
         
         {contextHolder}
         <Button type="primary" className="book-button" onClick={info}

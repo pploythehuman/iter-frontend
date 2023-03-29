@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from 'react-router-dom';
+
+import chroma from "chroma-js";
+import tinycolor from 'tinycolor2';
+
 import ItineraryNavbar from '../components/itinerary/ItineraryNavbar';
 import ItineraryCard from '../components/itinerary/ItineraryCard'
 import GoogleMap from "../components/maps/GoogleMaps";
 import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
+import whiteImg from "../assets/white_img.png";
+import bangkokImg from "../assets/bangkok_img.jpeg";
+
 
 import { Card, Tabs } from "antd";
 
@@ -14,7 +21,7 @@ const itineraryData = [
     id: 1,
     name: "Eiffel Tower",
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+    description: "A dd-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
     rating: 4.5,
     tags: ["landmark", "architecture"],
     date: "2023-04-01",
@@ -60,10 +67,28 @@ const location = {
 
 const Itinerary = () => {
   const { itineraryId } = useParams();
+  const [textColor, setTextColor] = useState("var(--color-white)");
   const [itinerary, setItineraryData] = useState(itineraryData);
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const handleImageLoad = (event: any) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const img = event.target;
+    canvas.width = img.width;
+    canvas.height = img.height;
+    if(context) {
+      context.drawImage(img, 0, 0);
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const rgba = `rgba(${imageData.data[0]}, ${imageData.data[1]}, ${imageData.data[2]}, ${imageData.data[3]})`;
+      const hex = tinycolor(rgba).toHexString();
+      const color = chroma(hex);
+      const isBright = color.luminance() < 0.009;
+      setTextColor(isBright ? "var(--color-black)" : "var(--color-white)");
+    }
+  };
+  
   const handleDelete = (id: number) => {
     const updatedItinerary = itinerary.filter((item) => item.id !== id);
     setItineraryData(updatedItinerary);
@@ -74,10 +99,16 @@ const Itinerary = () => {
     <div className="itinerary-page">
       <ItineraryNavbar />
       <div className="banner">
-        <img src="https://planetofhotels.com/guide/sites/default/files/styles/node__blog_post__bp_banner__blog_post_banner/public/2020-12/Yaowarat-road-Bangkok.jpg" alt="Destination" />
+        <img 
+          src={bangkokImg}
+          // src="https://planetofhotels.com/guide/sites/default/files/styles/node__blog_post__bp_banner__blog_post_banner/public/2020-12/Yaowarat-road-Bangkok.jpg" 
+          alt="Destination" 
+          onLoad={handleImageLoad}
+          onError={(e) => console.log("Error loading image:", e)}
+        />
         <div className="banner-text">
-          <h1 style={{ color: 'var(--color-white)', fontFamily: 'Montserrat-Bold' }}>Destination Name</h1>
-          <h5 style={{ color: 'var(--color-white)', fontFamily: 'Montserrat-SemiBold', marginTop: '10px' }}>Dates: April 1, 2023 - April 5, 2023</h5>
+          <h1 style={{ color: textColor, fontFamily: 'Montserrat-Bold' }}>Bangkok</h1>
+          <h5 style={{ color: textColor, fontFamily: 'Montserrat-SemiBold', marginTop: '10px' }}>Dates: April 1, 2023 - April 5, 2023</h5>
         </div>
       </div>
       <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>
