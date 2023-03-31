@@ -538,17 +538,30 @@ a {
     }
   }
 
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+
   .itinerary-wrapper {
+    margin-top: 0;
     display: flex;
     position: relative;
   }
   
   .itinerary-date-tab-container {
     position: sticky;
-    top: 30vh;
-    align-self: flex-start;
-    height: 100%;
-    // overflow-y: auto;
+    top: 20px; 
+    left: 0;
+    width: 200px; 
+    height: calc(100vh - 20px);
+    overflow-y: auto;
+    z-index: 1;
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .itinerary-date-tab-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
   }
   
   .itinerary-content {
@@ -556,6 +569,7 @@ a {
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
+    padding: 20px;
   }
 }
 

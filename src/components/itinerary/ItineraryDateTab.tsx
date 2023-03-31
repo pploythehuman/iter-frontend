@@ -4,6 +4,7 @@ import {
   ContainerOutlined,
   DesktopOutlined,
   MailOutlined,
+  CalendarOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -29,6 +30,13 @@ function getItem(
   } as MenuItem;
 }
 
+const date = (month: string, date: string) => (
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    <h2 style={{ fontSize: '9px', margin: '0', fontFamily: 'ASAP-Bold'}}>Mar</h2>
+    <h2 style={{ fontSize: '9px', margin: '0'}}>11</h2>
+  </div>
+)
+
 const items: MenuItem[] = [
   getItem('Option 1', '1', <PieChartOutlined />),
   getItem('Option 2', '2', <DesktopOutlined />),
@@ -49,8 +57,13 @@ const items: MenuItem[] = [
   ]),
 ];
 
-const ItineraryDateTab: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+interface ItineraryDateTabProps {
+  onFirstOptionClick: () => void;
+}
+
+const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ onFirstOptionClick }) => {
+  // const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -58,16 +71,27 @@ const ItineraryDateTab: React.FC = () => {
 
   return (
     <div style={{ width: 256 }}>
-      <Button type="primary" onClick={toggleCollapsed} style={{ }}>
+      {/* <Button type="primary" onClick={toggleCollapsed}>
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
+      </Button> */}
       <Menu
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
-        theme="dark"
+        // theme="dark"
         inlineCollapsed={collapsed}
         items={items}
+        style={{ 
+          borderRadius: '10px', 
+          border: 'none',
+          minHeight: '100vh',
+        }}
+        onClick={({ key }) => {
+          if (key === "3") {
+            alert("clicked")
+            onFirstOptionClick();
+          }
+        }}
       />
     </div>
   );

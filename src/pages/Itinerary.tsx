@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
 
 import chroma from "chroma-js";
@@ -72,6 +72,8 @@ const Itinerary = () => {
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const thirdItineraryCardRef = useRef<HTMLDivElement>(null);
+
   const handleImageLoad = (event: any) => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -94,7 +96,19 @@ const Itinerary = () => {
     setItineraryData(updatedItinerary);
   };
 
-
+  const scrollToThirdCard = () => {
+    if (thirdItineraryCardRef.current) {
+      thirdItineraryCardRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+  
+      const yOffset = -70; // Set the offset for the navbar
+      const yCoordinate = thirdItineraryCardRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
+    }
+  };
+  
   return (
     <div className="itinerary-page">
       <ItineraryNavbar />
@@ -112,11 +126,7 @@ const Itinerary = () => {
         </div>
       </div>
       <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>
-        <TabPane tab="Timeline" key="timeline">
-          {/* <div className="itinerary-date-tab-container">
-            <ItineraryDateTab />
-          </div> */}
-        </TabPane>
+        <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map" key="map" >
           <div style={{ borderRadius: '10px', padding: '25px'}}> 
@@ -126,12 +136,12 @@ const Itinerary = () => {
       </Tabs>
       <div className="itinerary-wrapper">
         <div className="itinerary-date-tab-container">
-          <ItineraryDateTab />
+          <ItineraryDateTab onFirstOptionClick={scrollToThirdCard}/>
         </div>
         <div className="itinerary-content">
           {activeTab === "timeline" && (
             itinerary.map((itinerary, index) => (
-              <div key={index} style={{ margin: "20px" }}>
+              <div key={index} style={{ margin: "20px" }} ref={index === 2 ? thirdItineraryCardRef : null}>
                 <ItineraryCard
                   name={itinerary.name}
                   imageUrl={itinerary.imageUrl}
