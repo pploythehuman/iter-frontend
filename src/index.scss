@@ -538,23 +538,24 @@ a {
     }
   }
 
-  .tabs-container {
-    // display: flex;
-    // align-items: flex-start;
-    justify-content: center;
+  .itinerary-wrapper {
+    display: flex;
+    position: relative;
   }
   
   .itinerary-date-tab-container {
     position: sticky;
-    top: 20px;
-    margin-right: 20px;
+    top: 30vh;
+    align-self: flex-start;
+    height: 100%;
+    // overflow-y: auto;
   }
   
   .itinerary-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    // margin-right: 100px;
+    flex-grow: 1;
   }
 }
 

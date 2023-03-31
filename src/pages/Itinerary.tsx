@@ -112,7 +112,11 @@ const Itinerary = () => {
         </div>
       </div>
       <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>
-        <TabPane tab="Timeline" key="timeline" />
+        <TabPane tab="Timeline" key="timeline">
+          {/* <div className="itinerary-date-tab-container">
+            <ItineraryDateTab />
+          </div> */}
+        </TabPane>
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map" key="map" >
           <div style={{ borderRadius: '10px', padding: '25px'}}> 
@@ -120,26 +124,31 @@ const Itinerary = () => {
           </div>
         </TabPane>
       </Tabs>
-      <div className="itinerary-content">
-        {activeTab === "timeline" &&
-          itinerary.map((itinerary, index) => (
-            <div key={index} style={{ margin: "20px" }}>
-              <ItineraryCard
-                name={itinerary.name}
-                imageUrl={itinerary.imageUrl}
-                description={itinerary.description}
-                rating={itinerary.rating}
-                tags={itinerary.tags}
-                date={itinerary.date}
-                time={itinerary.time}
-                itineraryId={itinerary.id}
-                onDelete={handleDelete}
-              />
-            </div>
-        ))}
-
+      <div className="itinerary-wrapper">
+        <div className="itinerary-date-tab-container">
+          <ItineraryDateTab />
+        </div>
+        <div className="itinerary-content">
+          {activeTab === "timeline" && (
+            itinerary.map((itinerary, index) => (
+              <div key={index} style={{ margin: "20px" }}>
+                <ItineraryCard
+                  name={itinerary.name}
+                  imageUrl={itinerary.imageUrl}
+                  description={itinerary.description}
+                  rating={itinerary.rating}
+                  tags={itinerary.tags}
+                  date={itinerary.date}
+                  time={itinerary.time}
+                  itineraryId={itinerary.id}
+                  onDelete={handleDelete}
+                />
+              </div>
+          )))}
+        </div>
       </div>
     </div>
+
   );
 };
 
