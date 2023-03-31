@@ -78,12 +78,10 @@ const GoogleMap: React.FC<GoogleMapProps> = () => {
     ]
   };
 
-
-
   // <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} options={options}>
   return (
     // <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}></LoadScript>
-     <LoadScript googleMapsApiKey={'AIzaSyBH0OxvMSyz96-Vk9j0QUtObxUV8LdZ3po'}>
+     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}>
       <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10}>
         <Marker position={center} />
       </GoogleMapComponent>

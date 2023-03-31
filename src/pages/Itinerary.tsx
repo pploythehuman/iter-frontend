@@ -114,11 +114,10 @@ const Itinerary = () => {
       <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>
         <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
-        <TabPane tab="Map View" key="map" >
+        <TabPane tab="Map" key="map" >
           <div style={{ borderRadius: '10px', padding: '25px'}}> 
             <GoogleMap />
           </div>
-
         </TabPane>
       </Tabs>
       <div className="itinerary-content">

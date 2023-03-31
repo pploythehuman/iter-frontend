@@ -56,7 +56,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         )
         : (
           <>
-            {description.substring(0, 150)}
+            {description.substring(0, 120)}
             <p 
               className="show-more-less-button"
               onClick={() => setShowMore(!showMore)}
