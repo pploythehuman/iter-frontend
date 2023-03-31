@@ -66,6 +66,8 @@ const location = {
 } 
 
 const Itinerary = () => {
+  const date = new Date('2023-04-02')
+
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
   const [itinerary, setItineraryData] = useState(itineraryData);
@@ -92,6 +94,7 @@ const Itinerary = () => {
   };
   
   const handleDelete = (id: number) => {
+    console.log(date.getMonth() + 1)
     const updatedItinerary = itinerary.filter((item) => item.id !== id);
     setItineraryData(updatedItinerary);
   };
@@ -103,7 +106,7 @@ const Itinerary = () => {
         block: 'start',
       });
   
-      const yOffset = -70; // Set the offset for the navbar
+      const yOffset = -70; // Set the offset
       const yCoordinate = thirdItineraryCardRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
     }
@@ -136,7 +139,7 @@ const Itinerary = () => {
       </Tabs>
       <div className="itinerary-wrapper">
         <div className="itinerary-date-tab-container">
-          <ItineraryDateTab onFirstOptionClick={scrollToThirdCard}/>
+          <ItineraryDateTab dates={itineraryData} onFirstOptionClick={scrollToThirdCard}/>
         </div>
         <div className="itinerary-content">
           {activeTab === "timeline" && (
