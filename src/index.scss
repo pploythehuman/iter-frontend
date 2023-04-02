@@ -553,8 +553,9 @@ a {
     top: 20px; 
     left: 0;
     width: 200px; 
-    height: calc(100vh - 20px);
+    max-height: calc(100vh - 20px);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1;
     -ms-overflow-style: none; /* Internet Explorer and Edge */
     scrollbar-width: none; /* Firefox */

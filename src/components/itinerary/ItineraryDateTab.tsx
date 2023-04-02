@@ -37,10 +37,10 @@ interface DateObject {
 
 interface ItineraryDateTabProps {
   dates: any[];
-  onFirstOptionClick: () => void;
+  onDateTabClick: (index: number) => void;
 }
 
-const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onFirstOptionClick }) => {
+const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onDateTabClick }) => {
   // const [collapsed, setCollapsed] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
 
@@ -56,19 +56,18 @@ const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onFirstOptio
   )
 
   const dateItems: MenuItem[] = dates.map((date, index) => {
-   
     const tempDate = new Date(date.date);
     const monthString = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(tempDate);
     const dayString = tempDate.getDate().toLocaleString('en-US', { minimumIntegerDigits: 2 });
 
-    console.log('date', date, monthString, dayString)
     return getItem(`Date ${index + 1}`, `date-${index}`, dateObject(monthString, dayString));
-    
   });
 
   const items: MenuItem[] = [
-    getItem('Option 1', '3', <CalendarOutlined />),
+    getItem('Option 1', '3', <CalendarOutlined style={{ color: 'var(--color-black)' }}/>),
     ...dateItems,
+    // ...dateItems,
+    // ...dateItems,
   
     // getItem('Option 1', '1', <PieChartOutlined />),
     // getItem('Option 2', '2', <DesktopOutlined />),
@@ -107,9 +106,9 @@ const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onFirstOptio
           minHeight: '100vh',
         }}
         onClick={({ key }) => {
-          if (key === "3") {
-            alert("clicked")
-            onFirstOptionClick();
+          const cardIndex = parseInt(key.split("-")[1]);
+          if (!isNaN(cardIndex)) {
+            onDateTabClick(cardIndex);
           }
         }}
       />

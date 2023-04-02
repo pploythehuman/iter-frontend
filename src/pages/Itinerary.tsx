@@ -57,6 +57,16 @@ const itineraryData = [
     date: "2023-04-02",
     time: "2:00 PM",
   },
+  {
+    id: 5,
+    name: "Arc de Triomphe",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "One of the most famous monuments in Paris, France.",
+    rating: 4.4,
+    tags: ["monument", "history"],
+    date: "2023-04-09",
+    time: "2:00 PM",
+  },
 ];
 
 const location = {
@@ -74,7 +84,10 @@ const Itinerary = () => {
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const thirdItineraryCardRef = useRef<HTMLDivElement>(null);
+  const itineraryRefs = useRef<(HTMLDivElement | null)[]>(
+    Array.from({ length: itineraryData.length }, () => null)
+  );
+  
 
   const handleImageLoad = (event: any) => {
     const canvas = document.createElement('canvas');
@@ -99,16 +112,20 @@ const Itinerary = () => {
     setItineraryData(updatedItinerary);
   };
 
-  const scrollToThirdCard = () => {
-    if (thirdItineraryCardRef.current) {
-      thirdItineraryCardRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+  const scrollToCard = (index: number) => {
+    setActiveIndex(index);
+    if (itineraryRefs.current[index]) {
+      itineraryRefs?.current[index]?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
   
-      const yOffset = -70; // Set the offset
-      const yCoordinate = thirdItineraryCardRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
+      const yOffset = -70;
+      const yCoordinate =
+        (itineraryRefs.current[index]?.getBoundingClientRect()?.top ?? 0) +
+        window.pageYOffset +
+        yOffset;
+      window.scrollTo({ top: yCoordinate, behavior: "smooth" });
     }
   };
   
@@ -137,30 +154,35 @@ const Itinerary = () => {
           </div>
         </TabPane>
       </Tabs>
+      
       <div className="itinerary-wrapper">
         <div className="itinerary-date-tab-container">
-          <ItineraryDateTab dates={itineraryData} onFirstOptionClick={scrollToThirdCard}/>
+          <ItineraryDateTab dates={itineraryData} onDateTabClick={(index) => scrollToCard(index)} />
         </div>
         <div className="itinerary-content">
-          {activeTab === "timeline" && (
-            itinerary.map((itinerary, index) => (
-              <div key={index} style={{ margin: "20px" }} ref={index === 2 ? thirdItineraryCardRef : null}>
-                <ItineraryCard
-                  name={itinerary.name}
-                  imageUrl={itinerary.imageUrl}
-                  description={itinerary.description}
-                  rating={itinerary.rating}
-                  tags={itinerary.tags}
-                  date={itinerary.date}
-                  time={itinerary.time}
-                  itineraryId={itinerary.id}
-                  onDelete={handleDelete}
-                />
-              </div>
-          )))}
+        {activeTab === "timeline" &&
+          itinerary.map((itinerary, index) => (
+            <div
+              key={index}
+              style={{ margin: "20px" }}
+              ref={(el) => (itineraryRefs.current[index] = el)}
+            >
+              <ItineraryCard
+                name={itinerary.name}
+                imageUrl={itinerary.imageUrl}
+                description={itinerary.description}
+                rating={itinerary.rating}
+                tags={itinerary.tags}
+                date={itinerary.date}
+                time={itinerary.time}
+                itineraryId={itinerary.id}
+                onDelete={handleDelete}
+              />
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+      </div>
 
   );
 };
