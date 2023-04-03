@@ -176,7 +176,7 @@ const Itinerary = () => {
         ))}
         {activeTab === "map" && (
           <>
-            <GoogleMap />
+            <GoogleMap itineraryData={itineraryData} />
           </>
         )}
       </div>

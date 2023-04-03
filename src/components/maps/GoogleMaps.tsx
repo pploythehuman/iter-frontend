@@ -11,10 +11,18 @@ const center = {
   lng: -38.523
 };
 
-interface GoogleMapProps {}
+interface GoogleMapProps {
+  itineraryData: any[];
+}
 
-const GoogleMap: React.FC<GoogleMapProps> = () => {
-  console.log("key", process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData }) => {
+  // console.log("key", process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+  const [map, setMap] = React.useState(null);
+
+  const onLoad = React.useCallback((map: any) => {
+    console.log('Map loaded!', map);
+    setMap(map);
+  }, []);
 
   const options = {
     styles: [
@@ -80,10 +88,10 @@ const GoogleMap: React.FC<GoogleMapProps> = () => {
 
   // <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} options={options}>
   return (
-    // <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}></LoadScript>
      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}>
-      <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10}>
-        <Marker position={center} />
+      <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} onLoad={onLoad}>
+        {/* <Marker position={center} /> */}
+        <Marker key={1} position={{ lat: -3.7492883, lng: -38.5399122 }} />
       </GoogleMapComponent>
     </LoadScript>
   );
