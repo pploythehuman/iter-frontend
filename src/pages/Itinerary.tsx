@@ -11,8 +11,13 @@ import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
 import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
+import {
+  UserAddOutlined,
+  PlusOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 
-import { Card, Tabs } from "antd";
+import { Button, Card, Tabs } from "antd";
 
 const { TabPane } = Tabs;
 
@@ -157,6 +162,13 @@ const Itinerary = () => {
         <div className="banner-text">
           <h1 style={{ color: textColor, fontFamily: 'Montserrat-Bold' }}>Bangkok</h1>
           <h5 style={{ color: textColor, fontFamily: 'Montserrat-SemiBold', marginTop: '10px' }}>Dates: April 1, 2023 - April 5, 2023</h5>
+        </div>
+        <div className="banner-button">
+          <Button type="primary" icon={<PlusOutlined />} size="small" style={{ color: textColor }}>
+            Add place
+          </Button>
+          <Button type="link" icon={<UserAddOutlined />} style={{ color: textColor, fontSize: '20px' }} />
+          <Button type="link" icon={<SettingOutlined />} style={{ color: textColor, fontSize: '20px' }} />
         </div>
       </div>
       <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>

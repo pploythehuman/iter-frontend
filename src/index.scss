@@ -537,6 +537,23 @@ a {
         margin: 0;
       }
     }
+    .banner-button {
+      .ant-btn{
+        font-family: 'Montserrat-Bold';
+        font-size: 12px;
+        border-radius: 20px;
+        // padding: 0 !important;
+      }
+       
+      position: absolute;
+      top: 5px;
+      right: 20px;
+      color: #fff;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+
+    }
   }
 
   .ant-tabs-nav {
