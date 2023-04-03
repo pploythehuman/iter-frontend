@@ -37,7 +37,7 @@ interface DateObject {
 
 interface ItineraryDateTabProps {
   dates: any[];
-  onDateTabClick: (index: number) => void;
+  onDateTabClick: (index: string) => void;
 }
 
 const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onDateTabClick }) => {
@@ -55,12 +55,12 @@ const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onDateTabCli
     </div>
   )
 
-  const dateItems: MenuItem[] = dates.map((date, index) => {
-    const tempDate = new Date(date.date);
+  const dateItems: MenuItem[] = dates.map((dateString, index) => {
+    const tempDate = new Date(dateString);  
     const monthString = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(tempDate);
     const dayString = tempDate.getDate().toLocaleString('en-US', { minimumIntegerDigits: 2 });
 
-    return getItem(`Date ${index + 1}`, `date-${index}`, dateObject(monthString, dayString));
+    return getItem(`Date ${index + 1}`, `date-${dateString}`, dateObject(monthString, dayString));
   });
 
   const items: MenuItem[] = [
@@ -106,11 +106,13 @@ const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onDateTabCli
           minHeight: '100vh',
         }}
         onClick={({ key }) => {
-          const cardIndex = parseInt(key.split("-")[1]);
-          if (!isNaN(cardIndex)) {
-            onDateTabClick(cardIndex);
+          const keyParts = key.split("-");
+          if (keyParts.length === 4 && keyParts[0] === "date") {
+            const date = keyParts.slice(1).join("-");
+            console.log("date", date);
+            onDateTabClick(date);
           }
-        }}
+        }}               
       />
     </div>
   );

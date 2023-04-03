@@ -23,6 +23,7 @@ const itineraryData = [
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
     description: "A dd-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
     rating: 4.5,
+    location: [-3.745, -38.523],
     tags: ["landmark", "architecture"],
     date: "2023-04-01",
     time: "10:00 AM",
@@ -33,6 +34,7 @@ const itineraryData = [
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
     description: "The world's largest art museum and a historic monument in Paris, France.",
     rating: 4.7,
+    location: [-3.745, -38.523],
     tags: ["museum", "art"],
     date: "2023-04-01",
     time: "2:00 PM",
@@ -43,6 +45,7 @@ const itineraryData = [
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
     description: "A medieval Catholic cathedral on the Île de la Cité in Paris, France.",
     rating: 4.6,
+    location: [-3.745, -38.523],
     tags: ["cathedral", "architecture"],
     date: "2023-04-02",
     time: "10:00 AM",
@@ -53,6 +56,7 @@ const itineraryData = [
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
     description: "One of the most famous monuments in Paris, France.",
     rating: 4.4,
+    location: [-3.745, -38.523],
     tags: ["monument", "history"],
     date: "2023-04-02",
     time: "2:00 PM",
@@ -63,31 +67,22 @@ const itineraryData = [
     imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
     description: "One of the most famous monuments in Paris, France.",
     rating: 4.4,
+    location: [-3.745, -38.523],
     tags: ["monument", "history"],
     date: "2023-04-09",
     time: "2:00 PM",
   },
 ];
 
-const location = {
-  address: '1600 Amphitheatre Parkway, Mountain View, california.',
-  lat: 37.42216,
-  lng: -122.08427,
-} 
-
 const Itinerary = () => {
-  const date = new Date('2023-04-02')
-
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
   const [itinerary, setItineraryData] = useState(itineraryData);
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const itineraryRefs = useRef<(HTMLDivElement | null)[]>(
-    Array.from({ length: itineraryData.length }, () => null)
-  );
-  
+  const uniqueDates = Array.from(new Set(itinerary.map(item => item.date)));
+  const itineraryRefs = useRef<(HTMLDivElement | null)[]>(Array.from({ length: uniqueDates.length }, () => null));
 
   const handleImageLoad = (event: any) => {
     const canvas = document.createElement('canvas');
@@ -107,14 +102,13 @@ const Itinerary = () => {
   };
   
   const handleDelete = (id: number) => {
-    console.log(date.getMonth() + 1)
     const updatedItinerary = itinerary.filter((item) => item.id !== id);
     setItineraryData(updatedItinerary);
   };
 
-  const scrollToCard = (index: number) => {
-    setActiveIndex(index);
-    if (itineraryRefs.current[index]) {
+  const scrollToCard = (date: string) => {
+    const index = itinerary.findIndex((item) => item.date === date);
+    if (index !== -1 && itineraryRefs.current[index]) {
       itineraryRefs?.current[index]?.scrollIntoView({
         behavior: "smooth",
         block: "start",
@@ -122,7 +116,7 @@ const Itinerary = () => {
   
       const yOffset = -70;
       const yCoordinate =
-        (itineraryRefs.current[index]?.getBoundingClientRect()?.top ?? 0) +
+        (itineraryRefs?.current[index]?.getBoundingClientRect().top ?? 0) +
         window.pageYOffset +
         yOffset;
       window.scrollTo({ top: yCoordinate, behavior: "smooth" });
@@ -149,15 +143,15 @@ const Itinerary = () => {
         <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map" key="map" >
-          <div style={{ borderRadius: '10px', padding: '25px'}}> 
+          {/* <div style={{ borderRadius: '10px', padding: '25px'}}> 
             <GoogleMap />
-          </div>
+          </div> */}
         </TabPane>
       </Tabs>
       
       <div className="itinerary-wrapper">
         <div className="itinerary-date-tab-container">
-          <ItineraryDateTab dates={itineraryData} onDateTabClick={(index) => scrollToCard(index)} />
+          <ItineraryDateTab dates={uniqueDates} onDateTabClick={(date) => scrollToCard(date)} />
         </div>
         <div className="itinerary-content">
         {activeTab === "timeline" &&
@@ -179,11 +173,15 @@ const Itinerary = () => {
                 onDelete={handleDelete}
               />
             </div>
-          ))}
-        </div>
+        ))}
+        {activeTab === "map" && (
+          <>
+            <GoogleMap />
+          </>
+        )}
       </div>
-      </div>
-
+    </div>
+    </div>
   );
 };
 

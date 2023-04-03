@@ -515,6 +515,7 @@ a {
 
 /* Itineray */
 .itinerary-page {
+  // background-color: $color-white;
   .banner {
     position: relative;
     img {
@@ -552,11 +553,13 @@ a {
     position: sticky;
     top: 20px; 
     left: 0;
-    width: 200px; 
+    // width: 200px; 
+    width: 100px; //width of collapsed date tab
     max-height: calc(100vh - 20px);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1;
+
     -ms-overflow-style: none; /* Internet Explorer and Edge */
     scrollbar-width: none; /* Firefox */
   }
@@ -569,6 +572,7 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     flex-grow: 1;
     padding: 20px;
   }
