@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleMap as GoogleMapComponent, LoadScript, Marker } from '@react-google-maps/api';
+import {MarkerF} from '@react-google-maps/api'
 
 const containerStyle = {
   width: '100%',
@@ -7,17 +8,23 @@ const containerStyle = {
 };
 
 const center = {
-  lat: -3.745,
-  lng: -38.523
+  lat: 13.7563,
+  lng: 100.5018
 };
 
 interface GoogleMapProps {
   itineraryData: any[];
+  selectedDate: string;
 }
 
-const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData }) => {
-  // console.log("key", process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-  const [map, setMap] = React.useState(null);
+const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData, selectedDate }) => {
+  console.log("key", process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+
+  const filteredMarkers = selectedDate
+  ? itineraryData.filter((item) => item.date === selectedDate)
+  : itineraryData;
+
 
   const onLoad = React.useCallback((map: any) => {
     console.log('Map loaded!', map);
@@ -30,11 +37,11 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData }) => {
         featureType: 'poi.business',
         stylers: [{ visibility: 'off' }]
       },
-      {
-        featureType: 'road',
-        elementType: 'geometry',
-        stylers: [{ color: '#FF9B26' }]
-      },
+      // {
+      //   featureType: 'road',
+      //   elementType: 'geometry',
+      //   stylers: [{ color: '#FF9B26' }]
+      // },
       {
         featureType: 'road',
         elementType: 'geometry.stroke',
@@ -45,11 +52,11 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData }) => {
         elementType: 'labels.text.fill',
         stylers: [{ color: '#424242' }]
       },
-      {
-        featureType: 'road.highway',
-        elementType: 'geometry',
-        stylers: [{ color: '#FF9B26' }]
-      },
+      // {
+      //   featureType: 'road.highway',
+      //   elementType: 'geometry',
+      //   stylers: [{ color: '#FF9B26' }]
+      // },
       {
         featureType: 'road.highway',
         elementType: 'geometry.stroke',
@@ -86,12 +93,36 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData }) => {
     ]
   };
 
+  const fitBounds = () => {
+    if (map) {
+      if (filteredMarkers.length > 0) {
+        const bounds = new window.google.maps.LatLngBounds();
+        filteredMarkers.forEach((marker) => {
+          bounds.extend(new window.google.maps.LatLng(marker.location[0], marker.location[1]));
+        });
+        map.fitBounds(bounds);
+      } else if (map){
+        map.setCenter(center);
+        map.setZoom(8);
+      }
+    }
+  };
+
+  
+  
+  useEffect(() => {
+    fitBounds();
+  }, [selectedDate]);
+  
+
   // <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} options={options}>
   return (
-     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}>
-      <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} onLoad={onLoad}>
-        {/* <Marker position={center} /> */}
-        <Marker key={1} position={{ lat: -3.7492883, lng: -38.5399122 }} />
+    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string}>
+      <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={9} onLoad={onLoad} options={options}>
+        {/* <MarkerF key={1} position={{ lat: 13.7462, lng: 100.5347 }} /> */}
+        {filteredMarkers.map((marker, index) => (
+          <MarkerF key={index} position={{ lat: marker.location[0], lng: marker.location[1] }} />
+        ))}
       </GoogleMapComponent>
     </LoadScript>
   );
