@@ -2708,6 +2708,11 @@ ansi-styles@^5.0.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
+antd-weekly-calendar@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/antd-weekly-calendar/-/antd-weekly-calendar-1.1.2.tgz#06be0bb2a84bc8595d42b8a73a97cdee0016f0c7"
+  integrity sha512-H4z59t2a1Fgg1Nn1VodyAUdCtktYeo8DH8NM4x+nWCJUgS0UdktR9XLdnfScljykp7L7gqnAP0pJXcnP+nqinQ==
+
 antd@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.3.0.tgz#a39599b76ed942399e2876aca8e60cdbb7af56b8"
@@ -3776,6 +3781,11 @@ data-urls@^2.0.0:
     abab "^2.0.3"
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.11.1:
   version "1.11.7"
