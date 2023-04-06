@@ -5,10 +5,32 @@ import { MailOutlined, LockOutlined, CalendarOutlined, UserOutlined } from "@ant
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
 import type { DatePickerProps } from 'antd';
 
+//del later
+import axios from 'axios';
+
 const SignInPage = () => {
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };
+
+  //del later
+  const handleRegister = async() => {
+    const testData = {
+      email: 'ployTest1234@example.com',
+      firstname: 'Test',
+      lastname: 'Test',
+      password: 'password',
+      password2: 'password',
+      tc: true,
+    }
+
+    try {
+      const response = await axios.post('http://dev.se.kmitl.ac.th:1337/api/user/register/', testData);
+      console.log('Registration response:', response);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
 
   return (
     <div className="main-container" style={{ backgroundColor: 'var(--color-secondary)'}}>
@@ -67,7 +89,7 @@ const SignInPage = () => {
               placeholder="Confirm Password"
               className="sign-in-input"
             />
-            <Button type="primary" className="sign-in-button" style={{ margin: '0px'}}>
+            <Button type="primary" className="sign-in-button" onClick={handleRegister} style={{ margin: '0px'}}>
               Sign Up
             </Button>
             <Divider style={{ color: 'var(--color-white)', borderColor: 'var(--color-white)', fontSize: '13px'}}>or login using</Divider>
