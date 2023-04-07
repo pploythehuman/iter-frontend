@@ -1,9 +1,10 @@
 import React from "react";
 import "../pages/styles/auth.scss";
 import { Input, Button, Divider, DatePicker } from "antd";
+import type { DatePickerProps } from 'antd';
 import { MailOutlined, LockOutlined, CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
-import type { DatePickerProps } from 'antd';
+import { register } from '../services/auth';
 
 //del later
 import axios from 'axios';
@@ -16,7 +17,7 @@ const SignInPage = () => {
   //del later
   const handleRegister = async() => {
     const testData = {
-      email: 'ployTest1234@example.com',
+      email: 'ployTest0007@gmail.com',
       firstname: 'Test',
       lastname: 'Test',
       password: 'password',
@@ -25,7 +26,8 @@ const SignInPage = () => {
     }
 
     try {
-      const response = await axios.post('http://dev.se.kmitl.ac.th:1337/api/user/register/', testData);
+      // const response = await axios.post('http://dev.se.kmitl.ac.th:1337/api/user/register/', testData);
+      const response = await register(testData);
       console.log('Registration response:', response);
     } catch (error) {
       console.log("Error", error);
