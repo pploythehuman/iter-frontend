@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "../pages/styles/auth.scss";
 import { Input, Button, Divider } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
+import { login } from '../services/auth';
 
 const SignInPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const loginData = {
+        email: email,
+        password: password,
+      }
+      const response = await login(loginData);
+      console.log('Login response:', response);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
   return (
     <div className="main-container">
       <div className="main-row">
@@ -40,13 +57,17 @@ const SignInPage = () => {
               prefix={<MailOutlined />}
               placeholder="Email"
               className="sign-in-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="Password"
               className="sign-in-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="primary" className="sign-in-button">
+            <Button type="primary" className="sign-in-button" onClick={handleLogin}>
               Sign In
             </Button>
             <a href="/" className="forgot-password-link" style={{ fontSize: '13px'}}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../pages/styles/auth.scss";
 import { Input, Button, Divider, DatePicker } from "antd";
 import type { DatePickerProps } from 'antd';
@@ -6,28 +6,38 @@ import { MailOutlined, LockOutlined, CalendarOutlined, UserOutlined } from "@ant
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
 import { register } from '../services/auth';
 
-//del later
-import axios from 'axios';
-
 const SignInPage = () => {
+  const [fullName, setFullName] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };
 
-  //del later
   const handleRegister = async() => {
-    const testData = {
-      email: 'ployTest0007@gmail.com',
-      firstname: 'Test',
-      lastname: 'Test',
-      password: 'password',
-      password2: 'password',
+    // const registerData = {
+    //   email: 'pployTest@gmail.com',
+    //   firstname: 'Test',
+    //   lastname: 'Test',
+    //   password: 'password',
+    //   password2: 'password',
+    //   tc: true,
+    // }
+    const registerData = {
+      email: email,
+      firstname: fullName.split(' ')[0],
+      lastname: fullName.split(' ')[1] || '',
+      password: password,
+      password2: confirmPassword,
       tc: true,
     }
 
     try {
       // const response = await axios.post('http://dev.se.kmitl.ac.th:1337/api/user/register/', testData);
-      const response = await register(testData);
+      const response = await register(registerData);
       console.log('Registration response:', response);
     } catch (error) {
       console.log("Error", error);
@@ -69,27 +79,35 @@ const SignInPage = () => {
               prefix={<UserOutlined />}
               placeholder="Full Name"
               className="sign-in-input"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
-            {/* <Input
-              prefix={<CalendarOutlined />}
-              placeholder="Birthdate"
-              className="sign-in-input"
-            /> */}
-            <DatePicker className="sign-in-input custom-date-picker" placeholder="Birthdate" onChange={onChange} />
+            <DatePicker 
+              className="sign-in-input custom-date-picker" 
+              placeholder="Birthdate" 
+              onChange={(_, dateString) => setBirthdate(dateString)}
+              // onChange={onChange} 
+            />
             <Input
               prefix={<MailOutlined />}
               placeholder="Email"
               className="sign-in-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="Password"
               className="sign-in-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Input.Password
               prefix={<LockOutlined />}
               placeholder="Confirm Password"
               className="sign-in-input"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <Button type="primary" className="sign-in-button" onClick={handleRegister} style={{ margin: '0px'}}>
               Sign Up

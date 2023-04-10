@@ -172,7 +172,7 @@ const Itinerary = () => {
           <Button type="link" icon={<SettingOutlined />} style={{ color: textColor, fontSize: '20px' }} />
         </div>
       </div>
-      <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%'}}>
+      <Tabs defaultActiveKey="timeline" onChange={(key) => setActiveTab(key)} centered style={{ width: '100%', fontFamily: "Asap-Medium"}}>
         <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map" key="map" >
