@@ -8,7 +8,8 @@ import ItineraryNavbar from '../components/itinerary/ItineraryNavbar';
 import ItineraryCard from '../components/itinerary/ItineraryCard'
 import GoogleMap from "../components/maps/GoogleMaps";
 import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
-import { MyCalendar }  from '../components/itinerary/WeeklyCalendarTab';
+// import { MyCalendar }  from '../components/itinerary/WeeklyCalendarTab';
+import MyCalendar  from '../components/calendar/Calendar';
 import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
