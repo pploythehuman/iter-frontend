@@ -140,9 +140,9 @@ const MyCalendar = () => {
     {
       id: 'event3',
       title: 'Event 3',
-      startTime: '4:00 PM',
-      endTime: '8:00 PM',
-      day: 3, 
+      startTime: '1:00 PM',
+      endTime: '2:00 PM',
+      day: 3,
     },
   ]);
 
@@ -192,9 +192,10 @@ const MyCalendar = () => {
   }));
 
   const rowHeight = 40;
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, item: { id: string }) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, item: DragItem) => {
+    const { id } = item; // Extract the id from the item object
     const { x, y } = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const droppedEvent = eventsData.find((event) => event.id === item.id);
+    const droppedEvent = eventsData.find((event) => event.id === id);
     if (!droppedEvent) return;
   
     const duration = timeToMinutes(droppedEvent.endTime) - timeToMinutes(droppedEvent.startTime);
@@ -211,8 +212,9 @@ const MyCalendar = () => {
     const newStartTime = calendarData[newStartTimeIndex].time;
     const newEndTime = minutesToTime(timeToMinutes(newStartTime) + duration);
   
-    handleEventDrop(item.id, newStartTime, newEndTime, newDay);
-  };  
+    handleEventDrop(id, newStartTime, newEndTime, newDay); // Pass the id to handleEventDrop
+  };
+   
   
   useEffect(() => {
     const newCalendarData = calendarData.map((item) => ({ ...item, day1: [], day2: [], day3: [], day4: [] }));
@@ -264,12 +266,13 @@ const CalendarTable: React.FC<CalendarTableProps> = ({ columns, dataSource, hand
         onRow={(record: CalendarItem) => ({
           onDrop: (e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
-            handleDrop(e, JSON.parse(e.dataTransfer.getData('text')));
+            const item = JSON.parse(e.dataTransfer.getData('text')) as DragItem;
+            handleDrop(e, item); // Pass the item with id property to handleDrop
           },
           onDragOver: (e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
           },
-        })}
+        })}        
       />
     </div>
   );

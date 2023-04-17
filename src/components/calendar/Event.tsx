@@ -35,7 +35,6 @@ const Event: React.FC<EventProps> = ({ id, startTime, endTime, onDrop, children 
     }),
   }));
   
-  
   return (
     <div
       ref={drag}
@@ -55,6 +54,7 @@ const Event: React.FC<EventProps> = ({ id, startTime, endTime, onDrop, children 
         maxWidth="100%"
         enable={{ top: false, right: false, bottom: true, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
       >
+        {`${startTime} - ${endTime}`}
         {children}
       </Resizable>
     </div>
