@@ -2,6 +2,10 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Resizable } from 're-resizable';
 
+interface DragItem {
+  id: string;
+}
+
 interface DropResult {
   startTime: string;
   endTime: string;
@@ -19,14 +23,18 @@ interface EventProps {
 const Event: React.FC<EventProps> = ({ id, startTime, endTime, onDrop, children }) => {
   const [, drag] = useDrag(() => ({
     type: 'event',
-    item: { id },
-    end: (item, monitor) => {
+    item: { id } as DragItem,
+    end: (item: DragItem | undefined, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (item && dropResult) {
         onDrop(item.id, dropResult.startTime, dropResult.endTime, parseInt(dropResult.day, 10));
-      }      
+      }
     },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   }));
+  
   
   return (
     <div
@@ -34,7 +42,12 @@ const Event: React.FC<EventProps> = ({ id, startTime, endTime, onDrop, children 
       draggable
       onDragStart={(e) => e.dataTransfer.setData('text', JSON.stringify({ id }))}
       onDragEnd={(e) => e.dataTransfer.clearData()}
-      style={{ cursor: 'move', background: 'lightblue', padding: '4px', borderRadius: '4px' }}
+      style={{
+        cursor: 'move',
+        background: 'lightblue',
+        padding: '4px',
+        borderRadius: '4px',
+      }}
     >
       <Resizable
         defaultSize={{ width: '100%', height: 'auto' }}
