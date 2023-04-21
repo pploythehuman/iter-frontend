@@ -8,7 +8,6 @@ import { DndProvider, useDrop, DropTargetMonitor } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import Event from './Event';
-// import CalendarTable from './CalendarTable';
 
 interface DragItem {
   id: string;
@@ -110,42 +109,67 @@ const MyCalendar = () => {
     }
     return timeSlots;
   };
-  
-  const [calendarData, setCalendarData] = useState<CalendarItem[]>(
-    generateTimeSlots(30).map((time, i) => ({
-      time,
-      id: i,
-      day1: [],
-      day2: [],
-      day3: [],
-      day4: [],
-    }))
-  );
+
+  const convertTo24Hour = (time: string) => {
+    const [hourMinPart, amPmPart] = time.split(" ");
+    let [hourStr, minutes] = hourMinPart.split(":");
+    const hour = parseInt(hourStr);
+    const convertedHour = amPmPart === "PM" ? (hour % 12) + 12 : hour % 12;
+    return `${convertedHour.toString().padStart(2, "0")}:${minutes}`;
+  };
   
   const [eventsData, setEventsData] = useState<EventItem[]>([
     {
-      id: 'event1',
-      title: 'Event 1',
-      startTime: '2:30 PM',
-      endTime: '3:30 PM',
+      id: "event1",
+      title: "Event 1",
+      // startTime: convertTo24Hour("2:30 PM"),
+      // endTime: convertTo24Hour("3:30 PM"),
+      startTime: convertTo24Hour("2:00 PM"),
+      endTime: convertTo24Hour("3:00 PM"),
       day: 1,
     },
     {
-      id: 'event2',
-      title: 'Event 2',
-      startTime: '4:00 PM',
-      endTime: '5:00 PM',
-      day: 2, 
+      id: "event2",
+      title: "Event 2",
+      startTime: convertTo24Hour("4:00 PM"),
+      endTime: convertTo24Hour("5:00 PM"),
+      day: 2,
     },
     {
-      id: 'event3',
-      title: 'Event 3',
-      startTime: '1:00 PM',
-      endTime: '2:00 PM',
+      id: "event3",
+      title: "Event 3",
+      startTime: convertTo24Hour("1:00 PM"),
+      endTime: convertTo24Hour("2:00 PM"),
       day: 3,
     },
-  ]);
+  ]);  
 
+  // fix any type later 
+  const addEventsToCalendar = (calendar: any, events: any) => {
+    const newCalendar = calendar.map((item: any) => ({ ...item, day1: [], day2: [], day3: [], day4: [] }));
+    events.forEach((event: any) => {
+      const startTimeIndex = newCalendar.findIndex((item: any) => item.time === event.startTime);
+      if (startTimeIndex !== -1) {
+        newCalendar[startTimeIndex][`day${event.day}`].push(event);
+      }
+    });
+    return newCalendar;
+  };
+
+  const [calendarData, setCalendarData] = useState<CalendarItem[]>(
+    addEventsToCalendar(
+      generateTimeSlots(60).map((time, i) => ({
+        time,
+        id: i,
+        day1: [],
+        day2: [],
+        day3: [],
+        day4: [],
+      })),
+      eventsData
+    )
+  );
+  
   // Convert time
   const timeToMinutes = (time: string) => {
     const [hours, minutes] = time.split(':');
@@ -172,25 +196,36 @@ const MyCalendar = () => {
       prevEventsData.map((event) => (event.id === id ? { ...event, startTime, endTime, day } : event))
     );
   };
-  
-  const [, calendarDrop] = useDrop(() => ({
-    accept: 'event',
-    drop: (item: DragItem, monitor: DropTargetMonitor) => {
-      const offset = monitor.getSourceClientOffset();
-      if (!offset) return null;
-      return { x: offset.x, y: offset.y, id: item.id };
-    },
-  }));
 
   const [, drop] = useDrop(() => ({
     accept: 'event',
-    drop: (item: DragItem, monitor: DropTargetMonitor) => {
-      const offset = monitor.getSourceClientOffset();
-      if (!offset) return null;
-      return { x: offset.x, y: offset.y, id: item.id };
+    drop: (item: { id: string }, monitor) => {
+      const id = item.id;
+      const droppedEvent = eventsData.find((event) => event.id === id);
+      if (!droppedEvent) return;
+
+      const calendarRect = calendarRef?.current?.getBoundingClientRect();
+      const offset = monitor.getClientOffset();
+
+      if (!offset || !calendarRect) return;
+
+      const rowHeight = 40;
+      const dropY = offset.y - calendarRect.top;
+      const dropRow = Math.floor(dropY / rowHeight);
+      const newStartTimeIndex = Math.max(0, Math.min(calendarData.length - 1, dropRow));
+
+      const dayWidth = calendarRect.width / 4;
+      const dropX = offset.x - calendarRect.left;
+      const newDay = Math.min(4, Math.max(1, Math.ceil(dropX / dayWidth)));
+
+      const duration = timeToMinutes(droppedEvent.endTime) - timeToMinutes(droppedEvent.startTime);
+      const newStartTime = calendarData[newStartTimeIndex].time;
+      const newEndTime = minutesToTime(timeToMinutes(newStartTime) + duration);
+
+      handleEventDrop(id, newStartTime, newEndTime, newDay);
     },
   }));
-
+  
   const rowHeight = 40;
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, item: DragItem) => {
     const { id } = item; // Extract the id from the item object
@@ -214,38 +249,35 @@ const MyCalendar = () => {
   
     handleEventDrop(id, newStartTime, newEndTime, newDay); // Pass the id to handleEventDrop
   };
-   
   
   useEffect(() => {
-    const newCalendarData = calendarData.map((item) => ({ ...item, day1: [], day2: [], day3: [], day4: [] }));
-    eventsData.forEach((event) => {
-      const startTimeIndex = newCalendarData.findIndex((item) => item.time === event.startTime);
-      if (startTimeIndex !== -1) {
-        getDayEvents(newCalendarData[startTimeIndex], `day${event.day}`).push(event);
-      }
-    });
-    setCalendarData(newCalendarData);
+    setCalendarData(addEventsToCalendar(calendarData, eventsData));
   }, [eventsData]);
   
   return (
-    <div className="calendar-container">
-      <Card
-        className="calendar-card"
-        title={
-          <div className="calendar-header">
-            <Button type="link" icon={<LeftOutlined />} />
-            <span>April 1 - April 4</span>
-            <Button type="link" icon={<RightOutlined />} />
+    <div className="calendar-container" ref={calendarRef}>
+        <Card
+          className="calendar-card"
+          title={
+            <div className="calendar-header">
+              <Button type="link" icon={<LeftOutlined />} />
+              <span>April 1 - April 4</span>
+              <Button type="link" icon={<RightOutlined />} />
+            </div>
+          }
+        >
+          <div ref={drop}>
+            <Table
+              className="calendar-table"
+              columns={columns}
+              dataSource={calendarData}
+              pagination={false}
+              scroll={{ y: 1000 }}
+              bordered
+              size="small"
+            />
           </div>
-        }
-      >
-        <CalendarTable
-          columns={columns}
-          dataSource={calendarData}
-          handleDrop={handleDrop}
-          drop={drop} 
-        />
-      </Card>
+        </Card>
     </div>
   );
 };
