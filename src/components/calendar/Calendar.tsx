@@ -1,41 +1,127 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, Card, Table } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, Table, Button } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import '../../pages/styles/calendar.scss';
-
-// drag and drop
-import { DndProvider, useDrop, DropTargetMonitor } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import Event from './Event';
+import '../../pages/styles/calendar.scss';
 
-interface DragItem {
-  id: string;
-}
+const itineraryData = [
+  {
+    id: 1,
+    name: "Eiffel Tower",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "A dd-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+    rating: 4.5,
+    location: [13.7494, 100.5282],
+    tags: ["landmark", "architecture"],
+    date: "2023-04-01",
+    startTime: "10:00 AM",
+    endTime: "10:00 AM",
 
-interface CalendarTableProps {
-  columns: any;
-  dataSource: any;
-  handleDrop: any;
-  drop: any;
-}
+  },
+  {
+    id: 2,
+    name: "Louvre Museum",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "The world's largest art museum and a historic monument in Paris, France.",
+    rating: 4.7,
+    location: [13.7441, 100.4941],
+    tags: ["museum", "art"],
+    date: "2023-04-01",
+    startTime: "2:00 PM",
+    endTime: "10:00 AM",
+  },
+  {
+    id: 3,
+    name: "Notre-Dame Cathedral",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "A medieval Catholic cathedral on the Île de la Cité in Paris, France.",
+    rating: 4.6,
+    location: [13.7581, 100.4917],
+    tags: ["cathedral", "architecture"],
+    date: "2023-04-02",
+    startTime: "10:00 AM",
+    endTime: "11:00 AM",
 
-type CalendarItem = {
-  time: string;
-  id: number;
-  [key: string]: string | number | EventItem[];
-};
+  },
+  {
+    id: 4,
+    name: "Arc de Triomphe",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "One of the most famous monuments in Paris, France.",
+    rating: 4.4,
+    location: [13.7641, 100.4991],
+    tags: ["monument", "history"],
+    date: "2023-04-02",
+    startTime: "5:00 PM",
+    endTime: "10:00 AM",
 
-type EventItem = {
-  id: string;
-  title: string;
-  startTime: string;
-  endTime: string;
-  day: number;
-};
+  },
+  {
+    id: 5,
+    name: "Place 5",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "One of the most famous monuments in Paris, France.",
+    rating: 4.4,
+    location: [13.7499, 100.4916],
+    tags: ["monument", "history"],
+    date: "2023-04-09",
+    startTime: "2:00 PM", 
+    endTime: "10:00 AM",
+
+  },
+  {
+    id: 6,
+    name: "Place 6",
+    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
+    description: "One of the most famous monuments in Paris, France.",
+    rating: 4.4,
+    location: [13.7641, 100.4991],
+    tags: ["monument", "history"],
+    date: "2023-04-09",
+    startTime: "2:00 PM",
+    endTime: "10:00 AM",
+
+  },
+];
 
 const MyCalendar = () => {
+  const timeSlots = Array.from({ length:24 }, (_, i) => {
+    const hour = i.toString().padStart(2, '0');
+    return `${hour}:00`
+  });
+
+  const calendarDataInitial = timeSlots.map((item, index) => ({
+    key: index,
+    time: item,
+    day1: [],
+    day2: [],
+    day3: [],
+    day4: [],
+  }));
+
+  const [calendarData, setCalendarData] = useState(calendarDataInitial);
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  const onDragEnd = (result: any) => {
+    // TODO: Handle the drag and drop event
+  };
+
+  function convertTo24HourFormat(time: string) {
+    const [hours, minutes] = time.split(':');
+    const [min, meridiem] = minutes.split(' ');
+  
+    let hour = parseInt(hours, 10);
+    if (meridiem === 'PM' && hour !== 12) {
+      hour += 12;
+    } else if (meridiem === 'AM' && hour === 12) {
+      hour = 0;
+    }
+  
+    return `${hour.toString().padStart(2, '0')}:${min}`;
+  }
+  
 
   const columns = [
     {
@@ -48,267 +134,158 @@ const MyCalendar = () => {
       title: 'Day 1',
       dataIndex: 'day1',
       key: 'day1',
-      render: (events: EventItem[]) =>
-        events.map((event: EventItem) => (
-          <Event
-            key={event.id}
-            {...event}
-            onDrop={handleEventDrop}
-          />
-        )),
+      render: (day1: any, record: any) => (
+        <Droppable droppableId={`day1-${record.key}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
+              {day1.map((event: any, index: number) => (
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Event event={event} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ),
     },
     {
       title: 'Day 2',
       dataIndex: 'day2',
       key: 'day2',
-      render: (events: EventItem[]) =>
-        events.map((event: EventItem) => (
-          <Event
-            key={event.id}
-            {...event}
-            onDrop={handleEventDrop}
-          />
-        )),
+      render: (day2: any, record: any) => (
+        <Droppable droppableId={`day2-${record.key}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
+              {day2.map((event: any, index: number) => (
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Event event={event} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ),
     },
     {
       title: 'Day 3',
       dataIndex: 'day3',
       key: 'day3',
-      render: (events: EventItem[]) =>
-        events.map((event: EventItem) => (
-          <Event
-            key={event.id}
-            {...event}
-            onDrop={handleEventDrop}
-          />
-        )),
+      render: (day3: any, record: any) => (
+        <Droppable droppableId={`day3-${record.key}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
+              {day3.map((event: any, index: number) => (
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Event event={event} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ),
     },
     {
       title: 'Day 4',
       dataIndex: 'day4',
       key: 'day4',
-      render: (events: EventItem[]) =>
-        events.map((event: EventItem) => (
-          <Event
-            key={event.id}
-            {...event}
-            onDrop={handleEventDrop}
-          />
-        )),
+      render: (day4: any, record: any) => (
+        <Droppable droppableId={`day4-${record.key}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
+              {day4.map((event: any, index: number) => (
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Event event={event} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ),
     },
   ];
   
-  const generateTimeSlots = (interval: number) => {
-    const timeSlots = [];
-    let currentMinutes = 0;
-    while (currentMinutes < 24 * 60) {
-      const hours = Math.floor(currentMinutes / 60);
-      const minutes = currentMinutes % 60;
-      timeSlots.push(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
-      currentMinutes += interval;
-    }
-    return timeSlots;
-  };
-
-  const convertTo24Hour = (time: string) => {
-    const [hourMinPart, amPmPart] = time.split(" ");
-    let [hourStr, minutes] = hourMinPart.split(":");
-    const hour = parseInt(hourStr);
-    const convertedHour = amPmPart === "PM" ? (hour % 12) + 12 : hour % 12;
-    return `${convertedHour.toString().padStart(2, "0")}:${minutes}`;
-  };
-  
-  const [eventsData, setEventsData] = useState<EventItem[]>([
-    {
-      id: "event1",
-      title: "Event 1",
-      // startTime: convertTo24Hour("2:30 PM"),
-      // endTime: convertTo24Hour("3:30 PM"),
-      startTime: convertTo24Hour("2:00 PM"),
-      endTime: convertTo24Hour("3:00 PM"),
-      day: 1,
-    },
-    {
-      id: "event2",
-      title: "Event 2",
-      startTime: convertTo24Hour("4:00 PM"),
-      endTime: convertTo24Hour("5:00 PM"),
-      day: 2,
-    },
-    {
-      id: "event3",
-      title: "Event 3",
-      startTime: convertTo24Hour("1:00 PM"),
-      endTime: convertTo24Hour("2:00 PM"),
-      day: 3,
-    },
-  ]);  
-
-  // fix any type later 
-  const addEventsToCalendar = (calendar: any, events: any) => {
-    const newCalendar = calendar.map((item: any) => ({ ...item, day1: [], day2: [], day3: [], day4: [] }));
-    events.forEach((event: any) => {
-      const startTimeIndex = newCalendar.findIndex((item: any) => item.time === event.startTime);
-      if (startTimeIndex !== -1) {
-        newCalendar[startTimeIndex][`day${event.day}`].push(event);
-      }
-    });
-    return newCalendar;
-  };
-
-  const [calendarData, setCalendarData] = useState<CalendarItem[]>(
-    addEventsToCalendar(
-      generateTimeSlots(60).map((time, i) => ({
-        time,
-        id: i,
-        day1: [],
-        day2: [],
-        day3: [],
-        day4: [],
-      })),
-      eventsData
-    )
-  );
-  
-  // Convert time
-  const timeToMinutes = (time: string) => {
-    const [hours, minutes] = time.split(':');
-    return parseInt(hours) * 60 + parseInt(minutes);
-  };
-
-  const minutesToTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-  };
-
-  // Drag and drop
-  function getDayEvents(calendarItem: CalendarItem, day: string): EventItem[] {
-    const events = calendarItem[day];
-    if (Array.isArray(events)) {
-      return events;
-    }
-    return [];
-  }
-
-  const handleEventDrop = (id: string, startTime: string, endTime: string, day: number) => {
-    setEventsData((prevEventsData) =>
-      prevEventsData.map((event) => (event.id === id ? { ...event, startTime, endTime, day } : event))
-    );
-  };
-
-  const [, drop] = useDrop(() => ({
-    accept: 'event',
-    drop: (item: { id: string }, monitor) => {
-      const id = item.id;
-      const droppedEvent = eventsData.find((event) => event.id === id);
-      if (!droppedEvent) return;
-
-      const calendarRect = calendarRef?.current?.getBoundingClientRect();
-      const offset = monitor.getClientOffset();
-
-      if (!offset || !calendarRect) return;
-
-      const rowHeight = 40;
-      const dropY = offset.y - calendarRect.top;
-      const dropRow = Math.floor(dropY / rowHeight);
-      const newStartTimeIndex = Math.max(0, Math.min(calendarData.length - 1, dropRow));
-
-      const dayWidth = calendarRect.width / 4;
-      const dropX = offset.x - calendarRect.left;
-      const newDay = Math.min(4, Math.max(1, Math.ceil(dropX / dayWidth)));
-
-      const duration = timeToMinutes(droppedEvent.endTime) - timeToMinutes(droppedEvent.startTime);
-      const newStartTime = calendarData[newStartTimeIndex].time;
-      const newEndTime = minutesToTime(timeToMinutes(newStartTime) + duration);
-
-      handleEventDrop(id, newStartTime, newEndTime, newDay);
-    },
-  }));
-  
-  const rowHeight = 40;
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, item: DragItem) => {
-    const { id } = item; // Extract the id from the item object
-    const { x, y } = JSON.parse(e.dataTransfer.getData('text/plain'));
-    const droppedEvent = eventsData.find((event) => event.id === id);
-    if (!droppedEvent) return;
-  
-    const duration = timeToMinutes(droppedEvent.endTime) - timeToMinutes(droppedEvent.startTime);
-  
-    const calendarRect = e.currentTarget.getBoundingClientRect();
-    const dropY = y - calendarRect.top;
-    const dropRow = Math.floor(dropY / rowHeight);
-    const newStartTimeIndex = Math.max(0, Math.min(calendarData.length - 1, dropRow));
-  
-    const dropX = x - calendarRect.left;
-    const dayWidth = calendarRect.width / 4;
-    const newDay = Math.min(4, Math.max(1, Math.ceil(dropX / dayWidth)));
-  
-    const newStartTime = calendarData[newStartTimeIndex].time;
-    const newEndTime = minutesToTime(timeToMinutes(newStartTime) + duration);
-  
-    handleEventDrop(id, newStartTime, newEndTime, newDay); // Pass the id to handleEventDrop
-  };
-  
   useEffect(() => {
-    setCalendarData(addEventsToCalendar(calendarData, eventsData));
-  }, [eventsData]);
+    console.log("render");
+    const newCalendarData = [...calendarDataInitial];
+    itineraryData.forEach((event) => {
+      console.log("add events");
+      const date = new Date(event.date);
+      const dayDiff = Math.ceil((+date - +new Date("2023-04-01")) / (1000 * 60 * 60 * 24));
   
+      // Convert to 24-hour format
+      const startTime24 = convertTo24HourFormat(event.startTime);
+      const hour = parseInt(startTime24.split(':')[0], 10);
+  
+      if (dayDiff >= 0 && dayDiff <= 3) {
+        const dayKey = 'day' + (dayDiff + 1);
+        const calendarItem = newCalendarData[hour];
+        if (calendarItem.hasOwnProperty(dayKey)) {
+          const isEventAlreadyAdded = (calendarItem as any)[dayKey].some((e: any) => e.id === event.id);
+          if (!isEventAlreadyAdded) {
+            (calendarItem as any)[dayKey].push(event);
+          }
+        }
+      }
+      console.log("calendar data", newCalendarData);
+    });
+  
+    setCalendarData(newCalendarData);
+  
+  }, []);
+  
+
   return (
     <div className="calendar-container" ref={calendarRef}>
-        <Card
-          className="calendar-card"
-          title={
-            <div className="calendar-header">
-              <Button type="link" icon={<LeftOutlined />} />
-              <span>April 1 - April 4</span>
-              <Button type="link" icon={<RightOutlined />} />
-            </div>
-          }
-        >
-          <div ref={drop}>
-            <Table
-              className="calendar-table"
-              columns={columns}
-              dataSource={calendarData}
-              pagination={false}
-              scroll={{ y: 1000 }}
-              bordered
-              size="small"
-            />
+      <Card
+        className="calendar-card"
+        title={
+          <div className="calendar-header">
+            <Button type="link" icon={<LeftOutlined />} />
+            <span>April 1 - April 4</span>
+            <Button type="link" icon={<RightOutlined />} />
           </div>
-        </Card>
+        }
+      >
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="calendar">
+            {(provided) => (
+              <Table
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="calendar-table"
+                columns={columns}
+                dataSource={calendarData}
+                pagination={false}
+                scroll={{ y: 1000 }}
+                bordered
+                size="small"
+              />
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Card>
     </div>
   );
 };
 
 export default MyCalendar;
-
-const CalendarTable: React.FC<CalendarTableProps> = ({ columns, dataSource, handleDrop, drop }) => {
-  return (
-    <div ref={drop}>
-      <Table
-        className="calendar-table"
-        columns={columns}
-        dataSource={dataSource}
-        pagination={false}
-        scroll={{ y: 1000 }}
-        bordered
-        size="small"
-        onRow={(record: CalendarItem) => ({
-          onDrop: (e: React.DragEvent<HTMLDivElement>) => {
-            e.preventDefault();
-            const item = JSON.parse(e.dataTransfer.getData('text')) as DragItem;
-            handleDrop(e, item); // Pass the item with id property to handleDrop
-          },
-          onDragOver: (e: React.DragEvent<HTMLDivElement>) => {
-            e.preventDefault();
-          },
-        })}        
-      />
-    </div>
-  );
-};
-
-
-
