@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Table, Button } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 import Event from './Event';
 import '../../pages/styles/calendar.scss';
@@ -86,6 +86,12 @@ const itineraryData = [
   },
 ];
 
+interface CalendarData {
+  key: number;
+  time: string;
+  [key: string]: any;
+}
+
 const MyCalendar = () => {
   const timeSlots = Array.from({ length:24 }, (_, i) => {
     const hour = i.toString().padStart(2, '0');
@@ -101,13 +107,32 @@ const MyCalendar = () => {
     day4: [],
   }));
 
-  const [calendarData, setCalendarData] = useState(calendarDataInitial);
+  const [calendarData, setCalendarData] = useState<CalendarData[]>(calendarDataInitial);
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const onDragEnd = (result: any) => {
-    // TODO: Handle the drag and drop event
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+  
+    if (!destination) {
+      return;
+    }
+  
+    const srcIndex = parseInt(source.droppableId.split('-')[1]);
+    const destIndex = parseInt(destination.droppableId.split('-')[1]);
+  
+    const srcDay = source.droppableId.split('-')[0];
+    const destDay = destination.droppableId.split('-')[0];
+  
+    const newCalendarData: CalendarData[] = [...calendarData];
+    const srcEvents = newCalendarData[srcIndex][srcDay] as Event[];
+    const destEvents = newCalendarData[destIndex][destDay] as Event[];
+  
+    const [removed] = srcEvents.splice(source.index, 1);
+    destEvents.splice(destination.index, 0, removed);
+  
+    setCalendarData(newCalendarData);
   };
-
+  
   function convertTo24HourFormat(time: string) {
     const [hours, minutes] = time.split(':');
     const [min, meridiem] = minutes.split(' ');
@@ -122,7 +147,6 @@ const MyCalendar = () => {
     return `${hour.toString().padStart(2, '0')}:${min}`;
   }
   
-
   const columns = [
     {
       title: 'Time',
@@ -225,10 +249,8 @@ const MyCalendar = () => {
   ];
   
   useEffect(() => {
-    console.log("render");
     const newCalendarData = [...calendarDataInitial];
     itineraryData.forEach((event) => {
-      console.log("add events");
       const date = new Date(event.date);
       const dayDiff = Math.ceil((+date - +new Date("2023-04-01")) / (1000 * 60 * 60 * 24));
   
@@ -236,6 +258,7 @@ const MyCalendar = () => {
       const startTime24 = convertTo24HourFormat(event.startTime);
       const hour = parseInt(startTime24.split(':')[0], 10);
   
+      // for (let i = 0; i < 4; i++) {
       if (dayDiff >= 0 && dayDiff <= 3) {
         const dayKey = 'day' + (dayDiff + 1);
         const calendarItem = newCalendarData[hour];
@@ -246,11 +269,10 @@ const MyCalendar = () => {
           }
         }
       }
-      console.log("calendar data", newCalendarData);
+        
     });
   
-    setCalendarData(newCalendarData);
-  
+    setCalendarData(newCalendarData);  
   }, []);
   
 
@@ -272,14 +294,15 @@ const MyCalendar = () => {
               <Table
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="calendar-table"
                 columns={columns}
                 dataSource={calendarData}
                 pagination={false}
-                scroll={{ y: 1000 }}
-                bordered
-                size="small"
-              />
+                scroll={{ y: 500 }}
+                rowClassName="time-row"
+                rowKey="key"
+              >
+                {provided.placeholder}
+              </Table>
             )}
           </Droppable>
         </DragDropContext>

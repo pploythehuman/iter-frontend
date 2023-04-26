@@ -8,7 +8,8 @@ const Event = ({ event }: EventProps) => {
 
   return (
     <div className="event-container">
-      <div className="event-info">
+      <div>
+      {/* <div className="event-info"> */}
         <p>{event.name}</p>
         <p>{`${event.startTime}-${event.endTime}`}</p>
       </div>
