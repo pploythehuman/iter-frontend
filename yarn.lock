@@ -2748,11 +2748,6 @@ ansi-styles@^5.0.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
-antd-weekly-calendar@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/antd-weekly-calendar/-/antd-weekly-calendar-1.1.2.tgz#06be0bb2a84bc8595d42b8a73a97cdee0016f0c7"
-  integrity sha512-H4z59t2a1Fgg1Nn1VodyAUdCtktYeo8DH8NM4x+nWCJUgS0UdktR9XLdnfScljykp7L7gqnAP0pJXcnP+nqinQ==
-
 antd@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.3.0.tgz#a39599b76ed942399e2876aca8e60cdbb7af56b8"
@@ -8258,11 +8253,6 @@ rc-virtual-list@^3.4.13, rc-virtual-list@^3.4.8:
     classnames "^2.2.6"
     rc-resize-observer "^1.0.0"
     rc-util "^5.15.0"
-
-re-resizable@^6.9.9:
-  version "6.9.9"
-  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.9.9.tgz#99e8b31c67a62115dc9c5394b7e55892265be216"
-  integrity sha512-l+MBlKZffv/SicxDySKEEh42hR6m5bAHfNu3Tvxks2c4Ah+ldnWjfnVRwxo/nxF27SsUsxDS0raAzFuJNKABXA==
 
 react-app-polyfill@^3.0.0:
   version "3.0.0"
