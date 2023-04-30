@@ -84,7 +84,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
             </Button>
           </Dropdown>
         </div>
-        <Rate value={rating} />
+        <Rate allowHalf disabled value={rating} />
         <div className="tags">
           {tags.map((tag, index) => (
             <a href='/'>

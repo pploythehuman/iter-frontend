@@ -286,22 +286,14 @@ const MyCalendar = () => {
         }
       >
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="calendar">
-            {(provided) => (
-              <Table
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                columns={columns}
-                dataSource={calendarData}
-                pagination={false}
-                scroll={{ y: 500 }}
-                rowClassName="time-row"
-                rowKey="key"
-              >
-                {provided.placeholder}
-              </Table>
-            )}
-          </Droppable>
+          <Table
+            columns={columns}
+            dataSource={calendarData}
+            pagination={false}
+            scroll={{ y: 500 }}
+            rowClassName="time-row"
+            rowKey="key"
+          />
         </DragDropContext>
       </Card>
     </div>
