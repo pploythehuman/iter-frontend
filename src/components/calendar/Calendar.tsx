@@ -16,8 +16,8 @@ const itineraryData = [
     location: [13.7494, 100.5282],
     tags: ["landmark", "architecture"],
     date: "2023-04-01",
-    startTime: "10:00 AM",
-    endTime: "10:00 AM",
+    startTime: "10:00",
+    endTime: "11:00",
 
   },
   {
@@ -29,8 +29,8 @@ const itineraryData = [
     location: [13.7441, 100.4941],
     tags: ["museum", "art"],
     date: "2023-04-01",
-    startTime: "2:00 PM",
-    endTime: "10:00 AM",
+    startTime: "14:00",
+    endTime: "15:00",
   },
   {
     id: 3,
@@ -41,8 +41,8 @@ const itineraryData = [
     location: [13.7581, 100.4917],
     tags: ["cathedral", "architecture"],
     date: "2023-04-02",
-    startTime: "10:00 AM",
-    endTime: "11:00 AM",
+    startTime: "10:00",
+    endTime: "11:00",
 
   },
   {
@@ -54,8 +54,8 @@ const itineraryData = [
     location: [13.7641, 100.4991],
     tags: ["monument", "history"],
     date: "2023-04-02",
-    startTime: "5:00 PM",
-    endTime: "10:00 AM",
+    startTime: "17:00",
+    endTime: "18:00",
 
   },
   {
@@ -67,8 +67,8 @@ const itineraryData = [
     location: [13.7499, 100.4916],
     tags: ["monument", "history"],
     date: "2023-04-09",
-    startTime: "2:00 PM", 
-    endTime: "10:00 AM",
+    startTime: "14:00", 
+    endTime: "15:00",
 
   },
   {
@@ -80,8 +80,8 @@ const itineraryData = [
     location: [13.7641, 100.4991],
     tags: ["monument", "history"],
     date: "2023-04-09",
-    startTime: "2:00 PM",
-    endTime: "10:00 AM",
+    startTime: "16:00",
+    endTime: "17:00",
 
   },
 ];
@@ -132,20 +132,6 @@ const MyCalendar = () => {
   
     setCalendarData(newCalendarData);
   };
-  
-  function convertTo24HourFormat(time: string) {
-    const [hours, minutes] = time.split(':');
-    const [min, meridiem] = minutes.split(' ');
-  
-    let hour = parseInt(hours, 10);
-    if (meridiem === 'PM' && hour !== 12) {
-      hour += 12;
-    } else if (meridiem === 'AM' && hour === 12) {
-      hour = 0;
-    }
-  
-    return `${hour.toString().padStart(2, '0')}:${min}`;
-  }
   
   const columns = [
     {
@@ -254,9 +240,7 @@ const MyCalendar = () => {
       const date = new Date(event.date);
       const dayDiff = Math.ceil((+date - +new Date("2023-04-01")) / (1000 * 60 * 60 * 24));
   
-      // Convert to 24-hour format
-      const startTime24 = convertTo24HourFormat(event.startTime);
-      const hour = parseInt(startTime24.split(':')[0], 10);
+      const hour = parseInt(event?.startTime?.split(':')[0], 10);
   
       // for (let i = 0; i < 4; i++) {
       if (dayDiff >= 0 && dayDiff <= 3) {
