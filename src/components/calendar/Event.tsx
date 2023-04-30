@@ -2,14 +2,17 @@ import React from 'react';
 
 interface EventProps {
   event: any;
+  highlight: boolean;
 }
-const Event = ({ event }: EventProps) => {
+
+const Event = ({ event, highlight }: EventProps) => {
   if (!event) return null;
 
+  const eventClass = highlight ? 'event-container highlight' : 'event-container';
+
   return (
-    <div className="event-container">
+    <div className={eventClass}>
       <div>
-      {/* <div className="event-info"> */}
         <p>{event.name}</p>
         <p>{`${event.startTime}-${event.endTime}`}</p>
       </div>

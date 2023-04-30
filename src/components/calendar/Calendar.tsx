@@ -166,7 +166,7 @@ const MyCalendar = () => {
                 <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} />
+                      <Event event={event} highlight={day1.length > 1} />
                     </div>
                   )}
                 </Draggable>
@@ -189,7 +189,7 @@ const MyCalendar = () => {
                 <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} />
+                      <Event event={event} highlight={day2.length > 1} />
                     </div>
                   )}
                 </Draggable>
@@ -212,7 +212,7 @@ const MyCalendar = () => {
                 <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} />
+                      <Event event={event} highlight={day3.length > 1} />
                     </div>
                   )}
                 </Draggable>
@@ -235,7 +235,7 @@ const MyCalendar = () => {
                 <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} />
+                      <Event event={event} highlight={day4.length > 1} />
                     </div>
                   )}
                 </Draggable>
