@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Table, Button } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { parse, differenceInMinutes, addMinutes, format } from 'date-fns';
 
 import Event from './Event';
+import { IEvent } from '../../interfaces/ICalendar';
 import '../../pages/styles/calendar.scss';
 
 const itineraryData = [
@@ -124,10 +127,20 @@ const MyCalendar = () => {
     const destDay = destination.droppableId.split('-')[0];
   
     const newCalendarData: CalendarData[] = [...calendarData];
-    const srcEvents = newCalendarData[srcIndex][srcDay] as Event[];
-    const destEvents = newCalendarData[destIndex][destDay] as Event[];
+    const srcEvents = newCalendarData[srcIndex][srcDay] as IEvent[];
+    const destEvents = newCalendarData[destIndex][destDay] as IEvent[];
   
     const [removed] = srcEvents.splice(source.index, 1);
+    const newStartTime = calendarData[destIndex].time;
+    const duration = differenceInMinutes(
+      parse(removed.endTime, 'HH:mm', new Date()),
+      parse(removed.startTime, 'HH:mm', new Date())
+    );
+    const newEndTime = format(addMinutes(parse(newStartTime, 'HH:mm', new Date()), duration), 'HH:mm');
+  
+    removed.startTime = newStartTime;
+    removed.endTime = newEndTime;
+  
     destEvents.splice(destination.index, 0, removed);
   
     setCalendarData(newCalendarData);

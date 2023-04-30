@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { IEvent } from '../../interfaces/ICalendar';
+
 interface EventProps {
-  event: any;
+  event: IEvent;
   highlight: boolean;
 }
 
