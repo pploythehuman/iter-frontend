@@ -27,6 +27,7 @@ const Event = ({ event, highlight, isResizing, setIsResizing }: EventProps) => {
 
   return (
     <Resizable
+      style={{ zIndex: 999}} // make event span multiple rows but not beyond navbar
       defaultSize={{
         width: "100%",
         height: containerHeight,
@@ -46,9 +47,9 @@ const Event = ({ event, highlight, isResizing, setIsResizing }: EventProps) => {
       }}
     >
       <div className={eventClass} style={{ height: '100%' }}>
-        <div style={{ marginLeft: '5px'}}>
-          <p>{event.name}</p>
-          <p>{`${event.startTime}-${event.endTime}`}</p>
+        <div style={{ textAlign: 'left'}}>
+          <p style={{ margin: '0px', fontSize: 12 }}>{event.name}</p>
+          <p style={{ margin: '0px', fontSize: 12  }}>{`${event.startTime}-${event.endTime}`}</p>
         </div>
       </div>
     </Resizable>
