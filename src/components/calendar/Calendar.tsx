@@ -154,6 +154,9 @@ const MyCalendar = () => {
       dataIndex: 'time',
       key: 'time',
       width: 80,
+      render: (time: string) => (
+        <div className="time-cell">{time}</div>
+      ),
     },
     {
       title: 'Day 1',
@@ -289,6 +292,7 @@ const MyCalendar = () => {
       >
         <DragDropContext onDragEnd={onDragEnd}>
           <Table
+            // className="calendar-table"
             columns={columns}
             dataSource={calendarData}
             pagination={false}
