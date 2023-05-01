@@ -112,6 +112,8 @@ const MyCalendar = () => {
 
   const [calendarData, setCalendarData] = useState<CalendarData[]>(calendarDataInitial);
   const calendarRef = useRef<HTMLDivElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
+  console.log("isResizing", isResizing);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -162,10 +164,10 @@ const MyCalendar = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
               {day1.map((event: any, index: number) => (
-                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={false}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} highlight={day1.length > 1} />
+                      <Event event={event} highlight={day1.length > 1} isResizing={isResizing} setIsResizing={setIsResizing}/>
                     </div>
                   )}
                 </Draggable>
@@ -185,10 +187,10 @@ const MyCalendar = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
               {day2.map((event: any, index: number) => (
-                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={isResizing}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} highlight={day2.length > 1} />
+                      <Event event={event} highlight={day2.length > 1} isResizing={isResizing} setIsResizing={setIsResizing}/>
                     </div>
                   )}
                 </Draggable>
@@ -208,10 +210,10 @@ const MyCalendar = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
               {day3.map((event: any, index: number) => (
-                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={isResizing}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} highlight={day3.length > 1} />
+                      <Event event={event} highlight={day3.length > 1} isResizing={isResizing} setIsResizing={setIsResizing}/>
                     </div>
                   )}
                 </Draggable>
@@ -231,10 +233,10 @@ const MyCalendar = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
               {day4.map((event: any, index: number) => (
-                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index}>
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={isResizing}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Event event={event} highlight={day4.length > 1} />
+                      <Event event={event} highlight={day4.length > 1} isResizing={isResizing} setIsResizing={setIsResizing}/>
                     </div>
                   )}
                 </Draggable>
