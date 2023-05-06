@@ -167,7 +167,7 @@ const MyCalendar = () => {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef} className="day-cell">
               {day1.map((event: any, index: number) => (
-                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={isResizing}>
+                <Draggable key={event.id} draggableId={`event-${event.id}`} index={index} isDragDisabled={false}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                       <Event event={event} highlight={day1.length > 1} isResizing={isResizing} setIsResizing={setIsResizing}/>

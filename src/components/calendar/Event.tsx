@@ -47,7 +47,7 @@ const Event = ({ event, highlight, isResizing, setIsResizing }: EventProps) => {
       }}
     >
       <div className={eventClass} style={{ height: '100%' }}>
-        <div style={{ textAlign: 'left'}}>
+        <div style={{ textAlign: 'left', padding: '8px'}}>
           <p style={{ margin: '0px', fontSize: 12 }}>{event.name}</p>
           <p style={{ margin: '0px', fontSize: 12  }}>{`${event.startTime}-${event.endTime}`}</p>
         </div>
