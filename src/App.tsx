@@ -9,13 +9,13 @@ import SignupPage from './pages/Register';
 import Itinerary from './pages/Itinerary';
 
 //drag and drop
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+// import { DndProvider } from 'react-dnd';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
+    // <DndProvider backend={HTML5Backend}>
     <BrowserRouter>
     <Layout>
       <Routes>
@@ -36,7 +36,7 @@ function App() {
       </Routes>
       </Layout>
     </BrowserRouter>
-    </DndProvider>
+    // </DndProvider>
   );
 }
 

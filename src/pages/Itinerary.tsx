@@ -103,7 +103,6 @@ const Itinerary = () => {
   const itineraryRefs = useRef<(HTMLDivElement | null)[]>(Array.from({ length: uniqueDates.length }, () => null));
 
   const [selectedDate, setSelectedDate] = useState("");
-  console.log("selectedDate", selectedDate)
 
   const handleImageLoad = (event: any) => {
     const canvas = document.createElement('canvas');

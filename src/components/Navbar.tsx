@@ -51,7 +51,7 @@ const Navbar = () => {
               closable={true}
               onClose={showDrawer}
               visible={visible}
-              style={{ zIndex: 999 }}
+              style={{ zIndex: 9999 }}
             >
               <LeftMenu mode={"inline"} />
               <RightMenu mode={"inline"} />

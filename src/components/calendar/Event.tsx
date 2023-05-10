@@ -1,63 +1,58 @@
-import React from 'react';
-import { useDrag } from 'react-dnd';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
-interface DragItem {
-  id: string;
-}
-
-interface DropResult {
-  startTime: string;
-  endTime: string;
-  day: string;
-}
+import { IEvent } from '../../interfaces/ICalendar';
 
 interface EventProps {
-  id: string;
-  startTime: string;
-  endTime: string;
-  children?: React.ReactNode;
-  onDrop: (id: string, startTime: string, endTime: string, day: number) => void;
+  event: IEvent;
+  highlight: boolean;
+  isResizing: boolean;
+  setIsResizing: Function;
 }
 
-const Event: React.FC<EventProps> = ({ id, startTime, endTime, onDrop, children }) => {
-  const [, drag] = useDrag(() => ({
-    type: 'event',
-    item: { id } as DragItem,
-    end: (item: DragItem | undefined, monitor) => {
-      const dropResult = monitor.getDropResult<DropResult>();
-      if (item && dropResult) {
-        onDrop(item.id, dropResult.startTime, dropResult.endTime, parseInt(dropResult.day, 10));
-      }
-    },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }));
-  
+const Event = ({ event, highlight, isResizing, setIsResizing }: EventProps) => {
+  const [containerHeight, setContainerHeight] = useState('auto');
+  if (!event) return null;
+
+  const eventClass = highlight ? 'event-container highlight' : 'event-container';
+
+  const handleResizeStart = () => {
+    setIsResizing(true);
+  };
+
+  const handleResizeStop = (e: any, direction: any, ref: any) => {
+    setIsResizing(false);
+    setContainerHeight(ref.style.height);
+  };
+
   return (
-    <div
-      ref={drag}
-      draggable
-      onDragStart={(e) => e.dataTransfer.setData('text', JSON.stringify({ id }))}
-      onDragEnd={(e) => e.dataTransfer.clearData()}
-      style={{
-        cursor: 'move',
-        background: 'lightblue',
-        padding: '4px',
-        borderRadius: '4px',
+    <Resizable
+      style={{ zIndex: 999}} // make event span multiple rows but not beyond navbar
+      defaultSize={{
+        width: "100%",
+        height: containerHeight,
+      }}
+      minHeight="40px"
+      onResizeStart={handleResizeStart}
+      onResizeStop={handleResizeStop}
+      enable={{
+        top: false,
+        right: false,
+        bottom: true,
+        left: false,
+        topRight: false,
+        bottomRight: false,
+        bottomLeft: false,
+        topLeft: false,
       }}
     >
-      <Resizable
-        defaultSize={{ width: '100%', height: 'auto' }}
-        minWidth="100%"
-        maxWidth="100%"
-        enable={{ top: false, right: false, bottom: true, left: false, topRight: false, bottomRight: false, bottomLeft: false, topLeft: false }}
-      >
-        {`${startTime} - ${endTime}`}
-        {children}
-      </Resizable>
-    </div>
+      <div className={eventClass} style={{ height: '100%' }}>
+        <div style={{ textAlign: 'left', padding: '8px'}}>
+          <p style={{ margin: '0px', fontSize: 12 }}>{event.name}</p>
+          <p style={{ margin: '0px', fontSize: 12  }}>{`${event.startTime}-${event.endTime}`}</p>
+        </div>
+      </div>
+    </Resizable>
   );
 };
 
