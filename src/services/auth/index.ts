@@ -19,9 +19,9 @@ interface ForgotPasswordData {
 }
 
 const login = async (data: LoginData) => {
-  const response = await apiPost<LoginData, { token: string }>('user/login/', data);
+  const response = await apiPost<LoginData, { token: any }>('user/login/', data);
   if (response.status === 200 && response.data) {
-    localStorage.setItem('auth', response.data.token);
+    localStorage.setItem('auth', response.data.token.access);
   }
   return response;
 };
