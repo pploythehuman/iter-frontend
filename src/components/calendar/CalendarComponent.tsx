@@ -5,7 +5,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import { Button, Card } from 'antd';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 export default function CalendarComponent() {
   function handleDateSelect(selectInfo: any) {
@@ -45,59 +44,46 @@ export default function CalendarComponent() {
   }
 
   return (
-    <div className="calendar-container">
-    <div className="calendar-container">
-      <Card
-        className="calendar-card"
-        title={
-          <div className="calendar-header">
-            <Button type="link" icon={<LeftOutlined />} />
-            <span>April 1 - April 4</span>
-            <Button type="link" icon={<RightOutlined />} />
-          </div>
-        }
-      >
-        <FullCalendar
-          headerToolbar={false}
-          plugins={[timeGridPlugin, interactionPlugin]} 
-          initialView="timeGridFourDay" 
-          allDaySlot={false} // remove all day top row
-          views={{
-            timeGridFourDay: {
-              type: 'timeGrid',
-              duration: { days: 4 },
-              buttonText: '4 day'
-            }
-          }}
-          editable={true} 
-          selectable={true} 
-          selectMirror={true} 
-          dayMaxEvents={true} 
-          weekends={true}
-          events={[
-            { 
-              title:  'My Event',
-              start:  '2023-05-16T14:30:00',
-              end:  '2023-05-16T17:30:00',
-              color: '#ff4d4f',
-              allDay: false
-            },
-            { 
-              title:  'My Event',
-              start:  '2023-05-16T14:30:00',
-              end:  '2023-05-16T17:30:00',
-              color: 'var(--color-secondary-light)',
-              allDay: false
-            },
-          ]}
-          select={handleDateSelect}
-          eventContent={renderEventContent} 
-          eventClick={handleEventClick}
-          eventsSet={handleEvents}
-        />
-      </Card>
-    </div>
-    </div>
+    <>
+      <FullCalendar
+        headerToolbar={false}
+        plugins={[timeGridPlugin, interactionPlugin]} 
+        initialView="timeGridFourDay" 
+        allDaySlot={false} // remove all day top row
+        views={{
+          timeGridFourDay: {
+            type: 'timeGrid',
+            duration: { days: 4 },
+            buttonText: '4 day'
+          }
+        }}
+        editable={true} 
+        selectable={true} 
+        selectMirror={true} 
+        dayMaxEvents={true} 
+        weekends={true}
+        events={[
+          { 
+            title:  'My Event',
+            start:  '2023-05-16T14:30:00',
+            end:  '2023-05-16T17:30:00',
+            color: '#ff4d4f',
+            allDay: false
+          },
+          { 
+            title:  'My Event',
+            start:  '2023-05-16T14:30:00',
+            end:  '2023-05-16T17:30:00',
+            color: 'var(--color-secondary-light)',
+            allDay: false
+          },
+        ]}
+        select={handleDateSelect}
+        eventContent={renderEventContent} 
+        eventClick={handleEventClick}
+        eventsSet={handleEvents}
+      />
+    </>
   )
 }
   
