@@ -1,12 +1,18 @@
 import { apiGet, apiPost } from '../api';
-
+import { getPlace, PlaceData } from '../place';
 
 interface AgendaData {
   place_id: string;
   arrival_time: Date;
   leave_time: Date;
   travel_time: string;
+}
 
+interface AgendaPlaceData {
+  place: PlaceData;
+  arrival_time: Date;
+  leave_time: Date;
+  travel_time: string;
 }
 
 interface ItineraryData {
@@ -16,6 +22,17 @@ interface ItineraryData {
   start_time: Date,
   end_time: Date,
   plan: [AgendaData];
+  co_travelers: [number], 
+  owner: number
+}
+
+interface ItineraryPlaceData {
+  destination: string,
+  start_date: Date,
+  end_date: Date,
+  start_time: Date,
+  end_time: Date,
+  plan: [AgendaPlaceData];
   co_travelers: [number], 
   owner: number
 }
@@ -102,12 +119,32 @@ const getItinerary = async (itineraryId: string | undefined) => {
   //       Authorization: 'Bearer '+ localStorage.getItem('auth'),
   //     },
   //   })
+  //   var iti = {
+  //     destination: response.destination,
+  //     start_date: response.start_date,
+  //     end_date: response.end_date,
+  //     start_time: response.start_time,
+  //     end_time: response.end_time,
+  //     plan: [];
+  //     co_travelers: response.co_travelers, 
+  //     owner: response.owner
+  //   }
+  //   response.data.plan.forEach(agenda => {
+  //     iti.plan.push(getPlace(agenda.place_id))
+  //   });
+    
   // return {
   //   status: response.status,
-  //   data: JSON.stringify(response.data)
+  //   data: JSON.stringify(iti)
   // };
 };
 
 export {
-  getItinerary,
+  getItinerary
 };
+export type {
+    ItineraryData,
+    ItineraryPlaceData,
+    AgendaData,
+    AgendaPlaceData
+  };
