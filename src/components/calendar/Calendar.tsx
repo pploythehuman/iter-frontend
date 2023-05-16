@@ -284,7 +284,7 @@ const MyCalendar = () => {
     <div className="calendar-container" ref={calendarRef}>
       
       <CalendarComponent />
-      <Card
+      {/* <Card
         className="calendar-card"
         title={
           <div className="calendar-header">
@@ -305,7 +305,7 @@ const MyCalendar = () => {
             rowKey="key"
           />
         </DragDropContext>
-      </Card>
+      </Card> */}
     </div>
   );
 };
