@@ -208,9 +208,9 @@ const Itinerary = () => {
             </div>
         ))}
         {activeTab === "calendar" && (
-          <div className="itinerary-content">
+          // <div className="itinerary-content">
             <MyCalendar />
-          </div>
+          // </div>
         )}
         {activeTab === "map" && (
           <>

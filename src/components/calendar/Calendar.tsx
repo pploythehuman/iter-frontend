@@ -9,6 +9,8 @@ import Event from './Event';
 import { IEvent } from '../../interfaces/ICalendar';
 import '../../pages/styles/calendar.scss';
 
+import CalendarComponent from './CalendarComponent';
+
 const itineraryData = [
   {
     id: 1,
@@ -280,6 +282,8 @@ const MyCalendar = () => {
 
   return (
     <div className="calendar-container" ref={calendarRef}>
+      
+      <CalendarComponent />
       <Card
         className="calendar-card"
         title={
