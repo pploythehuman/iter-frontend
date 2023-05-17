@@ -14,6 +14,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 
 const ImageUpload: React.FC = () => {
+  const uploadLimit = 8;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -86,7 +87,7 @@ const ImageUpload: React.FC = () => {
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {fileList.length >= 8 ? null : uploadButton}
+        {fileList.length >= uploadLimit ? null : uploadButton}
       </Upload>
       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: '100%' }} src={previewImage} />

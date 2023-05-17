@@ -41,7 +41,7 @@ const EventModal: React.FC<EventModalProps> = ({ modalVisible, setModalVisible }
           <Input placeholder="Enter Descriptions" style={{ marginTop: '10px'}}/>
           <DatePicker onChange={onChange} style={{ marginTop: '10px', marginRight: '10px' }}/>
           <TimePicker.RangePicker style={{ marginTop: '10px' }}/>
-          <Search placeholder="input search text" onSearch={onSearch} style={{ marginTop: '10px'}}/>
+          <Search placeholder="Search for place..." onSearch={onSearch} style={{ marginTop: '10px'}}/>
         </div>
       </Modal>
     </>

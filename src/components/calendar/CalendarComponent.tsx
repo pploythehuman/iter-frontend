@@ -42,10 +42,10 @@ export default function CalendarComponent() {
   
   function renderEventContent(eventInfo: any) {
     return (
-      <>
+      <div className="event-content">
+        <p>{eventInfo.event.title}</p>
         <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
+      </div>
     )
   }
 
@@ -71,14 +71,14 @@ export default function CalendarComponent() {
         weekends={true}
         events={[
           { 
-            title:  'My Event',
+            title:  'Event 1',
             start:  '2023-05-17T14:30:00',
-            end:  '2023-05-17T17:30:00',
+            end:  '2023-05-17T15:50:00',
             color: '#ff4d4f',
             allDay: false
           },
           { 
-            title:  'My Event',
+            title:  'Event 2',
             start:  '2023-05-17T14:30:00',
             end:  '2023-05-17T17:30:00',
             color: 'var(--color-secondary-light)',
