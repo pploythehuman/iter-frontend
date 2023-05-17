@@ -19,6 +19,7 @@ interface EventModalProps {
   setModalVisible: Function;
   eventName: String | undefined;
   addEvent: Function;
+  deleteEvent: Function;
 }
 
 const EventModal: React.FC<EventModalProps> = ({ 
@@ -26,6 +27,7 @@ const EventModal: React.FC<EventModalProps> = ({
   setModalVisible, 
   eventName,
   addEvent,
+  deleteEvent,
 }) => {
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
@@ -64,7 +66,7 @@ const EventModal: React.FC<EventModalProps> = ({
       handleAddPlace();
       setModalVisible(false);
     } else {
-
+      message.error(`Add place unsuccessfully`)
     }
   };
   

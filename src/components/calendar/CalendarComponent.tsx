@@ -49,6 +49,7 @@ export default function CalendarComponent() {
   }
   
   function handleEventClick(clickInfo: any) {
+    console.log("events", events);
     console.log("clickInfo", clickInfo.event.title);
     setEventModalVisible(true);
     setSelectedEvent(clickInfo.event)
@@ -60,6 +61,10 @@ export default function CalendarComponent() {
 
   function addEvent(event: IEvent) {
     setEvents(prevEvents => [...prevEvents, event]);
+  }
+
+  function deleteEvent(event: IEvent) {
+    setEvents((prevEvents) => prevEvents.filter((e) => e.id != event.id));
   }
   
   function renderEventContent(eventInfo: any) {
@@ -78,6 +83,7 @@ export default function CalendarComponent() {
         setModalVisible={setEventModalVisible} 
         eventName={selectedEvent?.title}
         addEvent={addEvent}
+        deleteEvent={deleteEvent}
       />
       <FullCalendar
         headerToolbar={false}
