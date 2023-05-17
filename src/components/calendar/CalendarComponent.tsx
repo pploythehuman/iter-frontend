@@ -6,38 +6,60 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 import { Button, Card } from 'antd';
 
+import { IEvent } from '../../interfaces/ICalendar';
 import EventModal from './EventModal';
 
+const eventData = [
+  { 
+    id: '1',
+    title: 'Event 1',
+    start: '2023-05-17T14:30:00',
+    end: '2023-05-17T15:50:00',
+    color: '#ff4d4f',
+    allDay: false
+  },
+  { 
+    id: '2',
+    title: 'Event 2',
+    start: '2023-05-17T14:30:00',
+    end: '2023-05-17T17:30:00',
+    color: 'var(--color-secondary-light)',
+    allDay: false
+  },
+]
+
 export default function CalendarComponent() {
+  const [events, setEvents] = useState<IEvent[]>([...eventData]);
+  const [selectedEvent, setSelectedEvent] = useState<IEvent>();
+
   const [eventModalVisible, setEventModalVisible] = useState(false);
+  
 
   function handleDateSelect(selectInfo: any) {
-    let title = prompt('Please enter a new title for your event');
-    let calendarApi = selectInfo.view.calendar;
-  
-    calendarApi.unselect();
-  
-    if (title) {
-      calendarApi.addEvent({
-        id: Date.now(), 
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      });
-    }
+    setEventModalVisible(true)
+    // let newEvent = {
+    //   id: Date.now().toString(), 
+    //   title: 'New Event',
+    //   start: selectInfo.startStr,
+    //   end: selectInfo.endStr,
+    //   allDay: selectInfo.allDay,
+    //   color: '#000000'
+    // };
+    // addEvent(newEvent);
   }
   
   function handleEventClick(clickInfo: any) {
-    console.log("clickInfo", clickInfo);
+    console.log("clickInfo", clickInfo.event.title);
     setEventModalVisible(true);
-    // if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
+    setSelectedEvent(clickInfo.event)
   }
   
   function handleEvents(events: any) {
     console.log(events);
+  }
+
+  function addEvent(event: IEvent) {
+    setEvents(prevEvents => [...prevEvents, event]);
   }
   
   function renderEventContent(eventInfo: any) {
@@ -51,7 +73,12 @@ export default function CalendarComponent() {
 
   return (
     <>
-      <EventModal modalVisible={eventModalVisible} setModalVisible={setEventModalVisible} />
+      <EventModal 
+        modalVisible={eventModalVisible} 
+        setModalVisible={setEventModalVisible} 
+        eventName={selectedEvent?.title}
+        addEvent={addEvent}
+      />
       <FullCalendar
         headerToolbar={false}
         plugins={[timeGridPlugin, interactionPlugin]} 
@@ -69,22 +96,23 @@ export default function CalendarComponent() {
         selectMirror={true} 
         dayMaxEvents={true} 
         weekends={true}
-        events={[
-          { 
-            title:  'Event 1',
-            start:  '2023-05-17T14:30:00',
-            end:  '2023-05-17T15:50:00',
-            color: '#ff4d4f',
-            allDay: false
-          },
-          { 
-            title:  'Event 2',
-            start:  '2023-05-17T14:30:00',
-            end:  '2023-05-17T17:30:00',
-            color: 'var(--color-secondary-light)',
-            allDay: false
-          },
-        ]}
+        events={events}
+        // events={[
+        //   { 
+        //     title:  'Event 1',
+        //     start:  '2023-05-17T14:30:00',
+        //     end:  '2023-05-17T15:50:00',
+        //     color: '#ff4d4f',
+        //     allDay: false
+        //   },
+        //   { 
+        //     title:  'Event 2',
+        //     start:  '2023-05-17T14:30:00',
+        //     end:  '2023-05-17T17:30:00',
+        //     color: 'var(--color-secondary-light)',
+        //     allDay: false
+        //   },
+        // ]}
         select={handleDateSelect}
         eventContent={renderEventContent} 
         eventClick={handleEventClick}

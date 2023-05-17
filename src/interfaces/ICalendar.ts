@@ -1,8 +1,17 @@
 export interface IEvent {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  color: string;
+  allDay: boolean;
+}
+
+//del later
+export interface IEvent {
+  name?: string;
+  endTime?: string;
+  startTime?: string;
 }
 
   
