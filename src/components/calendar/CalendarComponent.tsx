@@ -30,29 +30,21 @@ const eventData = [
 
 export default function CalendarComponent() {
   const [events, setEvents] = useState<IEvent[]>([...eventData]);
-  const [selectedEvent, setSelectedEvent] = useState<IEvent>();
+  const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 
   const [eventModalVisible, setEventModalVisible] = useState(false);
-  
 
   function handleDateSelect(selectInfo: any) {
+    setSelectedEvent(null);
     setEventModalVisible(true)
-    // let newEvent = {
-    //   id: Date.now().toString(), 
-    //   title: 'New Event',
-    //   start: selectInfo.startStr,
-    //   end: selectInfo.endStr,
-    //   allDay: selectInfo.allDay,
-    //   color: '#000000'
-    // };
-    // addEvent(newEvent);
   }
   
   function handleEventClick(clickInfo: any) {
-    console.log("events", events);
-    console.log("clickInfo", clickInfo.event.title);
-    setEventModalVisible(true);
     setSelectedEvent(clickInfo.event)
+    setEventModalVisible(true);
+
+    // console.log('selectedEvent', selectedEvent);
+
   }
   
   function handleEvents(events: any) {
@@ -61,6 +53,10 @@ export default function CalendarComponent() {
 
   function addEvent(event: IEvent) {
     setEvents(prevEvents => [...prevEvents, event]);
+  }
+
+  function updateEvent(event: IEvent) {
+    // Update the event in state here
   }
 
   function deleteEvent(event: IEvent) {
@@ -81,8 +77,9 @@ export default function CalendarComponent() {
       <EventModal 
         modalVisible={eventModalVisible} 
         setModalVisible={setEventModalVisible} 
-        eventName={selectedEvent?.title}
+        eventItem={selectedEvent}
         addEvent={addEvent}
+        updateEvent={updateEvent}
         deleteEvent={deleteEvent}
       />
       <FullCalendar
