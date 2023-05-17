@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import type { DatePickerProps, TimeRangePickerProps } from 'antd';
 import { EnvironmentOutlined, LockOutlined } from "@ant-design/icons";
+import dayjs from 'dayjs';
 
 import { IEvent } from '../../interfaces/ICalendar';
 import ImageUpload from './ImageUpload';
@@ -39,16 +40,18 @@ const EventModal: React.FC<EventModalProps> = ({
   const [startTime, setStartTime] = useState(eventItem?.start || '');
   const [endTime, setEndTime] = useState(eventItem?.end || '');
 
-  const handleAddPlace = () => {
-    message.success(`Add place successfully`)
-  };
+  const clearInputs = () => {
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setStartTime('');
+    setEndTime('');
+  }
 
-  const handleEditPlace = () => {
-    message.success(`Changes are saved successfully`)
-  };
-
-  const handleDeletePlace = () => {
-    message.success(`Delete place successfully`)
+  const handleDeleteEvent = () => {
+    deleteEvent(eventItem);
+    setModalVisible(false);
+    clearInputs();
   };
 
   const handleAddEvent = () => {
@@ -64,8 +67,9 @@ const EventModal: React.FC<EventModalProps> = ({
       };
       
       addEvent(newEvent);
-      handleAddPlace();
       setModalVisible(false);
+      clearInputs();
+      message.success('Add place successfully')
     } else {
       message.error(`Add place unsuccessfully`)
     }
@@ -73,10 +77,12 @@ const EventModal: React.FC<EventModalProps> = ({
   
   const handleOk = () => {
     setModalVisible(false);
+    clearInputs();
   }
 
   const handleCancel = () => {
     setModalVisible(false);
+    clearInputs();
   };
 
   const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
@@ -107,7 +113,7 @@ const EventModal: React.FC<EventModalProps> = ({
           <>
             {eventItem != null ? (
               <>
-                <Button key="back" onClick={handleCancel}>
+                <Button key="back" onClick={handleDeleteEvent}>
                   Delete Event
                 </Button>
                 <Button key="submit" type="primary" onClick={handleAddEvent}>
@@ -142,10 +148,12 @@ const EventModal: React.FC<EventModalProps> = ({
             style={{ marginTop: '10px'}}
           />
           <DatePicker 
+            // value={undefined}
             onChange={onDateChange} 
             style={{ marginTop: '10px', marginRight: '10px' }}
           />
           <TimePicker.RangePicker 
+            // value={startTime}
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />

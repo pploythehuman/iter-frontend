@@ -42,9 +42,7 @@ export default function CalendarComponent() {
   function handleEventClick(clickInfo: any) {
     setSelectedEvent(clickInfo.event)
     setEventModalVisible(true);
-
     // console.log('selectedEvent', selectedEvent);
-
   }
   
   function handleEvents(events: any) {
