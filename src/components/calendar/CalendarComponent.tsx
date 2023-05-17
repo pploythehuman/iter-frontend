@@ -6,7 +6,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 import { Button, Card } from 'antd';
 
+import EventModal from './EventModal';
+
 export default function CalendarComponent() {
+  const [eventModalVisible, setEventModalVisible] = useState(false);
+
   function handleDateSelect(selectInfo: any) {
     let title = prompt('Please enter a new title for your event');
     let calendarApi = selectInfo.view.calendar;
@@ -25,9 +29,11 @@ export default function CalendarComponent() {
   }
   
   function handleEventClick(clickInfo: any) {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
-    }
+    console.log("clickInfo", clickInfo);
+    setEventModalVisible(true);
+    // if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove();
+    // }
   }
   
   function handleEvents(events: any) {
@@ -45,6 +51,7 @@ export default function CalendarComponent() {
 
   return (
     <>
+      <EventModal modalVisible={eventModalVisible} setModalVisible={setEventModalVisible} />
       <FullCalendar
         headerToolbar={false}
         plugins={[timeGridPlugin, interactionPlugin]} 
@@ -65,15 +72,15 @@ export default function CalendarComponent() {
         events={[
           { 
             title:  'My Event',
-            start:  '2023-05-16T14:30:00',
-            end:  '2023-05-16T17:30:00',
+            start:  '2023-05-17T14:30:00',
+            end:  '2023-05-17T17:30:00',
             color: '#ff4d4f',
             allDay: false
           },
           { 
             title:  'My Event',
-            start:  '2023-05-16T14:30:00',
-            end:  '2023-05-16T17:30:00',
+            start:  '2023-05-17T14:30:00',
+            end:  '2023-05-17T17:30:00',
             color: 'var(--color-secondary-light)',
             allDay: false
           },
