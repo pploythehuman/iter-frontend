@@ -2,17 +2,21 @@ import { apiGet, apiPost } from '../api';
 import { getPlace, PlaceData } from '../place';
 
 interface AgendaData {
+  id: number;
   place_id: string;
+  date: Date;
   arrival_time: Date;
   leave_time: Date;
-  travel_time: string;
+  travel_time: object;
 }
 
 interface AgendaPlaceData {
+  id: number;
   place: PlaceData;
+  date: Date;
   arrival_time: Date;
   leave_time: Date;
-  travel_time: string;
+  travel_time: object;
 }
 
 interface ItineraryData {
