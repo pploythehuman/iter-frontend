@@ -9,7 +9,7 @@ import {
   message,
 } from 'antd';
 import type { DatePickerProps, TimeRangePickerProps } from 'antd';
-import { EnvironmentOutlined, LockOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
 
 import { IEvent } from '../../interfaces/ICalendar';
@@ -48,12 +48,6 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime('');
   }
 
-  const handleDeleteEvent = () => {
-    deleteEvent(eventItem);
-    setModalVisible(false);
-    clearInputs();
-  };
-
   const handleAddEvent = () => {
     if (title && date && startTime && endTime) {
       alert("in");
@@ -63,7 +57,7 @@ const EventModal: React.FC<EventModalProps> = ({
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
         allDay: false, 
-        color: '#ff4d4f'
+        color: 'var(--color-secondary-light)'
       };
       
       addEvent(newEvent);
@@ -74,7 +68,17 @@ const EventModal: React.FC<EventModalProps> = ({
       message.error(`Add place unsuccessfully`)
     }
   };
-  
+
+  const handleEditEvent = () => {
+    // edit events
+  };
+
+  const handleDeleteEvent = () => {
+    deleteEvent(eventItem);
+    setModalVisible(false);
+    clearInputs();
+  };
+
   const handleOk = () => {
     setModalVisible(false);
     clearInputs();
@@ -99,7 +103,7 @@ const EventModal: React.FC<EventModalProps> = ({
     setStartTime(eventItem?.start || '');
     setEndTime(eventItem?.end || '');
 
-    console.log("selected event", eventItem);
+    // console.log("selected event", eventItem);
   }, [eventItem]);
 
   return(
@@ -116,7 +120,7 @@ const EventModal: React.FC<EventModalProps> = ({
                 <Button key="back" onClick={handleDeleteEvent}>
                   Delete Event
                 </Button>
-                <Button key="submit" type="primary" onClick={handleAddEvent}>
+                <Button key="submit" type="primary" onClick={handleEditEvent}>
                   Save Changes
                 </Button>
               </>

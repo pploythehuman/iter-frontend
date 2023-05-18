@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -13,26 +13,27 @@ const eventData = [
   { 
     id: '1',
     title: 'Event 1',
-    start: '2023-05-17T14:30:00',
-    end: '2023-05-17T15:50:00',
+    start: '2023-05-18T14:30:00',
+    end: '2023-05-18T15:50:00',
     color: '#ff4d4f',
     allDay: false
   },
   { 
     id: '2',
     title: 'Event 2',
-    start: '2023-05-17T14:30:00',
-    end: '2023-05-17T17:30:00',
+    start: '2023-05-18T14:30:00',
+    end: '2023-05-18T17:30:00',
     color: 'var(--color-secondary-light)',
     allDay: false
   },
 ]
 
 export default function CalendarComponent() {
+  const calendarRef = useRef<any>(null);
   const [events, setEvents] = useState<IEvent[]>([...eventData]);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
-
   const [eventModalVisible, setEventModalVisible] = useState(false);
+  console.log("my events", events);
 
   function handleDateSelect(selectInfo: any) {
     setSelectedEvent(null);
@@ -42,23 +43,58 @@ export default function CalendarComponent() {
   function handleEventClick(clickInfo: any) {
     setSelectedEvent(clickInfo.event)
     setEventModalVisible(true);
-    // console.log('selectedEvent', selectedEvent);
+  }
+
+  function handleEventDrop(info: any) {
+    let event = {
+      id: info.event.id,
+      title: info.event.title,
+      start: info.event.startStr,
+      end: info.event.endStr,
+      color: info.event.backgroundColor,
+      allDay: info.event.allDay
+    }
+    handleUpdateEvent(event);
+  }
+
+  function handleEventResize(info: any) {
+    let event = {
+      id: info.event.id,
+      title: info.event.title,
+      start: info.event.startStr,
+      end: info.event.endStr,
+      color: info.event.backgroundColor,
+      allDay: info.event.allDay
+    }
+    handleUpdateEvent(event);
   }
   
   function handleEvents(events: any) {
-    console.log(events);
+    console.log("full calendar events", events);
+  }
+
+  function handleUpdateEvent(updatedEvent: IEvent) {
+    // sync internal events
+    setEvents(prevEvents => prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event));
+  
+    //sync full calendar events
+    if (calendarRef.current) {
+      let calendarApi = calendarRef.current.getApi();
+      let event = calendarApi.getEventById(updatedEvent.id);
+      if (event) {
+        event.setProp('color', updatedEvent.color);
+        event.setProp('title', updatedEvent.title);
+        event.setDates(updatedEvent.start, updatedEvent.end, { allDay: updatedEvent.allDay });
+      }
+    }
   }
 
   function addEvent(event: IEvent) {
     setEvents(prevEvents => [...prevEvents, event]);
   }
 
-  function updateEvent(event: IEvent) {
-    // Update the event in state here
-  }
-
   function deleteEvent(event: IEvent) {
-    setEvents((prevEvents) => prevEvents.filter((e) => e.id != event.id));
+    setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
   }
   
   function renderEventContent(eventInfo: any) {
@@ -77,10 +113,11 @@ export default function CalendarComponent() {
         setModalVisible={setEventModalVisible} 
         eventItem={selectedEvent}
         addEvent={addEvent}
-        updateEvent={updateEvent}
+        updateEvent={() => {}}
         deleteEvent={deleteEvent}
       />
       <FullCalendar
+        ref={calendarRef}
         headerToolbar={false}
         plugins={[timeGridPlugin, interactionPlugin]} 
         initialView="timeGridFourDay" 
@@ -98,25 +135,11 @@ export default function CalendarComponent() {
         dayMaxEvents={true} 
         weekends={true}
         events={events}
-        // events={[
-        //   { 
-        //     title:  'Event 1',
-        //     start:  '2023-05-17T14:30:00',
-        //     end:  '2023-05-17T15:50:00',
-        //     color: '#ff4d4f',
-        //     allDay: false
-        //   },
-        //   { 
-        //     title:  'Event 2',
-        //     start:  '2023-05-17T14:30:00',
-        //     end:  '2023-05-17T17:30:00',
-        //     color: 'var(--color-secondary-light)',
-        //     allDay: false
-        //   },
-        // ]}
         select={handleDateSelect}
         eventContent={renderEventContent} 
         eventClick={handleEventClick}
+        eventDrop={handleEventDrop}
+        eventResize={handleEventResize}
         eventsSet={handleEvents}
       />
     </>
