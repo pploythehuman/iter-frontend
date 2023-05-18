@@ -76,7 +76,6 @@ export default function CalendarComponent() {
 
   function handleUpdateEvent(updatedEvent: IEvent) {
     // sync internal events
-    // setEvents(prevEvents => prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event));
     setEvents(prevEvents => {
       const newEvents = prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event);
       const checkedEvents = checkEventOverlap(newEvents);
@@ -97,8 +96,9 @@ export default function CalendarComponent() {
 
   function checkEventOverlap(events: IEvent[]) {
     let newEvents = [...events];
+    newEvents = newEvents.map(event => ({ ...event, color: 'var(--color-secondary-light)' }));
+  
     for (let i = 0; i < newEvents.length; i++) {
-      newEvents[i].color = 'var(--color-secondary-light)'; // Default color
       for (let j = 0; j < newEvents.length; j++) {
         if (i !== j) {
           const startI = new Date(newEvents[i].start);
@@ -109,15 +109,15 @@ export default function CalendarComponent() {
             (startI < endJ && endI > startJ) ||
             (startJ < endI && endJ > startI)
           ) {
-            newEvents[i].color = '#ff4d4f'; // If overlap, change color to red
-            break; // No need to check further
-          }
+            newEvents[i] = { ...newEvents[i], color: '#ff4d4f' };
+            newEvents[j] = { ...newEvents[j], color: '#ff4d4f' };
+          } 
         }
       }
     }
     return newEvents;
   }
-
+  
   function addEvent(event: IEvent) {
     // setEvents(prevEvents => [...prevEvents, event]);
     setEvents(prevEvents => {
