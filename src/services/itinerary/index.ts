@@ -20,6 +20,7 @@ interface AgendaPlaceData {
 }
 
 interface ItineraryData {
+  id: number,
   destination: string,
   start_date: Date,
   end_date: Date,
@@ -31,6 +32,7 @@ interface ItineraryData {
 }
 
 interface ItineraryPlaceData {
+  id: number,
   destination: string,
   start_date: Date,
   end_date: Date,
