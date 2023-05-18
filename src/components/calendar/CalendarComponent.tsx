@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -15,7 +15,7 @@ const eventData = [
     title: 'Event 1',
     start: '2023-05-18T14:30:00',
     end: '2023-05-18T15:50:00',
-    color: '#ff4d4f',
+    color: 'var(--color-secondary-light)',
     allDay: false
   },
   { 
@@ -30,7 +30,8 @@ const eventData = [
 
 export default function CalendarComponent() {
   const calendarRef = useRef<any>(null);
-  const [events, setEvents] = useState<IEvent[]>([...eventData]);
+  const [events, setEvents] = useState<IEvent[]>(checkEventOverlap([...eventData]));
+
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
   console.log("my events", events);
@@ -75,8 +76,13 @@ export default function CalendarComponent() {
 
   function handleUpdateEvent(updatedEvent: IEvent) {
     // sync internal events
-    setEvents(prevEvents => prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event));
-  
+    // setEvents(prevEvents => prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event));
+    setEvents(prevEvents => {
+      const newEvents = prevEvents.map(event => event.id === updatedEvent.id ? updatedEvent : event);
+      const checkedEvents = checkEventOverlap(newEvents);
+      return checkedEvents;
+    });
+
     //sync full calendar events
     if (calendarRef.current) {
       let calendarApi = calendarRef.current.getApi();
@@ -89,12 +95,45 @@ export default function CalendarComponent() {
     }
   }
 
+  function checkEventOverlap(events: IEvent[]) {
+    let newEvents = [...events];
+    for (let i = 0; i < newEvents.length; i++) {
+      newEvents[i].color = 'var(--color-secondary-light)'; // Default color
+      for (let j = 0; j < newEvents.length; j++) {
+        if (i !== j) {
+          const startI = new Date(newEvents[i].start);
+          const endI = new Date(newEvents[i].end);
+          const startJ = new Date(newEvents[j].start);
+          const endJ = new Date(newEvents[j].end);
+          if (
+            (startI < endJ && endI > startJ) ||
+            (startJ < endI && endJ > startI)
+          ) {
+            newEvents[i].color = '#ff4d4f'; // If overlap, change color to red
+            break; // No need to check further
+          }
+        }
+      }
+    }
+    return newEvents;
+  }
+
   function addEvent(event: IEvent) {
-    setEvents(prevEvents => [...prevEvents, event]);
+    // setEvents(prevEvents => [...prevEvents, event]);
+    setEvents(prevEvents => {
+      const newEvents = [...prevEvents, event];
+      const checkedEvents = checkEventOverlap(newEvents);
+      return checkedEvents;
+    });
   }
 
   function deleteEvent(event: IEvent) {
-    setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
+    // setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
+    setEvents(prevEvents => {
+      const newEvents = prevEvents.filter((e) => e.id !== event.id);
+      const checkedEvents = checkEventOverlap(newEvents);
+      return checkedEvents;
+    });
   }
   
   function renderEventContent(eventInfo: any) {
