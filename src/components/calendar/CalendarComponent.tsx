@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import { Button, Card } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 import { IEvent } from '../../interfaces/ICalendar';
 import EventModal from './EventModal';
@@ -36,7 +37,24 @@ export default function CalendarComponent() {
 
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
+
+  const [dateRange, setDateRange] = useState<string | null>(null);
   console.log("my events", events);
+
+  function goToNext() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.next();
+  }
+
+  function goToPrev() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.prev();
+  }
+
+  function goToToday() {
+    let calendarApi = calendarRef.current.getApi();
+    calendarApi.today();
+  }
 
   function handleDateSelect(selectInfo: any) {
     setSelectedEvent(null);
@@ -96,6 +114,13 @@ export default function CalendarComponent() {
     }
   }
 
+  function handleDatesSet({ start, end }: { start: Date, end: Date }) {
+    console.log(start.getMonth)
+    const startStr = `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}`
+    const endStr = `${end.toLocaleString('default', { month: 'long' })} ${end.getDate()}`
+    setDateRange(`${startStr} - ${endStr}`);
+  }
+
   function checkEventOverlap(events: IEvent[]) {
     let newEvents = [...events];
     newEvents = newEvents.map(event => ({ ...event, color: 'var(--color-secondary-light)' }));
@@ -121,7 +146,6 @@ export default function CalendarComponent() {
   }
   
   function addEvent(event: IEvent) {
-    // setEvents(prevEvents => [...prevEvents, event]);
     setEvents(prevEvents => {
       const newEvents = [...prevEvents, event];
       const checkedEvents = checkEventOverlap(newEvents);
@@ -138,7 +162,6 @@ export default function CalendarComponent() {
   }
 
   function deleteEvent(event: IEvent) {
-    // setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
     setEvents(prevEvents => {
       const newEvents = prevEvents.filter((e) => e.id !== event.id);
       const checkedEvents = checkEventOverlap(newEvents);
@@ -157,6 +180,20 @@ export default function CalendarComponent() {
 
   return (
     <>
+      <Card
+        className="calendar-card"
+        title={
+          <div className="calendar-header">
+            <div>
+              <Button type="link" icon={<LeftOutlined />} onClick={goToPrev}/>
+              <span>{dateRange}</span>
+              <Button type="link" icon={<RightOutlined />} onClick={goToNext}/>
+            </div>
+            
+            <Button onClick={goToToday}>Today</Button>
+          </div>
+        }
+      >
       <EventModal 
         modalVisible={eventModalVisible} 
         setModalVisible={setEventModalVisible} 
@@ -190,7 +227,9 @@ export default function CalendarComponent() {
         eventDrop={handleEventDrop}
         eventResize={handleEventResize}
         eventsSet={handleEvents}
+        datesSet={handleDatesSet}
       />
+      </Card>
     </>
   )
 }

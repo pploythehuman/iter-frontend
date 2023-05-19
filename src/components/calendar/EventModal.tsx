@@ -154,7 +154,7 @@ const EventModal: React.FC<EventModalProps> = ({
           </>
         }
       >
-        <div>
+        <div style={{ marginBottom: '15px' }}>
           <ImageUpload />
           {eventItem? (
             <p style={{ margin: 0 }}>
@@ -187,15 +187,13 @@ const EventModal: React.FC<EventModalProps> = ({
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />
-          {eventItem ? (
-            <div style={{ height: '10px' }} />
-          ) : (
+          {eventItem && (
             <Search 
               prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
               placeholder="Search for place..." 
               onSearch={onSearch} 
               // enterButton
-              style={{ marginTop: '10px'}}
+              style={{ marginTop: '10px', marginBottom: '10px' }}
             />
           )}
         </div>

@@ -91,7 +91,7 @@ const MyCalendar = () => {
 
   return (
     <div className="calendar-container" ref={calendarRef}>
-      <Card
+      {/* <Card
         className="calendar-card"
         title={
           <div className="calendar-header">
@@ -100,9 +100,9 @@ const MyCalendar = () => {
             <Button type="link" icon={<RightOutlined />} />
           </div>
         }
-      >
+      > */}
         <CalendarComponent />
-      </Card>
+      {/* </Card> */}
     </div>
   );
 };
