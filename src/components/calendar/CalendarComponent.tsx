@@ -129,6 +129,14 @@ export default function CalendarComponent() {
     });
   }
 
+  function editEvent(event: IEvent, updatedEvent: IEvent) {
+    setEvents(prevEvents => {
+      const newEvents = prevEvents.map(e => e.id === event.id ? updatedEvent : e)
+      const checkedEvents = checkEventOverlap(newEvents);
+      return checkedEvents;
+    })
+  }
+
   function deleteEvent(event: IEvent) {
     // setEvents((prevEvents) => prevEvents.filter((e) => e.id !== event.id));
     setEvents(prevEvents => {
@@ -154,7 +162,7 @@ export default function CalendarComponent() {
         setModalVisible={setEventModalVisible} 
         eventItem={selectedEvent}
         addEvent={addEvent}
-        updateEvent={() => {}}
+        editEvent={editEvent}
         deleteEvent={deleteEvent}
       />
       <FullCalendar

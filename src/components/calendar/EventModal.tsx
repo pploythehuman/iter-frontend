@@ -20,7 +20,7 @@ interface EventModalProps {
   setModalVisible: Function;
   eventItem: IEvent | null;
   addEvent: Function;
-  updateEvent: Function;
+  editEvent: Function;
   deleteEvent: Function;
 }
 
@@ -29,6 +29,7 @@ const EventModal: React.FC<EventModalProps> = ({
   setModalVisible, 
   eventItem,
   addEvent,
+  editEvent,
   deleteEvent,
 }) => {
   const { Search } = Input;
@@ -63,20 +64,37 @@ const EventModal: React.FC<EventModalProps> = ({
       addEvent(newEvent);
       setModalVisible(false);
       clearInputs();
-      message.success('Add place successfully')
+      message.success('Add event successfully')
     } else {
-      message.error(`Add place unsuccessfully`)
+      message.error(`Add event unsuccessfully`)
     }
   };
 
   const handleEditEvent = () => {
-    // edit events
+    if (title && date && startTime && endTime) {
+      alert("in edit");
+      const newEvent: IEvent = {
+        id: Date.now().toString(), // need fix
+        title: title,
+        start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
+        end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
+        allDay: false, 
+        color: 'var(--color-secondary-light)'
+      };
+      editEvent(eventItem, newEvent);
+      setModalVisible(false);
+      clearInputs();
+      message.success('Changes are saved successfully')
+    } else {
+      message.error(`Failed to save changes`)
+    }
   };
 
   const handleDeleteEvent = () => {
     deleteEvent(eventItem);
     setModalVisible(false);
     clearInputs();
+    message.success('Delete event successfully')
   };
 
   const handleOk = () => {
@@ -169,13 +187,17 @@ const EventModal: React.FC<EventModalProps> = ({
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />
-          <Search 
-            prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
-            placeholder="Search for place..." 
-            onSearch={onSearch} 
-            // enterButton
-            style={{ marginTop: '10px'}}
-          />
+          {eventItem ? (
+            <div style={{ height: '10px' }} />
+          ) : (
+            <Search 
+              prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
+              placeholder="Search for place..." 
+              onSearch={onSearch} 
+              // enterButton
+              style={{ marginTop: '10px'}}
+            />
+          )}
         </div>
       </Modal>
     </>
