@@ -1,8 +1,9 @@
 export interface IEvent {
   id: string;
   title: string;
-  start: string;
-  end: string;
+  description?: string
+  start: any;
+  end: any;
   color?: string;
   allDay: boolean;
 }

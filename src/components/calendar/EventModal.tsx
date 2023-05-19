@@ -35,27 +35,27 @@ const EventModal: React.FC<EventModalProps> = ({
   const onSearch = (value: string) => console.log(value);
 
   const [title, setTitle] = useState(eventItem?.title || '');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [startTime, setStartTime] = useState(eventItem?.start || '');
-  const [endTime, setEndTime] = useState(eventItem?.end || '');
+  const [description, setDescription] = useState(eventItem?.description || '');
+  const [date, setDate] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
+  const [startTime, setStartTime] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
+  const [endTime, setEndTime] = useState(eventItem?.end ? dayjs(eventItem.end) : null);
 
   const clearInputs = () => {
     setTitle('');
     setDescription('');
-    setDate('');
-    setStartTime('');
-    setEndTime('');
+    setDate(null);
+    setStartTime(null);
+    setEndTime(null);
   }
 
   const handleAddEvent = () => {
     if (title && date && startTime && endTime) {
       alert("in");
       const newEvent: IEvent = {
-        id: Date.now().toString(),
+        id: Date.now().toString(), // need fix
         title: title,
-        start: `${date}T${startTime}`,
-        end: `${date}T${endTime}`,
+        start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
+        end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
         allDay: false, 
         color: 'var(--color-secondary-light)'
       };
@@ -90,26 +90,25 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-    setDate(dateString);
+    setDate(date);
   };
 
   const onTimeChange: TimeRangePickerProps['onChange'] = (time, timeString) => {
-    setStartTime(timeString[0]);
-    setEndTime(timeString[1]);
+    setStartTime(time ? time[0]: null);
+    setEndTime(time ? time[1]: null);
   };
 
   useEffect(() => {
     setTitle(eventItem?.title || '');
-    setStartTime(eventItem?.start || '');
-    setEndTime(eventItem?.end || '');
-
-    // console.log("selected event", eventItem);
+    setDate(eventItem?.start ? dayjs(eventItem.start) : null)
+    setStartTime(eventItem?.start ? dayjs(eventItem.start) : null);
+    setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);
   }, [eventItem]);
 
   return(
     <>
       <Modal 
-        title={eventItem?.title} //does not change when var title changes
+        title={eventItem?.title || 'Custom Event'} //does not change when var title changes
         open={modalVisible} 
         onOk={handleOk} 
         onCancel={handleCancel}
@@ -139,25 +138,34 @@ const EventModal: React.FC<EventModalProps> = ({
       >
         <div>
           <ImageUpload />
-          <Input 
-            placeholder="Enter Name" 
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ marginTop: '10px'}}
-          />
-          <Input 
-            placeholder="Enter Descriptions" 
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            style={{ marginTop: '10px'}}
-          />
+          {eventItem? (
+            <p style={{ margin: 0 }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+          ) : (
+            <>
+              <Input 
+                placeholder="Enter Name" 
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ marginTop: '10px'}}
+              />
+
+              <Input 
+                placeholder="Enter Descriptions" 
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                style={{ marginTop: '10px'}}
+              />
+            </>
+          )}
           <DatePicker 
-            // value={undefined}
+            value={date? dayjs(date) : null}
             onChange={onDateChange} 
             style={{ marginTop: '10px', marginRight: '10px' }}
           />
           <TimePicker.RangePicker 
-            // value={startTime}
+            value={[startTime, endTime]}
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />
