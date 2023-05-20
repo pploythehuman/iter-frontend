@@ -35,7 +35,7 @@ export default function CalendarComponent() {
   const calendarRef = useRef<any>(null);
   const [events, setEvents] = useState<IEvent[]>(checkEventOverlap([...eventData]));
 
-  const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<IEvent | { start: string, end: string } | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
 
   const [dateRange, setDateRange] = useState<string | null>(null);
@@ -57,7 +57,11 @@ export default function CalendarComponent() {
   }
 
   function handleDateSelect(selectInfo: any) {
-    setSelectedEvent(null);
+    // setSelectedEvent(null);
+    setSelectedEvent({
+      start: selectInfo.startStr,
+      end: selectInfo.endStr
+    });
     setEventModalVisible(true)
   }
   

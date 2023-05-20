@@ -18,7 +18,7 @@ import ImageUpload from './ImageUpload';
 interface EventModalProps {
   modalVisible: boolean;
   setModalVisible: Function;
-  eventItem: IEvent | null;
+  eventItem: any;
   addEvent: Function;
   editEvent: Function;
   deleteEvent: Function;
@@ -34,6 +34,8 @@ const EventModal: React.FC<EventModalProps> = ({
 }) => {
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
+
+  const isEditMode = Boolean(eventItem?.id);
 
   const [title, setTitle] = useState(eventItem?.title || '');
   const [description, setDescription] = useState(eventItem?.description || '');
@@ -134,7 +136,7 @@ const EventModal: React.FC<EventModalProps> = ({
         onCancel={handleCancel}
         footer={
           <>
-            {eventItem != null ? (
+            {isEditMode ? (
               <>
                 <Button key="back" onClick={handleDeleteEvent}>
                   Delete Event
@@ -158,7 +160,7 @@ const EventModal: React.FC<EventModalProps> = ({
       >
         <div style={{ marginBottom: '15px' }}>
           <ImageUpload />
-          {eventItem? (
+          {isEditMode ? (
             <p style={{ margin: 0 }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </p>
@@ -189,7 +191,7 @@ const EventModal: React.FC<EventModalProps> = ({
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />
-          {eventItem && (
+          {isEditMode && (
             <Search 
               prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
               placeholder="Search for place..." 
