@@ -38,6 +38,7 @@ interface ItineraryInterface{
 
 const Itinerary = () => {
   const { itineraryId } = useParams();
+  localStorage.setItem('auth', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0NTk0NDY4LCJpYXQiOjE2ODQ1NzY0NjgsImp0aSI6ImE5NTNjOTI5MzBlODQxODc4MWU1Zjg3M2M0MDhiYjk5IiwidXNlcl9pZCI6MX0._HIqZj0X_9Tqx1cA1hNWJyM0Q-uAynTs8dmI7ZsHyUM")
   const [textColor, setTextColor] = useState("var(--color-white)");
   const [itinerary, setItineraryData] = useState<ItineraryInterface[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
@@ -93,17 +94,36 @@ const Itinerary = () => {
   useEffect(() => {
     console.log(itinerary)
     console.log(uniqueDates)
-    getItinerary(itineraryId)
-    .then( res => {
-        let itineraryData:ItineraryInterface[] = JSON.parse(res.data)
-        setItineraryData(itineraryData);
-        setUniqueDates(Array.from(new Set(itineraryData.map(item => item.date))))
-        
-      }
-    )
+    const fetchData = async () => {
+      const res = await getItinerary(itineraryId)
+      var itineraryData:ItineraryInterface[] = []
+      console.log(res.data.plan, Array.isArray(res.data.plan), res.data.plan.length, res.data.plan[0])
+      res.data.plan.forEach(agenda => {
+        console.log('test')
+        itineraryData.push( {
+            id: agenda.id,
+            name: agenda.place.place_name,
+            imageUrl: agenda.place.web_picture_urls[0],
+            description: agenda.place.introduction,
+            rating: 10,
+            location: [agenda.place.latitude, agenda.place.longitude],
+            tags: [agenda.place.category_description],
+            date: agenda.date.toLocaleString(),
+            time: agenda.arrival_time.toTimeString()
+          })
+      })
+      console.log(itineraryData)
+      setItineraryData(itineraryData);
+      let temp = Array.from(new Set(itineraryData.map(item => item.date)));
+      setUniqueDates(temp)
+      console.log(temp)
+    }
+    fetchData().catch(console.error);
+    
   }, [])
 
   useEffect(() => {
+    
     setIsLoading(false)
     console.log(itinerary)
     console.log(uniqueDates)
