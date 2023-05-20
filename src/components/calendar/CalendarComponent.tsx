@@ -15,8 +15,8 @@ const eventData = [
     id: '1',
     title: 'Event 1',
     description: 'this is a description',
-    start: '2023-05-19T14:30:00',
-    end: '2023-05-19T15:50:00',
+    start: '2023-05-20T14:30:00',
+    end: '2023-05-20T15:50:00',
     color: 'var(--color-secondary-light)',
     allDay: false
   },
@@ -24,8 +24,8 @@ const eventData = [
     id: '2',
     title: 'Event 2',
     description: 'this is a description',
-    start: '2023-05-19T14:30:00',
-    end: '2023-05-19T17:30:00',
+    start: '2023-05-20T14:30:00',
+    end: '2023-05-20T17:30:00',
     color: 'var(--color-secondary-light)',
     allDay: false
   },

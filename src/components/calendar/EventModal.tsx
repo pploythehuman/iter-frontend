@@ -74,8 +74,9 @@ const EventModal: React.FC<EventModalProps> = ({
     if (title && date && startTime && endTime) {
       alert("in edit");
       const newEvent: IEvent = {
-        id: Date.now().toString(), // need fix
+        id: eventItem?.id,
         title: title,
+        description: description,
         start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
         end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
         allDay: false, 
@@ -118,6 +119,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   useEffect(() => {
     setTitle(eventItem?.title || '');
+    setDescription(eventItem?.description || '');
     setDate(eventItem?.start ? dayjs(eventItem.start) : null)
     setStartTime(eventItem?.start ? dayjs(eventItem.start) : null);
     setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);

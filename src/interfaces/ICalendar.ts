@@ -1,11 +1,11 @@
 export interface IEvent {
-  id: string;
+  id: string | undefined;
   title: string;
   description?: string
   start: any;
   end: any;
   color?: string;
-  allDay: boolean;
+  allDay?: boolean;
 }
 
 //del later
