@@ -12,7 +12,7 @@ import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
 import MyCalendar  from '../components/calendar/Calendar';
 import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
-import { getItinerary } from "../services/itinerary";
+import { getItinerary, getPlace } from "../services/itinerary";
 
 import {
   UserAddOutlined,
@@ -43,6 +43,8 @@ const Itinerary = () => {
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [resultData, setResultData] = useState<any[]>([]);
 
   const [uniqueDates, setUniqueDates] = useState<any[]>([]);
   const itineraryRefs = useRef<(HTMLDivElement | null)[]>(Array.from({ length: uniqueDates.length }, () => null));
@@ -90,18 +92,35 @@ const Itinerary = () => {
     }
   };
 
+  console.log("resultData", resultData);
   useEffect(() => {
-    console.log(itinerary)
-    console.log(uniqueDates)
-    getItinerary(itineraryId)
-    .then( res => {
-        let itineraryData:ItineraryInterface[] = JSON.parse(res.data)
-        setItineraryData(itineraryData);
-        setUniqueDates(Array.from(new Set(itineraryData.map(item => item.date))))
-        
+    const fetchData = async() => {
+      const itineraryResult = await getItinerary(itineraryId);
+      console.log("itineraryResult", itineraryResult);
+      console.log("plan", itineraryResult.data.plan);
+      let plans = itineraryResult.data.plan;
+  
+      for (const plan of plans) {
+        const place: any = await getPlace(plan.place_id);
+        console.log("place", place)
+        const newPlace = {
+          id: plan.place_id,
+          name: place.data.place_name,
+          imageUrl: place.data.web_picture_urls,
+          description: place.data.detail,
+          rating: 4.7,
+          location: [place.data.latitude, place.data.longitude],
+          tags: [place.data.category_description],
+          date: plan.date,
+          time: plan.arrival_time,
+        }
+        setResultData((prevData) => [...prevData, newPlace]);
       }
-    )
+    }
+  
+    fetchData();
   }, [])
+  
 
   useEffect(() => {
     setIsLoading(false)
@@ -152,7 +171,7 @@ const Itinerary = () => {
         </div>
         <div className="itinerary-content">
         {!isLoading && activeTab === "timeline" &&
-          itinerary.map((iti, index) => (
+          resultData.map((iti, index) => (
             <div
               key={index}
               style={{ margin: "20px" }}
@@ -160,7 +179,7 @@ const Itinerary = () => {
             >
               <ItineraryCard
                 name={iti.name}
-                imageUrl={iti.imageUrl}
+                imageUrl={iti.imageUrl[0]}
                 description={iti.description}
                 rating={iti.rating}
                 tags={iti.tags}
