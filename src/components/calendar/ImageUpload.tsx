@@ -4,6 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
+import type { UploadRequestOption } from 'rc-upload/lib/interface';
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -78,12 +79,27 @@ const ImageUpload: React.FC = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  const handleBeforeUpload = () => {
+    return true;
+  };
+
+  const dummyRequest = ({ file, onSuccess }: UploadRequestOption) => {
+    setTimeout(() => {
+      if (onSuccess) {
+        onSuccess("ok");
+      }
+    }, 0);
+  };
+
   return (
     <>
       <Upload
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
         fileList={fileList}
+        customRequest={dummyRequest}
+        beforeUpload={handleBeforeUpload}
         onPreview={handlePreview}
         onChange={handleChange}
       >
