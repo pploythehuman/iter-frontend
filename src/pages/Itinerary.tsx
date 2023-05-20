@@ -12,6 +12,7 @@ import ItineraryDateTab from '../components/itinerary/ItineraryDateTab';
 import MyCalendar  from '../components/calendar/Calendar';
 import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
+import { getItinerary } from "../services/itinerary";
 
 import {
   UserAddOutlined,
@@ -23,83 +24,27 @@ import { Button, Card, Tabs } from "antd";
 
 const { TabPane } = Tabs;
 
-const itineraryData = [
-  {
-    id: 1,
-    name: "Eiffel Tower",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "A dd-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
-    rating: 4.5,
-    location: [13.7494, 100.5282],
-    tags: ["landmark", "architecture"],
-    date: "2023-04-01",
-    time: "10:00 AM",
-  },
-  {
-    id: 2,
-    name: "Louvre Museum",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "The world's largest art museum and a historic monument in Paris, France.",
-    rating: 4.7,
-    location: [13.7441, 100.4941],
-    tags: ["museum", "art"],
-    date: "2023-04-01",
-    time: "2:00 PM",
-  },
-  {
-    id: 3,
-    name: "Notre-Dame Cathedral",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "A medieval Catholic cathedral on the Île de la Cité in Paris, France.",
-    rating: 4.6,
-    location: [13.7581, 100.4917],
-    tags: ["cathedral", "architecture"],
-    date: "2023-04-02",
-    time: "10:00 AM",
-  },
-  {
-    id: 4,
-    name: "Arc de Triomphe",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "One of the most famous monuments in Paris, France.",
-    rating: 4.4,
-    location: [13.7641, 100.4991],
-    tags: ["monument", "history"],
-    date: "2023-04-02",
-    time: "2:00 PM",
-  },
-  {
-    id: 5,
-    name: "Arc de Triomphe",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "One of the most famous monuments in Paris, France.",
-    rating: 4.4,
-    location: [13.7499, 100.4916],
-    tags: ["monument", "history"],
-    date: "2023-04-09",
-    time: "2:00 PM",
-  },
-  {
-    id: 5,
-    name: "Arc de Triomphe",
-    imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-    description: "One of the most famous monuments in Paris, France.",
-    rating: 4.4,
-    location: [13.7641, 100.4991],
-    tags: ["monument", "history"],
-    date: "2023-04-09",
-    time: "2:00 PM",
-  },
-];
+interface ItineraryInterface{
+  id: number,
+  name: string,
+  imageUrl: string,
+  description: string,
+  rating: number,
+  location: number[],
+  tags: string[],
+  date: string,
+  time: string,
+}
 
 const Itinerary = () => {
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
-  const [itinerary, setItineraryData] = useState(itineraryData);
+  const [itinerary, setItineraryData] = useState<ItineraryInterface[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const uniqueDates = Array.from(new Set(itinerary.map(item => item.date)));
+  const [uniqueDates, setUniqueDates] = useState<any[]>([]);
   const itineraryRefs = useRef<(HTMLDivElement | null)[]>(Array.from({ length: uniqueDates.length }, () => null));
 
   const [selectedDate, setSelectedDate] = useState("");
@@ -146,6 +91,25 @@ const Itinerary = () => {
   };
 
   useEffect(() => {
+    console.log(itinerary)
+    console.log(uniqueDates)
+    getItinerary(itineraryId)
+    .then( res => {
+        let itineraryData:ItineraryInterface[] = JSON.parse(res.data)
+        setItineraryData(itineraryData);
+        setUniqueDates(Array.from(new Set(itineraryData.map(item => item.date))))
+        
+      }
+    )
+  }, [])
+
+  useEffect(() => {
+    setIsLoading(false)
+    console.log(itinerary)
+    console.log(uniqueDates)
+  }, [itinerary, uniqueDates])
+
+  useEffect(() => {
     setSelectedDate("")
   }, [activeTab])
   
@@ -187,34 +151,34 @@ const Itinerary = () => {
           <ItineraryDateTab dates={uniqueDates} onDateTabClick={(date) => scrollToCard(date)} />
         </div>
         <div className="itinerary-content">
-        {activeTab === "timeline" &&
-          itinerary.map((itinerary, index) => (
+        {!isLoading && activeTab === "timeline" &&
+          itinerary.map((iti, index) => (
             <div
               key={index}
               style={{ margin: "20px" }}
               ref={(el) => (itineraryRefs.current[index] = el)}
             >
               <ItineraryCard
-                name={itinerary.name}
-                imageUrl={itinerary.imageUrl}
-                description={itinerary.description}
-                rating={itinerary.rating}
-                tags={itinerary.tags}
-                date={itinerary.date}
-                time={itinerary.time}
-                itineraryId={itinerary.id}
+                name={iti.name}
+                imageUrl={iti.imageUrl}
+                description={iti.description}
+                rating={iti.rating}
+                tags={iti.tags}
+                date={iti.date}
+                time={iti.time}
+                itineraryId={iti.id}
                 onDelete={handleDelete}
               />
             </div>
         ))}
         {activeTab === "calendar" && (
-          <div className="itinerary-content">
+          // <div className="itinerary-content">
             <MyCalendar />
-          </div>
+          // </div>
         )}
         {activeTab === "map" && (
           <>
-            <GoogleMap itineraryData={itineraryData} selectedDate={selectedDate} />
+            <GoogleMap itineraryData={itinerary} selectedDate={selectedDate} />
           </>
         )}
         
