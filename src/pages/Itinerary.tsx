@@ -210,21 +210,21 @@ const Itinerary = () => {
         <div className="itinerary-content">
           {!isLoading &&
             activeTab === "timeline" &&
-            itineraryData.map((iti, index) => (
+            itineraryData.map((placeItem, index) => (
               <div
                 key={index}
                 style={{ margin: "20px" }}
                 ref={(el) => (itineraryRefs.current[index] = el)}
               >
                 <ItineraryCard
-                  name={iti.name}
-                  imageUrl={iti.imageUrl[0]}
-                  description={iti.description}
-                  rating={iti.rating}
-                  tags={iti.tags}
-                  date={iti.date}
-                  time={iti.time}
-                  itineraryId={iti.id}
+                  name={placeItem.name}
+                  imageUrl={placeItem.imageUrl[0]}
+                  description={placeItem.description}
+                  rating={placeItem.rating}
+                  tags={placeItem.tags}
+                  date={placeItem.date}
+                  time={placeItem.time}
+                  placeId={placeItem.id}
                   onDelete={handleDelete}
                 />
               </div>
