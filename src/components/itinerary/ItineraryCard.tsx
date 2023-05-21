@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Rate, Tag, Button, Menu, Dropdown, message } from 'antd';
+import { Rate, Tag, Button, Menu, Dropdown, message, Image } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
+import noImg from '../../assets/no_img.jpeg';
 
 interface ItineraryCardProps {
   name: string;
@@ -73,7 +74,10 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   return (
     <div className="itinerary-card">
       <div className="card-image">
-        <img alt={name} src={imageUrl} />
+        <img
+          alt={name}
+          src={imageUrl? imageUrl : noImg}
+        />
       </div>
       <div className="card-content">
         <div className="card-header">
@@ -87,8 +91,8 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         <Rate allowHalf disabled value={rating} />
         <div className="tags">
           {tags.map((tag, index) => (
-            <a href='/'>
-              <Tag key={index} color="var(--color-secondary-light)">{tag}</Tag>
+            <a key={index} href='/'>
+              <Tag color="var(--color-secondary-light)">{tag}</Tag>
             </a>
           ))}
         </div>
