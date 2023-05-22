@@ -612,6 +612,10 @@ a {
   }
 }
 
+.itinerary-card.column-direction {
+  flex-direction: column;
+}
+
 .card-image {
   flex: 0 0 45%;
   img {
