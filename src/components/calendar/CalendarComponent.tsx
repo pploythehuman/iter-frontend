@@ -7,38 +7,24 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { Button, Card } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
-import { IEvent } from '../../interfaces/ICalendar';
+import { IEvent, IAgenda } from '../../interfaces/IItinerary';
 import EventModal from './EventModal';
 
-const eventData = [
-  { 
-    id: '1',
-    title: 'Event 1',
-    description: 'this is a description',
-    start: '2023-05-21T14:30:00',
-    end: '2023-05-21T15:50:00',
-    color: 'var(--color-secondary-light)',
-    allDay: false
-  },
-  { 
-    id: '2',
-    title: 'Event 2',
-    description: 'this is a description',
-    start: '2023-05-21T14:30:00',
-    end: '2023-05-21T17:30:00',
-    color: 'var(--color-secondary-light)',
-    allDay: false
-  },
-]
+interface CalendarComponentProps {
+  itineraryData: any[];
+  selectedDate: string;
+}
 
-export default function CalendarComponent() {
+export default function CalendarComponent({ itineraryData, selectedDate }: CalendarComponentProps) {
   const calendarRef = useRef<any>(null);
-  const [events, setEvents] = useState<IEvent[]>(checkEventOverlap([...eventData]));
 
+  const transformedData = transformRealDataToEventData(itineraryData)
+  const [events, setEvents] = useState<IEvent[]>(checkEventOverlap([...transformedData]));
   const [selectedEvent, setSelectedEvent] = useState<IEvent | { start: string, end: string } | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
-
   const [dateRange, setDateRange] = useState<string | null>(null);
+  const [initialDate, setInitialDate] = useState<string>(selectedDate || events[0]?.date);
+  console.log("itineraryData from calendar", itineraryData);
   console.log("my events", events);
 
   function goToNext() {
@@ -76,6 +62,7 @@ export default function CalendarComponent() {
       title: info.event.title,
       start: info.event.startStr,
       end: info.event.endStr,
+      date: info.event.startStr, // not sure
       color: info.event.backgroundColor,
       allDay: info.event.allDay
     }
@@ -88,6 +75,7 @@ export default function CalendarComponent() {
       title: info.event.title,
       start: info.event.startStr,
       end: info.event.endStr,
+      date: info.event.startStr, // not sure
       color: info.event.backgroundColor,
       allDay: info.event.allDay
     }
@@ -119,7 +107,6 @@ export default function CalendarComponent() {
   }
 
   function handleDatesSet({ start, end }: { start: Date, end: Date }) {
-    console.log(start.getMonth)
     const startStr = `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}`
     const endStr = `${end.toLocaleString('default', { month: 'long' })} ${end.getDate()}`
     setDateRange(`${startStr} - ${endStr}`);
@@ -182,6 +169,33 @@ export default function CalendarComponent() {
     )
   }
 
+  function transformRealDataToEventData(itineraryData: IAgenda[]) {
+    return itineraryData.map((item: IAgenda) => ({
+      id: item.id,
+      title: item.name,
+      description: item.description,
+      start: `${item.date}T${item.arrival_time}`,
+      end: `${item.date}T${item.leave_time}`, 
+      date: item.date,
+      color: 'var(--color-secondary-light)', 
+      allDay: false
+    }));
+  }
+
+  useEffect(() => {
+    const transformedData = transformRealDataToEventData(itineraryData);
+    setEvents(checkEventOverlap([...transformedData]));
+  }, [itineraryData]); 
+
+  useEffect(() => {
+    setInitialDate(selectedDate || events[0]?.date);
+    if (calendarRef.current) {
+      let calendarApi = calendarRef.current.getApi();
+      calendarApi.gotoDate(selectedDate || events[0]?.date);
+    }
+  }, [selectedDate]);  
+  
+
   return (
     <>
       <Card
@@ -211,6 +225,7 @@ export default function CalendarComponent() {
         headerToolbar={false}
         plugins={[timeGridPlugin, interactionPlugin]} 
         initialView="timeGridFourDay" 
+        initialDate={initialDate || undefined}
         allDaySlot={false} // remove all day top row
         views={{
           timeGridFourDay: {

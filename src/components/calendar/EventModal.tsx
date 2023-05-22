@@ -12,7 +12,7 @@ import type { DatePickerProps, TimeRangePickerProps } from 'antd';
 import { EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
 
-import { IEvent } from '../../interfaces/ICalendar';
+import { IEvent } from '../../interfaces/IItinerary';
 import ImageUpload from './ImageUpload';
 
 interface EventModalProps {
@@ -39,7 +39,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const [title, setTitle] = useState(eventItem?.title || '');
   const [description, setDescription] = useState(eventItem?.description || '');
-  const [date, setDate] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
+  const [date, setDate] = useState(eventItem?.date? dayjs(eventItem.date) : null);
   const [startTime, setStartTime] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
   const [endTime, setEndTime] = useState(eventItem?.end ? dayjs(eventItem.end) : null);
 
@@ -59,6 +59,7 @@ const EventModal: React.FC<EventModalProps> = ({
         title: title,
         start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
         end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
+        date: date,
         allDay: false, 
         color: 'var(--color-secondary-light)'
       };
@@ -81,6 +82,7 @@ const EventModal: React.FC<EventModalProps> = ({
         description: description,
         start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
         end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
+        date: date,
         allDay: false, 
         color: 'var(--color-secondary-light)'
       };

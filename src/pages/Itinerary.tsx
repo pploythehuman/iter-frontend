@@ -9,14 +9,14 @@ import {
   PlusOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Tabs, Spin } from "antd";
+import { Button, Tabs, Spin } from "antd";
 
 import ItineraryNavbar from "../components/itinerary/ItineraryNavbar";
-import ItineraryCard from "../components/itinerary/ItineraryCard";
+import ItineraryTimeline from "../components/timeline/ItineraryTimeline";
 import GoogleMap from "../components/maps/GoogleMaps";
 import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
-import whiteImg from "../assets/white_img.png";
+// import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
 import { getItinerary, getPlace } from "../services/itinerary";
@@ -32,7 +32,8 @@ interface ItineraryInterface {
   location: number[];
   tags: string[];
   date: string;
-  time: string;
+  arrival_time: string;
+  leave_time: string;
 }
 
 const Itinerary = () => {
@@ -40,7 +41,7 @@ const Itinerary = () => {
   const [textColor, setTextColor] = useState("var(--color-white)");
   const [itineraryData, setItineraryData] = useState<ItineraryInterface[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
-  const [activeIndex, setActiveIndex] = useState(0);
+  // const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const uniqueDates = Array.from(
@@ -103,7 +104,7 @@ const Itinerary = () => {
     }
   };
 
-  console.log("itineraryData", itineraryData);
+  // console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
       const itinerary = await getItinerary(itineraryId);
@@ -123,7 +124,8 @@ const Itinerary = () => {
           location: [place.data.latitude, place.data.longitude],
           tags: [place.data.category_description],
           date: plan.date,
-          time: plan.arrival_time,
+          arrival_time: plan.arrival_time,
+          leave_time: plan.leave_time,
         };
         setItineraryData((prevData) => [...prevData, newPlace]);
       }
@@ -131,7 +133,7 @@ const Itinerary = () => {
 
     fetchData();
     setIsLoading(false);
-  }, []);
+  }, [itineraryId]);
 
   useEffect(() => {
     setSelectedDate("");
@@ -192,11 +194,7 @@ const Itinerary = () => {
       >
         <TabPane tab="Timeline" key="timeline" />
         <TabPane tab="Calendar" key="calendar" />
-        <TabPane tab="Map" key="map">
-          {/* <div style={{ borderRadius: '10px', padding: '25px'}}> 
-            <GoogleMap />
-          </div> */}
-        </TabPane>
+        <TabPane tab="Map" key="map" />
       </Tabs>
 
       <Spin tip="Loading" spinning={isLoading}>
@@ -208,28 +206,20 @@ const Itinerary = () => {
           />
         </div>
         <div className="itinerary-content">
-          {!isLoading &&
-            activeTab === "timeline" &&
-            itineraryData.map((placeItem, index) => (
-              <div
-                key={index}
-                style={{ margin: "20px" }}
-                ref={(el) => (itineraryRefs.current[index] = el)}
-              >
-                <ItineraryCard
-                  name={placeItem.name}
-                  imageUrl={placeItem.imageUrl[0]}
-                  description={placeItem.description}
-                  rating={placeItem.rating}
-                  tags={placeItem.tags}
-                  date={placeItem.date}
-                  time={placeItem.time}
-                  placeId={placeItem.id}
-                  onDelete={handleDelete}
-                />
-              </div>
-            ))}
-          {activeTab === "calendar" && <MyCalendar />}
+          {activeTab === "timeline" &&
+            <ItineraryTimeline 
+              itineraryData={itineraryData} 
+              selectedDate={selectedDate}
+              itineraryRefs={itineraryRefs}
+              onDelete={handleDelete}
+            />
+          }
+          {activeTab === "calendar" && 
+            <MyCalendar 
+              itineraryData={itineraryData} 
+              selectedDate={selectedDate}
+            />
+          }
           {activeTab === "map" && (
             <GoogleMap
               itineraryData={itineraryData}
