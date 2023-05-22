@@ -86,7 +86,12 @@ const itineraryData = [
   },
 ];
 
-const MyCalendar = () => {
+interface MyCalendarProps {
+  itineraryData: any[];
+  selectedDate: string;
+}
+
+const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -101,7 +106,10 @@ const MyCalendar = () => {
           </div>
         }
       > */}
-        <CalendarComponent />
+        <CalendarComponent 
+          itineraryData={itineraryData}
+          selectedDate={selectedDate}
+        />
       {/* </Card> */}
     </div>
   );

@@ -32,7 +32,8 @@ interface ItineraryInterface {
   location: number[];
   tags: string[];
   date: string;
-  time: string;
+  arrival_time: string;
+  leave_time: string;
 }
 
 const Itinerary = () => {
@@ -103,7 +104,7 @@ const Itinerary = () => {
     }
   };
 
-  console.log("itineraryData", itineraryData);
+  // console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
       const itinerary = await getItinerary(itineraryId);
@@ -123,7 +124,8 @@ const Itinerary = () => {
           location: [place.data.latitude, place.data.longitude],
           tags: [place.data.category_description],
           date: plan.date,
-          time: plan.arrival_time,
+          arrival_time: plan.arrival_time,
+          leave_time: plan.leave_time,
         };
         setItineraryData((prevData) => [...prevData, newPlace]);
       }
@@ -223,13 +225,18 @@ const Itinerary = () => {
                   rating={placeItem.rating}
                   tags={placeItem.tags}
                   date={placeItem.date}
-                  time={placeItem.time}
+                  time={placeItem.arrival_time}
                   placeId={placeItem.id}
                   onDelete={handleDelete}
                 />
               </div>
             ))}
-          {activeTab === "calendar" && <MyCalendar />}
+          {activeTab === "calendar" && 
+            <MyCalendar 
+              itineraryData={itineraryData} 
+              selectedDate={selectedDate}
+            />
+          }
           {activeTab === "map" && (
             <GoogleMap
               itineraryData={itineraryData}
