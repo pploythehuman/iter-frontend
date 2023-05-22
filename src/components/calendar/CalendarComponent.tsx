@@ -23,6 +23,7 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   const [selectedEvent, setSelectedEvent] = useState<IEvent | { start: string, end: string } | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
   const [dateRange, setDateRange] = useState<string | null>(null);
+  const [initialDate, setInitialDate] = useState<string>(selectedDate || events[0]?.date);
   console.log("itineraryData from calendar", itineraryData);
   console.log("my events", events);
 
@@ -184,7 +185,16 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   useEffect(() => {
     const transformedData = transformRealDataToEventData(itineraryData);
     setEvents(checkEventOverlap([...transformedData]));
-  }, [itineraryData]);  
+  }, [itineraryData]); 
+
+  useEffect(() => {
+    setInitialDate(selectedDate || events[0]?.date);
+    if (calendarRef.current) {
+      let calendarApi = calendarRef.current.getApi();
+      calendarApi.gotoDate(selectedDate || events[0]?.date);
+    }
+  }, [selectedDate]);  
+  
 
   return (
     <>
@@ -215,7 +225,7 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
         headerToolbar={false}
         plugins={[timeGridPlugin, interactionPlugin]} 
         initialView="timeGridFourDay" 
-        initialDate={events[0]?.date}
+        initialDate={initialDate || undefined}
         allDaySlot={false} // remove all day top row
         views={{
           timeGridFourDay: {
