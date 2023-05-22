@@ -1,4 +1,4 @@
-export interface IEvent {
+export interface IPlace {
   id: string | undefined;
   title: string;
   description?: string
@@ -7,12 +7,4 @@ export interface IEvent {
   color?: string;
   allDay?: boolean;
 }
-
-//del later
-export interface IEvent {
-  name?: string;
-  endTime?: string;
-  startTime?: string;
-}
-
   

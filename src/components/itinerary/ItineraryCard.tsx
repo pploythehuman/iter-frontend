@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Rate, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
+import noImg from '../../assets/no_img.jpeg';
 
 interface ItineraryCardProps {
   name: string;
@@ -11,7 +12,7 @@ interface ItineraryCardProps {
   date: string;
   time: string;
   onDelete: Function; 
-  itineraryId: number; 
+  placeId: number; 
 }
 
 const ItineraryCard: React.FC<ItineraryCardProps> = ({
@@ -23,7 +24,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   date,
   time,
   onDelete,
-  itineraryId,
+  placeId,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [showMore, setShowMore] = useState(false);
@@ -35,7 +36,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   const menu = (
     <Menu>
       <Menu.Item key="1">Edit</Menu.Item>
-      <Menu.Item key="2" onClick={() => onDelete(itineraryId)}>Delete</Menu.Item>
+      <Menu.Item key="2" onClick={() => onDelete(placeId)}>Delete</Menu.Item>
     </Menu>
   );
 
@@ -56,7 +57,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         )
         : (
           <>
-            {description.substring(0, 120)}
+            {description.substring(0, getDeviceType() === 'mobile'? 120 : 400)}
             <p 
               className="show-more-less-button"
               onClick={() => setShowMore(!showMore)}
@@ -70,10 +71,24 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
     }
   };
 
+  const getDeviceType = () => {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return "tablet";
+    }
+    if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(ua)) {
+      return "mobile";
+    }
+    return "desktop";
+  }
+
   return (
-    <div className="itinerary-card">
+    <div className={`itinerary-card ${showMore ? 'column-direction' : ''}`}>
       <div className="card-image">
-        <img alt={name} src={imageUrl} />
+        <img
+          alt={name}
+          src={imageUrl? imageUrl : noImg}
+        />
       </div>
       <div className="card-content">
         <div className="card-header">
@@ -84,11 +99,11 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
             </Button>
           </Dropdown>
         </div>
-        <Rate allowHalf disabled value={rating} />
+        {/* <Rate allowHalf disabled value={rating} /> */}
         <div className="tags">
           {tags.map((tag, index) => (
-            <a href='/'>
-              <Tag key={index} color="var(--color-secondary-light)">{tag}</Tag>
+            <a key={index} href='/'>
+              <Tag color="var(--color-secondary-light)">{tag}</Tag>
             </a>
           ))}
         </div>
