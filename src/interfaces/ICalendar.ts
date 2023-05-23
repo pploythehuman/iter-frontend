@@ -1,8 +1,8 @@
+//del later
 export interface IEvent {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
+  name?: string;
+  endTime?: string;
+  startTime?: string;
 }
 
   

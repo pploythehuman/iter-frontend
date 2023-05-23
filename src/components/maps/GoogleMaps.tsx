@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap as GoogleMapComponent, LoadScript, Marker } from '@react-google-maps/api';
-import {MarkerF} from '@react-google-maps/api'
+import { MarkerF } from '@react-google-maps/api'
 
 const containerStyle = {
   width: '100%',
@@ -20,14 +20,15 @@ interface GoogleMapProps {
 const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData, selectedDate }) => {
   console.log("key", process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [filteredMarkers, setFilteredMarkers] = useState<any[]>([]);
 
-  const filteredMarkers = selectedDate
-  ? itineraryData.filter((item) => item.date === selectedDate)
-  : itineraryData;
+  // const filteredMarkers = selectedDate
+  // ? itineraryData.filter((item) => item.date === selectedDate)
+  // : itineraryData;
 
 
   const onLoad = React.useCallback((map: any) => {
-    console.log('Map loaded!', map);
+    // console.log('Map loaded!', map);
     setMap(map);
   }, []);
 
@@ -108,12 +109,21 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ itineraryData, selectedDate }) =>
     }
   };
 
-  
+  useEffect(() => {
+    setFilteredMarkers(
+      selectedDate
+        ? itineraryData.filter((item) => item.date === selectedDate)
+        : itineraryData
+    );
+  }, [selectedDate, itineraryData]);
   
   useEffect(() => {
     fitBounds();
-  }, [selectedDate]);
+  }, [selectedDate, itineraryData, filteredMarkers, map]); 
   
+  useEffect(() => {
+    fitBounds();
+  }, [selectedDate, itineraryData]);  
 
   // <GoogleMapComponent mapContainerStyle={containerStyle} center={center} zoom={10} options={options}>
   return (

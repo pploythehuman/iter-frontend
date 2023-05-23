@@ -27,7 +27,7 @@ const Event = ({ event, highlight, isResizing, setIsResizing }: EventProps) => {
 
   return (
     <Resizable
-      style={{ zIndex: 999}} // make event span multiple rows but not beyond navbar
+      style={{ zIndex: 99}} // make event span multiple rows but not beyond navbar
       defaultSize={{
         width: "100%",
         height: containerHeight,
