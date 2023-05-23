@@ -10,7 +10,7 @@ export interface IEvent {
 }
 
 export interface IAgenda {
-  id: string;
+  id: string | number;
   name: string;
   imageUrl: string[];
   description: string;

@@ -46,14 +46,16 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
           ref={(el) => (itineraryRefs.current[index] = el)}
         >
           <ItineraryCard
+            id={placeItem.id}
             name={placeItem.name}
-            imageUrl={placeItem.imageUrl[0]}
+            imageUrl={placeItem.imageUrl}
             description={placeItem.description}
             rating={placeItem.rating}
             tags={placeItem.tags}
             date={placeItem.date}
-            time={placeItem.arrival_time}
-            placeId={placeItem.id}
+            arrival_time={placeItem.arrival_time}
+            leave_time={placeItem.leave_time}
+            location={[0, 0]} // change later
             onDelete={onDelete}
           />
         </div>

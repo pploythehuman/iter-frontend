@@ -1,30 +1,26 @@
 import React, { useState } from 'react';
 import { Rate, Tag, Button, Menu, Dropdown, message } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
-import noImg from '../../assets/no_img.jpeg';
 
-interface ItineraryCardProps {
-  name: string;
-  imageUrl: string;
-  description: string;
-  rating: number;
-  tags: string[];
-  date: string;
-  time: string;
+import noImg from '../../assets/no_img.jpeg';
+import { IAgenda } from '../../interfaces/IItinerary';
+
+interface ItineraryCardProps extends IAgenda {
   onDelete: Function; 
-  placeId: number; 
 }
 
 const ItineraryCard: React.FC<ItineraryCardProps> = ({
+  id,
   name,
   imageUrl,
   description,
   rating,
   tags,
   date,
-  time,
+  arrival_time,
+  leave_time,
+  location,
   onDelete,
-  placeId,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [showMore, setShowMore] = useState(false);
@@ -36,7 +32,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   const menu = (
     <Menu>
       <Menu.Item key="1">Edit</Menu.Item>
-      <Menu.Item key="2" onClick={() => onDelete(placeId)}>Delete</Menu.Item>
+      <Menu.Item key="2" onClick={() => onDelete(id)}>Delete</Menu.Item>
     </Menu>
   );
 
@@ -87,7 +83,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
       <div className="card-image">
         <img
           alt={name}
-          src={imageUrl? imageUrl : noImg}
+          src={imageUrl? imageUrl[0] : noImg}
         />
       </div>
       <div className="card-content">
@@ -107,7 +103,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
             </a>
           ))}
         </div>
-        <p className="date-time">{date} - {time}</p>
+        <p className="date-time">{`${date} ${arrival_time}-${leave_time}`}</p>
         <p style={{ marginTop: '0px' }}>
           {renderDescription()}
         </p>
