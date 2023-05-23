@@ -85,25 +85,6 @@ const Itinerary = () => {
     setItineraryData(updatedItinerary);
   };
 
-  const scrollToCard = (date: string) => {
-    setSelectedDate(date);
-
-    const index = itineraryData.findIndex((item) => item.date === date);
-    if (index !== -1 && itineraryRefs.current[index]) {
-      itineraryRefs?.current[index]?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-
-      const yOffset = -70;
-      const yCoordinate =
-        (itineraryRefs?.current[index]?.getBoundingClientRect().top ?? 0) +
-        window.pageYOffset +
-        yOffset;
-      window.scrollTo({ top: yCoordinate, behavior: "smooth" });
-    }
-  };
-
   // console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
@@ -202,7 +183,7 @@ const Itinerary = () => {
         <div className="itinerary-date-tab-container">
           <ItineraryDateTab
             dates={uniqueDates}
-            onDateTabClick={(date) => scrollToCard(date)}
+            onDateTabClick={(date) => setSelectedDate(date)}
           />
         </div>
         <div className="itinerary-content">
