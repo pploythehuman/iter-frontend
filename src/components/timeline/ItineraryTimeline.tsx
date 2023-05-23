@@ -1,4 +1,5 @@
 import React, { MutableRefObject, useEffect, useState } from "react";
+import { FloatButton } from 'antd';
 import { CarOutlined, CalendarOutlined } from '@ant-design/icons';
 import { format } from 'date-fns';
 
@@ -49,6 +50,11 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
 
   return (
     <>
+      <FloatButton.BackTop
+          shape="circle"
+          type="primary"
+          style={{ right: 20 }}
+      />
       {itineraryData.map((placeItem, index) => {
         const shouldDisplayDate = !displayedDates[placeItem.date];
         displayedDates[placeItem.date] = true;
