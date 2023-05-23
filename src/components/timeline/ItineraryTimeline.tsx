@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, useEffect } from "react";
 
 import ItineraryCard from './ItineraryCard';
 
@@ -15,6 +15,28 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
   itineraryRefs,
   onDelete,
 }) => {
+
+  const scrollToCard = (date: string) => {
+    const index = itineraryData.findIndex((item) => item.date === date);
+    if (index !== -1 && itineraryRefs.current[index]) {
+      itineraryRefs?.current[index]?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      const yOffset = -70;
+      const yCoordinate =
+        (itineraryRefs?.current[index]?.getBoundingClientRect().top ?? 0) +
+        window.pageYOffset +
+        yOffset;
+      window.scrollTo({ top: yCoordinate, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToCard(selectedDate)
+  }, [selectedDate, itineraryData, itineraryRefs]);
+
   return (
     <>
       {itineraryData.map((placeItem, index) => (
