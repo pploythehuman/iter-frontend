@@ -643,26 +643,40 @@ a {
   position: relative;
 
   .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
     h3 {
       color: $color-black;
-      margin: 0;
+      margin:0 !important;
+      line-height: 25px !important;
       font-size: 1.2rem;
       font-weight: 600;
     }
-
+  
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.1rem;
+      margin-bottom: 0.5rem;
+    }
+  
     .ellipsis {
       font-size: 1.2rem;
       cursor: pointer;
     }
   }
+  
 
   .date-time {
-    color: gray;
-    font-size: 0.9rem;
+    // color: gray;
+    // font-size: 0.9rem;
+    color: $color-primary;
+    font-size: 1rem;
+    font-family: 'Asap-Medium';
     margin-bottom: 0px;
   }
 

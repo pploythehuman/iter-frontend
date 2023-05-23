@@ -83,27 +83,38 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
       <div className="card-image">
         <img
           alt={name}
-          src={imageUrl? imageUrl[0] : noImg}
+          src={imageUrl[0]? imageUrl[0] : noImg}
         />
       </div>
       <div className="card-content">
         <div className="card-header">
-          <h3>{name}</h3>
-          <Dropdown overlay={menu}>
-            <Button type="ghost">
-              <EllipsisOutlined className="ellipsis" />
-            </Button>
-          </Dropdown>
-        </div>
-        {/* <Rate allowHalf disabled value={rating} /> */}
-        <div className="tags">
+          <div className="header-top">
+            <h3>{name}</h3>
+            <Dropdown overlay={menu}>
+              <Button type="ghost">
+                <EllipsisOutlined className="ellipsis" />
+              </Button>
+            </Dropdown>
+          </div>
+          <div className="tags">
           {tags.map((tag, index) => (
             <a key={index} href='/'>
               <Tag color="var(--color-secondary-light)">{tag}</Tag>
             </a>
           ))}
         </div>
-        <p className="date-time">{`${date} ${arrival_time}-${leave_time}`}</p>
+        </div>
+        {/* <Rate allowHalf disabled value={rating} /> */}
+        {/* <div className="tags">
+          {tags.map((tag, index) => (
+            <a key={index} href='/'>
+              <Tag color="var(--color-secondary-light)">{tag}</Tag>
+            </a>
+          ))}
+        </div> */}
+        <p className="date-time">
+          {`${date} ${arrival_time.substring(0, 5)}-${leave_time.substring(0, 5)}`}
+        </p>
         <p style={{ marginTop: '0px' }}>
           {renderDescription()}
         </p>

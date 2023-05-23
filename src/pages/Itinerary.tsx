@@ -85,7 +85,7 @@ const Itinerary = () => {
     setItineraryData(updatedItinerary);
   };
 
-  // console.log("itineraryData", itineraryData);
+  console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
       const itinerary = await getItinerary(itineraryId);
