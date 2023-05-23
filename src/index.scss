@@ -571,7 +571,10 @@ a {
     top: 20px; 
     left: 0;
     // width: 200px; 
-    width: 100px; //width of collapsed date tab
+    min-width: 100px; //width of collapsed date tab
+    @media (max-width: 400px) {
+      min-width: 60px;
+    }
     max-height: calc(100vh - 20px);
     overflow-y: auto;
     overflow-x: hidden;
@@ -579,6 +582,10 @@ a {
 
     -ms-overflow-style: none; /* Internet Explorer and Edge */
     scrollbar-width: none; /* Firefox */
+
+    .ant-menu-title-content{
+      font-family: 'Asap-Bold';
+    }
   }
 
   .itinerary-date-tab-container::-webkit-scrollbar {
@@ -591,8 +598,27 @@ a {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    padding: 20px;
+    padding: 20px 0px 20px 0px;
+    // padding: 20px;
   }
+}
+
+.itinerary-travel-time {
+  color: $color-black;
+  margin: 0 !important;
+  font-family: 'Asap-Regular';
+  font-size: 15px;
+}
+
+.itinerary-date-header {
+  margin: 0 !important;
+  margin-bottom: 10px !important;
+  background-color: $color-primary;
+  padding: 10px 15px;
+  display: inline-flex;
+  justify-content: center;
+  color: $color-white;
+  border-radius: 20px;
 }
 
 .itinerary-card {
@@ -643,17 +669,27 @@ a {
   position: relative;
 
   .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
     h3 {
       color: $color-black;
-      margin: 0;
+      margin:0 !important;
+      line-height: 25px !important;
       font-size: 1.2rem;
       font-weight: 600;
     }
-
+  
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.1rem;
+      margin-bottom: 0.5rem;
+    }
+  
     .ellipsis {
       font-size: 1.2rem;
       cursor: pointer;
@@ -661,8 +697,11 @@ a {
   }
 
   .date-time {
-    color: gray;
-    font-size: 0.9rem;
+    // color: gray;
+    // font-size: 0.9rem;
+    color: $color-primary;
+    font-size: 1rem;
+    font-family: 'Asap-Medium';
     margin-bottom: 0px;
   }
 
@@ -672,11 +711,21 @@ a {
     margin-bottom: 0.5rem;
   }
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.1rem;
-    margin-bottom: 0.5rem;
+  .contact {
+    margin-top: '0px';
+
+    a {
+      color: black;
+      font-size: 0.9rem;
+      font-family: 'Asap-Regular';
+      margin-right: 10px;
+    }
+
+    .ant-btn {
+      background-color: $color-primary !important;
+      border: none !important;
+      margin-right: 5px;
+    }
   }
 
   .book-button {

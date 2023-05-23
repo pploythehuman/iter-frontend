@@ -1,4 +1,6 @@
-import React, { MutableRefObject, useEffect } from "react";
+import React, { MutableRefObject, useEffect, useState } from "react";
+import { CarOutlined, CalendarOutlined } from '@ant-design/icons';
+import { format } from 'date-fns';
 
 import ItineraryCard from './ItineraryCard';
 
@@ -15,6 +17,12 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
   itineraryRefs,
   onDelete,
 }) => {
+
+  const dateItems =(dateString: string) => {
+    const tempDate = new Date(dateString);  
+    const formattedDate = format(tempDate, 'EEEE, MMMM do');
+    return formattedDate
+  };
 
   const scrollToCard = (date: string) => {
     const index = itineraryData.findIndex((item) => item.date === date);
@@ -37,27 +45,46 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
     scrollToCard(selectedDate)
   }, [selectedDate, itineraryData, itineraryRefs]);
 
+  const displayedDates: {[key: string]: boolean} = {};
+
   return (
     <>
-      {itineraryData.map((placeItem, index) => (
-        <div
-          key={index}
-          style={{ margin: "20px" }}
-          ref={(el) => (itineraryRefs.current[index] = el)}
-        >
-          <ItineraryCard
-            name={placeItem.name}
-            imageUrl={placeItem.imageUrl[0]}
-            description={placeItem.description}
-            rating={placeItem.rating}
-            tags={placeItem.tags}
-            date={placeItem.date}
-            time={placeItem.arrival_time}
-            placeId={placeItem.id}
-            onDelete={onDelete}
-          />
-        </div>
-      ))}
+      {itineraryData.map((placeItem, index) => {
+        const shouldDisplayDate = !displayedDates[placeItem.date];
+        displayedDates[placeItem.date] = true;
+
+        return (
+          <div
+            key={index}
+            style={{ margin: "20px" }}
+            ref={(el) => (itineraryRefs.current[index] = el)}
+          >
+            {shouldDisplayDate && (
+              <h5 className="itinerary-date-header">
+                <CalendarOutlined style={{ marginRight: '5px'}} />
+                {dateItems(placeItem.date)}
+              </h5>
+            )}
+            <ItineraryCard
+              id={placeItem.id}
+              name={placeItem.name}
+              imageUrl={placeItem.imageUrl}
+              description={placeItem.description}
+              contact={placeItem.contact}
+              tags={placeItem.tags}
+              date={placeItem.date}
+              arrival_time={placeItem.arrival_time}
+              leave_time={placeItem.leave_time}
+              location={[0, 0]} // change later
+              onDelete={onDelete}
+            />
+            <p className="itinerary-travel-time">
+              <CarOutlined style={{ marginRight: '5px' }}/>
+              Travel time: 8 min
+            </p>
+          </div>
+        );
+      })}
     </>
   );
 };
