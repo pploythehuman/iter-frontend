@@ -571,7 +571,10 @@ a {
     top: 20px; 
     left: 0;
     // width: 200px; 
-    width: 100px; //width of collapsed date tab
+    min-width: 100px; //width of collapsed date tab
+    @media (max-width: 400px) {
+      min-width: 60px;
+    }
     max-height: calc(100vh - 20px);
     overflow-y: auto;
     overflow-x: hidden;
@@ -579,6 +582,10 @@ a {
 
     -ms-overflow-style: none; /* Internet Explorer and Edge */
     scrollbar-width: none; /* Firefox */
+
+    .ant-menu-title-content{
+      font-family: 'Asap-Bold';
+    }
   }
 
   .itinerary-date-tab-container::-webkit-scrollbar {
@@ -591,7 +598,8 @@ a {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    padding: 20px;
+    padding: 20px 0px 20px 0px;
+    // padding: 20px;
   }
 }
 
@@ -600,6 +608,17 @@ a {
   margin: 0 !important;
   font-family: 'Asap-Regular';
   font-size: 15px;
+}
+
+.itinerary-date-header {
+  margin: 0 !important;
+  margin-bottom: 10px !important;
+  background-color: $color-primary;
+  padding: 10px 15px;
+  display: inline-flex;
+  justify-content: center;
+  color: $color-white;
+  border-radius: 20px;
 }
 
 .itinerary-card {
