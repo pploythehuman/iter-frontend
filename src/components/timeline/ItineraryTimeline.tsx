@@ -1,4 +1,5 @@
 import React, { MutableRefObject, useEffect } from "react";
+import { CarOutlined } from '@ant-design/icons';
 
 import ItineraryCard from './ItineraryCard';
 
@@ -58,6 +59,10 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
             location={[0, 0]} // change later
             onDelete={onDelete}
           />
+          <p className="itinerary-travel-time">
+            <CarOutlined style={{ marginRight: '5px' }}/>
+            Travel time: 8 min
+          </p>
         </div>
       ))}
     </>

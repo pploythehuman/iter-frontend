@@ -595,6 +595,13 @@ a {
   }
 }
 
+.itinerary-travel-time {
+  color: $color-black;
+  margin: 0 !important;
+  font-family: 'Asap-Regular';
+  font-size: 15px;
+}
+
 .itinerary-card {
   display: flex;
   width: 100%;
@@ -670,7 +677,6 @@ a {
     }
   }
 
-  
   .date-time {
     // color: gray;
     // font-size: 0.9rem;
