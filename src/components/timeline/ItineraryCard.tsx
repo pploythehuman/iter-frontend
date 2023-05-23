@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Rate, Tag, Button, Menu, Dropdown, message } from 'antd';
-import { EllipsisOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 
 import noImg from '../../assets/no_img.jpeg';
 import { IAgenda } from '../../interfaces/IItinerary';
 
 interface ItineraryCardProps extends IAgenda {
+  contact: any;
   onDelete: Function; 
 }
 
@@ -14,7 +15,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   name,
   imageUrl,
   description,
-  rating,
+  contact,
   tags,
   date,
   arrival_time,
@@ -53,7 +54,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         )
         : (
           <>
-            {description.substring(0, getDeviceType() === 'mobile'? 120 : 400)}
+            {description.substring(0, getDeviceType() === 'mobile'? 120 : 350)}
             <p 
               className="show-more-less-button"
               onClick={() => setShowMore(!showMore)}
@@ -78,6 +79,14 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
     return "desktop";
   }
 
+  const PhoneNumber: React.FC<{ number: string }> = ({ number }) => (
+    <a href={`tel:${number}`}>{number}</a>
+  );
+
+  const Email: React.FC<{ email: string }> = ({ email }) => (
+    <a href={`mailto:${email}`}>{email}</a>
+  );
+  
   return (
     <div className={`itinerary-card ${showMore ? 'column-direction' : ''}`}>
       <div className="card-image">
@@ -104,29 +113,46 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
           ))}
         </div>
         </div>
-        {/* <Rate allowHalf disabled value={rating} /> */}
-        {/* <div className="tags">
-          {tags.map((tag, index) => (
-            <a key={index} href='/'>
-              <Tag color="var(--color-secondary-light)">{tag}</Tag>
-            </a>
-          ))}
-        </div> */}
         <p className="date-time">
           {`${date} ${arrival_time.substring(0, 5)}-${leave_time.substring(0, 5)}`}
         </p>
-        <p style={{ marginTop: '0px' }}>
+        <p style={{ marginTop: '0px', marginBottom: '0px' }}>
           {renderDescription()}
         </p>
-        
         {contextHolder}
-        <Button type="primary" className="book-button" onClick={info}
+          
+        <p className="contact">
+          {contact.mobile_number.concat(contact.phone_number).length > 0 && (
+            <>
+              <Button type="primary" shape="circle" size="small">
+                <PhoneOutlined />
+              </Button>
+              {contact.mobile_number.concat(contact.phone_number).map((number: string, index: number) => 
+                <PhoneNumber key={index} number={number} />
+              )}
+            </>
+          )}
+          
+          {contact.emails.length > 0 && (
+            <>
+              <Button type="primary" shape="circle" size="small">
+                <MailOutlined />
+              </Button>
+              {contact.emails.map((email: string, index: number) => 
+                <Email key={index} email={email} />
+              )}
+            </>
+          )}
+        </p>
+
+        {/* <Button type="primary" className="book-button" onClick={info}
         >
           Book Now
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
 };
 
 export default ItineraryCard;
+

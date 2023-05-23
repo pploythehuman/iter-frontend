@@ -669,8 +669,8 @@ a {
       cursor: pointer;
     }
   }
-  
 
+  
   .date-time {
     // color: gray;
     // font-size: 0.9rem;
@@ -686,11 +686,21 @@ a {
     margin-bottom: 0.5rem;
   }
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.1rem;
-    margin-bottom: 0.5rem;
+  .contact {
+    margin-top: '0px';
+
+    a {
+      color: black;
+      font-size: 0.9rem;
+      font-family: 'Asap-Regular';
+      margin-right: 10px;
+    }
+
+    .ant-btn {
+      background-color: $color-primary !important;
+      border: none !important;
+      margin-right: 5px;
+    }
   }
 
   .book-button {

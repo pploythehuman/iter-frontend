@@ -20,26 +20,18 @@ import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
 import { getItinerary, getPlace } from "../services/itinerary";
+import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
 
-interface ItineraryInterface {
-  id: number;
-  name: string;
-  imageUrl: string;
-  description: string;
-  rating: number;
-  location: number[];
-  tags: string[];
-  date: string;
-  arrival_time: string;
-  leave_time: string;
+interface ItineraryItem extends IAgenda {
+  contact: any;
 }
 
 const Itinerary = () => {
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
-  const [itineraryData, setItineraryData] = useState<ItineraryInterface[]>([]);
+  const [itineraryData, setItineraryData] = useState<ItineraryItem[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
   // const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +44,6 @@ const Itinerary = () => {
   );
 
   const [selectedDate, setSelectedDate] = useState("");
-
   const [destination, setDestination] = useState<string>("");
   const [coTravellers, setCoTravellers] = useState<any[]>([]);
   const [dates, setDates] = useState<string[]>([]);
@@ -101,7 +92,7 @@ const Itinerary = () => {
           name: place.data.place_name,
           imageUrl: place.data.web_picture_urls,
           description: `${place.data.introduction} ${place.data.detail}`,
-          rating: 4.7,
+          contact: place.data.contact,
           location: [place.data.latitude, place.data.longitude],
           tags: [place.data.category_description],
           date: plan.date,

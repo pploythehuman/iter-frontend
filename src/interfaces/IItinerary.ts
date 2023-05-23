@@ -14,7 +14,6 @@ export interface IAgenda {
   name: string;
   imageUrl: string[];
   description: string;
-  rating?: number;
   location: number[];
   tags: string[];
   date: string;
