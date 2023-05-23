@@ -136,7 +136,7 @@ const Itinerary = () => {
   }, [itineraryId]);
 
   useEffect(() => {
-    setSelectedDate("");
+    // setSelectedDate("");
   }, [activeTab]);
 
   return (
