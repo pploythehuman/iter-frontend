@@ -51,12 +51,7 @@ const getPlace = async (placeId: string | undefined) => {
     if (placeId == undefined) {
       placeId = ""
     }
-    const response = await apiGet<PlaceData>('/places/'+placeId, 
-      {
-        headers: {
-          Authorization: 'Bearer '+ localStorage.getItem('auth'),
-        },
-      })
+    const response = await apiGet<PlaceData>('/places/'+placeId)
     return {
       status: response.status,
       data: JSON.stringify(response.data)
