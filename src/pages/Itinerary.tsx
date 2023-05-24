@@ -13,7 +13,8 @@ import { Button, Tabs, Spin } from "antd";
 
 import ItineraryNavbar from "../components/itinerary/ItineraryNavbar";
 import ItineraryTimeline from "../components/timeline/ItineraryTimeline";
-import GoogleMap from "../components/maps/GoogleMaps";
+// import GoogleMap from "../components/maps/GoogleMaps";
+import LeafletMaps from "../components/maps/LeafletMaps";
 import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 // import whiteImg from "../assets/white_img.png";
@@ -193,9 +194,13 @@ const Itinerary = () => {
             />
           }
           {activeTab === "map" && (
-            <GoogleMap
-              itineraryData={itineraryData}
-              selectedDate={selectedDate}
+            // <GoogleMap
+            //   itineraryData={itineraryData}
+            //   selectedDate={selectedDate}
+            // />
+            <LeafletMaps
+            itineraryData={itineraryData}
+            selectedDate={selectedDate}
             />
           )}
         </div>

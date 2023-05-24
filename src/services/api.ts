@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: "http://dev.se.kmitl.ac.th:1337/api/",
 });
 
-const handleResponse = async <T = any>(responsePromise: Promise<AxiosResponse<T>>): Promise<{ status: number; data?: T }> => {
+export const handleResponse = async <T = any>(responsePromise: Promise<AxiosResponse<T>>): Promise<{ status: number; data?: T }> => {
   try {
     const response = await responsePromise;
     return {
