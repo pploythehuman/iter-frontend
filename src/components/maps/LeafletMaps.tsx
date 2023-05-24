@@ -3,8 +3,6 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import placeholder from '../../assets/placeholder.png';
 import L, { LatLngExpression } from "leaflet";
-import Itinerary from "../../pages/Itinerary";
-import { AgendaPlaceData } from "../../services/itinerary";
 import { getDirection } from "../../services/direction";
 import { GeoJsonObject } from "geojson";
 

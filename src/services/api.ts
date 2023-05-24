@@ -60,6 +60,10 @@ export const apiPatch = <T = any, R = any>(url: string, data?: T): Promise<{ sta
   return handleResponse(api.patch<R>(url, data));
 };
 
+export const apiPut = <T = any, R = any>(url: string, data?: T): Promise<{ status: number; data?: R }> => {
+  return handleResponse(api.put<R>(url, data));
+};
+
 export const apiDelete = <T = any>(url: string): Promise<{ status: number; data?: T }> => {
   return handleResponse(api.delete<T>(url));
 };
