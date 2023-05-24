@@ -27,7 +27,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Navbar from '../components/Navbar';
 import QuestionModal from '../components/QuestionModal';
-import MultiCarousel from '../components/MultiCarousel';
 
 dayjs.extend(customParseFormat);
 const disabledDate: RangePickerProps['disabledDate'] = (current) => {

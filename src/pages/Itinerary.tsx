@@ -14,13 +14,15 @@ import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getItinerary, getPlace } from "../services/itinerary";
+import { getDetailedItinerary } from "../services/itinerary";
+import { getItinerary, getPlace } from "../services/temp";
+
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
 
 interface ItineraryItem extends IAgenda {
-  contact: any;
+
 }
 
 const Itinerary = () => {
@@ -75,6 +77,8 @@ const Itinerary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("getDetailedItinerary", await getDetailedItinerary(itineraryId));
+        
         const itinerary = await getItinerary(itineraryId);
         setDestination(itinerary?.data?.destination);
         setCoTravellers([...itinerary?.data?.co_travelers]);
@@ -84,12 +88,12 @@ const Itinerary = () => {
         for (const plan of plans) {
           const place: any = await getPlace(plan.place_id);
           const newPlace = {
-            id: plan.place_id,
-            name: place.data.place_name,
-            imageUrl: place.data.web_picture_urls,
+            id: plan.id,
+            place_id: plan.place_id,
+            place_name: place.data.place_place_name,
+            web_picture_urls: place.data.web_picture_urls,
             description: `${place.data.introduction} ${place.data.detail}`,
             contact: place.data.contact,
-            location: [place.data.latitude, place.data.longitude],
             tags: [place.data.category_description],
             date: plan.date,
             arrival_time: plan.arrival_time,

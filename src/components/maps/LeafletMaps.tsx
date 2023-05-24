@@ -135,7 +135,7 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
                 <Marker position={marker.location} icon={icon}>
                     <Popup>
                         <center>
-                        <b>{marker.name}</b> <br/>
+                        <b>{marker.place_name}</b> <br/>
                         {new Date(marker.date).toDateString()} <br/>
                         {marker.arrival_time}-{marker.leave_time}
                         </center>
