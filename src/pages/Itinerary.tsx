@@ -14,21 +14,16 @@ import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getDetailedItinerary } from "../services/itinerary";
-import { getItinerary, getPlace } from "../services/temp";
+import { getDetailedItinerary, getItinerary, getPlace } from "../services/itinerary";
 
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
 
-interface ItineraryItem extends IAgenda {
-
-}
-
 const Itinerary = () => {
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
-  const [itineraryData, setItineraryData] = useState<ItineraryItem[]>([]);
+  const [itineraryData, setItineraryData] = useState<IAgenda[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null | unknown>(null);
@@ -72,36 +67,18 @@ const Itinerary = () => {
     const updatedItinerary = itineraryData.filter((item) => item.id !== id);
     setItineraryData(updatedItinerary);
   };
-
   console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("getDetailedItinerary", await getDetailedItinerary(itineraryId));
-        
         const itinerary = await getItinerary(itineraryId);
-        setDestination(itinerary?.data?.destination);
-        setCoTravellers([...itinerary?.data?.co_travelers]);
-        setDates([itinerary?.data?.start_date, itinerary?.data?.end_date]);
+        setDestination(itinerary?.destination);
+        setCoTravellers([...itinerary?.co_travelers]);
+        setDates([itinerary?.start_date, itinerary?.end_date]);
 
-        let plans = itinerary.data.plan;
-        for (const plan of plans) {
-          const place: any = await getPlace(plan.place_id);
-          const newPlace = {
-            id: plan.id,
-            place_id: plan.place_id,
-            place_name: place.data.place_place_name,
-            web_picture_urls: place.data.web_picture_urls,
-            description: `${place.data.introduction} ${place.data.detail}`,
-            contact: place.data.contact,
-            tags: [place.data.category_description],
-            date: plan.date,
-            arrival_time: plan.arrival_time,
-            leave_time: plan.leave_time,
-          };
-          setItineraryData((prevData) => [...prevData, newPlace]);
-        }
-        
+        const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
+        setItineraryData(detailedItinerary);
+
       } catch (error) {
         console.log("error", error);
         setError(error);
@@ -111,10 +88,6 @@ const Itinerary = () => {
     fetchData();
     setIsLoading(false);
   }, [itineraryId]);
-
-  useEffect(() => {
-    // setSelectedDate("");
-  }, [activeTab]);
 
   return (
     <div className="itinerary-page">

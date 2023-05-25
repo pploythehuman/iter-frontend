@@ -15,9 +15,10 @@ export interface IAgenda {
   place_name: string;
   web_picture_urls: string[];
   description: string;
+  contact: any;
   tags?: string[];
   date: string;
   arrival_time: string;
   leave_time: string;
-  contact: any;
+  
 }
