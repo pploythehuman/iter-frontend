@@ -71,6 +71,7 @@ const Itinerary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const itinerary = await getItinerary(itineraryId);
         setDestination(itinerary?.destination);
         setCoTravellers([...itinerary?.co_travelers]);
@@ -78,10 +79,12 @@ const Itinerary = () => {
 
         const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
         setItineraryData(detailedItinerary);
+        setIsLoading(false);
 
       } catch (error) {
         console.log("error", error);
         setError(error);
+        setIsLoading(false)
       }
     };
 

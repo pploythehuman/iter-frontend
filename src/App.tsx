@@ -8,6 +8,10 @@ import Home from './pages/Home';
 import SignInPage from './pages/Login';
 import SignupPage from './pages/Register';
 import Itinerary from './pages/Itinerary';
+import Explore from './pages/Explore';
+import MyTrips from './pages/MyTrips';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -21,7 +25,10 @@ function App() {
           path="/itinerary/:itineraryId"
           element={<Itinerary />}
         />
-
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/my-trips" element={<MyTrips />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         {/* <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="blogs" element={<Blogs />} />
