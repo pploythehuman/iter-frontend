@@ -107,12 +107,13 @@ export default function Home() {
           {destinations.map((destination, index) => (
             <Input
               key={index}
+              style={{ marginBottom: '16px' }}
               placeholder="Destination"
               value={destination}
               onChange={(event) => handleDestinationChange(event, index)}
             />
           ))}
-          <Button 
+          {/* <Button 
             type="link"
             style={{ margin: '0px 0px 16px 0px', padding: '0px', width: '100%', textAlign:'left' }}
             onClick={() => setDestinations([...destinations, ''])}
@@ -120,7 +121,7 @@ export default function Home() {
             <h5 style={{ margin: '0px', fontSize: '13px' }}>
               + Add destination
             </h5>
-          </Button>
+          </Button> */}
 
           <DatePicker.RangePicker
             placeholder={["Start Date", "End Date"]}

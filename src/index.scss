@@ -346,10 +346,12 @@ a {
 
 /* Homepage */
 .top-home-page {
+  min-height: calc(100vh - 40px);
   background-image: url('https://www.globalization-partners.com/wp-content/uploads/2019/05/globalpedia-hero-thailand-1.jpg');
   background-size: cover;
   background-color: var(--color-light);
   padding: 50px;
+  box-sizing: border-box;
   text-align: center;
   font-size: 20px;
 }

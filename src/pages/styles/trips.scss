@@ -2,11 +2,10 @@
 
 .trips-page {
   min-height: 100vh;
-  background-color: #f3f3f3;
+  // background-color: #f3f3f3;
 
   .trips-container {
-    // margin: 0 auto;
-    padding: 0 3rem;
+    padding: 0 8rem;
     @media only screen and (max-width: 768px) {
       padding: 0 2.5rem;
     }
@@ -14,6 +13,7 @@
     h1 {
       margin-bottom: 2rem;
       color: $color-black;
+      font-family: 'Asap-SemiBold';
       // text-align: center;
       font-size: 2rem;
     }
@@ -25,6 +25,7 @@
 
       .ant-card {
         a {
+          color: $color-primary;
           &:hover {
             color: $color-primary-light;
           }
@@ -34,6 +35,10 @@
           color: $color-black;
         }
 
+        .ant-card-cover {
+          border-radius: 0px 0px 0px 0px !important;
+        }
+
         transition: transform 0.3s;
         &:hover {
           transform: scale(1.03);
@@ -41,4 +46,11 @@
       }
     }
   }
+}
+
+.create-trip-card {
+  background-color: $color-secondary-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
