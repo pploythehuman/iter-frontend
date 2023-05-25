@@ -365,6 +365,7 @@ a {
 
 .search-box {
   display: flex;
+  // justify-content: center;
   align-items: center;
   width: 60%;
   margin: 0 auto;
@@ -376,27 +377,35 @@ a {
   margin-bottom: 24px;
   margin-top: 50px;
 
-  .ant-input {
+  .destination-input {
     flex-basis: calc(100% - 16px);
     margin-right: 16px;
     margin-bottom: 6px;
-    // margin-bottom: 16px;
   }
 
-  .ant-picker {
-    flex-basis: calc(65% - 16px);
-    margin-bottom: 16px;
-  }
-
-  .ant-input-number {
+  .date-input {
     flex-basis: calc(35% - 16px);
-    margin-right: 16px;
     margin-bottom: 16px;
+    @media only screen and (max-width: 768px) {
+      flex-basis: calc(100% - 16px);
+    }
+  }
+
+  .co-traveller-input {
+    flex-basis: calc(65% - 16px);
+    margin-right: 16px;
+    margin-bottom: 6px;
+    @media only screen and (max-width: 768px) {
+      flex-basis: calc(100% - 16px);
+    }
   }
 
   .ant-btn {
     flex-basis: calc(50% - 16px);
     margin-bottom: 16px;
+    @media only screen and (max-width: 768px) {
+      flex-basis: calc(100% - 16px);
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Button, 
   Carousel, 
@@ -27,6 +27,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Navbar from '../components/Navbar';
 import QuestionModal from '../components/QuestionModal';
+import { createBlankItinerary } from '../services/itinerary';
 
 dayjs.extend(customParseFormat);
 const disabledDate: RangePickerProps['disabledDate'] = (current) => {
@@ -96,6 +97,14 @@ export default function Home() {
     const destinationQuery = destinations.join(', ');
     console.log(`Searching for ${destinationQuery} from ${dateRange[0]} to ${dateRange[1]} with ${numberOfTravellers} travellers`);
   };
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const result = await createBlankItinerary("Bangkok", [4], "2023-09-26", "2023-09-30");
+      console.log("profile", result)
+    }
+    fetchData();
+  }, [])
   
   return (
     <>
@@ -104,35 +113,23 @@ export default function Home() {
       <div className="top-home-page">
         <div className="search-box">
           <h1 style={{ marginTop: '0px', fontFamily: 'Montserrat-Bold' }}>Plan your journey</h1>
-          {destinations.map((destination, index) => (
-            <Input
-              key={index}
-              style={{ marginBottom: '16px' }}
-              placeholder="Destination"
-              value={destination}
-              onChange={(event) => handleDestinationChange(event, index)}
-            />
-          ))}
-          {/* <Button 
-            type="link"
-            style={{ margin: '0px 0px 16px 0px', padding: '0px', width: '100%', textAlign:'left' }}
-            onClick={() => setDestinations([...destinations, ''])}
-          >
-            <h5 style={{ margin: '0px', fontSize: '13px' }}>
-              + Add destination
-            </h5>
-          </Button> */}
-
+          <Input
+            className="destination-input"
+            style={{ marginBottom: '16px' }}
+            placeholder="Destination"
+            // value={destination}
+          />
           <DatePicker.RangePicker
+            className="date-input"
             placeholder={["Start Date", "End Date"]}
             onChange={handleDateRangeChange}
             disabledDate={disabledDate}
           />
-          <InputNumber
-            placeholder="Number of Travellers"
-            min={1}
-            value={numberOfTravellers}
-            onChange={handleNumberOfTravellersChange}
+          <Input
+            className="co-traveller-input"
+            style={{ marginBottom: '16px' }}
+            placeholder="Co-Travellers"
+            // value={email}
           />
           <Button type="primary" onClick={showModal}>
             Continue to Questions

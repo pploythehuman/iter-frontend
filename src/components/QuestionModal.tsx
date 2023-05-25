@@ -19,12 +19,12 @@ interface QuestionData {
 }
 
 const questionData: QuestionData[] = [
-  {
-    label: 'What is your budget for this trip?',
-    slider: true,
-    range: [0, 10000],
-    step: 500,
-  },
+  // {
+  //   label: 'What is your budget for this trip?',
+  //   slider: true,
+  //   range: [0, 10000],
+  //   step: 500,
+  // },
   {
     label: 'What is kind of trip you are going for?',
     options: ['Fast-paced', 'Medium', 'Slow & easy'],
