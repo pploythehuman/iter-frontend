@@ -1,0 +1,44 @@
+@import './variable.scss';
+
+.trips-page {
+  min-height: 100vh;
+  background-color: #f3f3f3;
+
+  .trips-container {
+    // margin: 0 auto;
+    padding: 0 3rem;
+    @media only screen and (max-width: 768px) {
+      padding: 0 2.5rem;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      color: $color-black;
+      // text-align: center;
+      font-size: 2rem;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding-bottom: 3rem;
+
+      .ant-card {
+        a {
+          &:hover {
+            color: $color-primary-light;
+          }
+        }
+
+        p {
+          color: $color-black;
+        }
+
+        transition: transform 0.3s;
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
+    }
+  }
+}

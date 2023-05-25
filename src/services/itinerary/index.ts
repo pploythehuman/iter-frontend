@@ -1,26 +1,25 @@
 import { apiGet, apiPost, apiDelete } from '../api';
-import { IAgenda } from '../../interfaces/IItinerary';
+import { IAgenda, IItinerary } from '../../interfaces/IItinerary';
+import { PlaceData } from '../../interfaces/IData';
 
-interface PlaceData {
-  place_id: string;
-  place_name: string;
-  web_picture_urls: string[];
-  introduction: string;
-  detail: string;
-  contact: any;
-  category_description: string;
-  date: string;
-  arrival_time: string;
-  leave_time: string;
-}
+const getItineraries = async () => {
+  const response = await apiGet(`itinerary`);
+  return response.data;
+};
 
 const getItinerary = async (itineraryId: string | undefined) => {
-  const response = await apiGet(`itinerary/${itineraryId}`);
+  const response = await apiGet(`itinerary/${itineraryId}/`);
+  return response.data;
+};
+
+const createItinerary = async (itineraryItem: IItinerary | undefined) => {
+  const data = itineraryItem;
+  const response = await apiPost(`itinerary/`, data);
   return response.data;
 };
 
 const getPlace = async (placeId: string) => {
-  const response = await apiGet(`places/${placeId}`);
+  const response = await apiGet(`places/${placeId}/`);
   return response.data;
 };
 
@@ -48,14 +47,16 @@ const getDetailedItinerary = async (itineraryId: string | undefined): Promise<IA
   return detailedItinerary;
 };
 
-const deleteItineraryItem = async (itineraryItemId: string) => {
-  const response = await apiDelete(`itinerary/${itineraryItemId}`);
+const deleteItinerary = async (itineraryId: string) => {
+  const response = await apiDelete(`itinerary/${itineraryId}`);
   return response;
 };
 
 export {
+  getItineraries,
   getItinerary,
+  createItinerary,
   getPlace,
   getDetailedItinerary,
-  deleteItineraryItem,
+  deleteItinerary,
 };

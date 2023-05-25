@@ -20,5 +20,16 @@ export interface IAgenda {
   date: string;
   arrival_time: string;
   leave_time: string;
-  
+}
+
+export interface IItinerary {
+  id?: number;
+  owner: number;
+  co_travelers: number[];
+  destination: string;
+  plan: any[];
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
 }
