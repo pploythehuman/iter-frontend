@@ -11,6 +11,8 @@ import {
   DatePicker,
   Form,
   AutoComplete,
+  Tag,
+  message,
 } from "antd";
 import type { RangePickerProps } from "antd/es/date-picker";
 
@@ -47,31 +49,6 @@ const destinationData = [
     image:
       "https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg",
   },
-  {
-    title: "Bangkok",
-    image:
-      "https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840",
-  },
-  {
-    title: "Bangkok",
-    image:
-      "https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg",
-  },
-  {
-    title: "Bangkok",
-    image:
-      "https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840",
-  },
-  {
-    title: "Bangkok",
-    image:
-      "https://www.tripsavvy.com/thmb/4IhtAQ1Bh5Zte05C0iLqwGp3u_U=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-642551278-5e19f089331d42dbb6b24e938fce1ab5.jpg",
-  },
-  {
-    title: "Bangkok",
-    image:
-      "https://lp-cms-production.imgix.net/2021-03/GettyRF_512268647.jpg?auto=format&q=75&w=3840",
-  },
 ];
 
 const options = [
@@ -85,7 +62,34 @@ const options = [
 export default function Home() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [emails, setEmails] = useState<any[]>([]);
   const [form] = Form.useForm();
+  const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
+
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  const handleInputChange = (event: any) => {
+    if (event.key === "Enter" || event.target.value.includes(',')) {
+      let newEmail = event.target.value.replace(',', '');  // remove comma if any
+      if (emailPattern.test(newEmail)) {
+        setEmails([...emails, newEmail]);
+        form.setFieldsValue({ coTravellerEmails: '' });  // clear the input field
+      } else {
+        message.error("Input email is incorrect");
+      }
+    }
+  };  
+
+  const handleClose = (removedEmail: string) => {
+    const newEmails = emails.filter((email) => email !== removedEmail);
+    setEmails(newEmails);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -97,10 +101,12 @@ export default function Home() {
 
   const handleContinueQuestionButton = async () => {
     try {
+      setHasFormBeenSubmitted(true);
       const values = await form.validateFields();
       console.log(values);
       showModal();
       form.resetFields();
+      setEmails([]);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
@@ -108,6 +114,7 @@ export default function Home() {
 
   const handleCreateBlankPlanButton = async () => {
     try {
+      setHasFormBeenSubmitted(true);
       const values = await form.validateFields();
       const startDate = dayjs(values.dateRange[0]).format("YYYY-MM-DD");
       const endDate = dayjs(values.dateRange[1]).format("YYYY-MM-DD");
@@ -121,6 +128,7 @@ export default function Home() {
       console.log("blankItinerary", blankItinerary);
       navigate(`itinerary/${blankItinerary.id}`);
       form.resetFields();
+      setEmails([]);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
@@ -177,21 +185,37 @@ export default function Home() {
                   disabledDate={disabledDate}
                 />
               </Form.Item>
-
-              
-              
-              {/* <Form.Item
+              <Form.Item
                 className="co-traveller-input"
-                name="numberOfTravellers"
+                name="coTravellerEmails"
                 rules={[
                   {
-                    required: true,
-                    message: "Please input the number of co-travellers!",
+                    validator: (_, value, callback) => {
+                      if (emails.length === 0  && hasFormBeenSubmitted) {
+                        return Promise.reject(new Error('Please input co-travellers\' emails!'));
+                      }
+                      return Promise.resolve();
+                    },
                   },
                 ]}
               >
-                <Input placeholder="Co-Travellers" />
-              </Form.Item> */}
+                <Input
+                  value={emails.join(', ')}
+                  onChange={handleInputChange}
+                  placeholder="Input email and press Enter"
+                  onPressEnter={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                />
+              </Form.Item>
+
+            </div>
+
+            <div style={{ marginBottom: '16px', width: '100%' }}>
+              {emails.map((email) => (
+                <Tag closable onClose={() => handleClose(email)}>
+                  {email}
+                </Tag>
+              ))}
             </div>
             <div className="button-wrapper">
               <Button
