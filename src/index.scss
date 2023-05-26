@@ -365,7 +365,7 @@ a {
 
 .search-box {
   display: flex;
-  // justify-content: center;
+  flex-direction: column;
   align-items: center;
   width: 60%;
   margin: 0 auto;
@@ -378,36 +378,59 @@ a {
   margin-top: 50px;
 
   .destination-input {
-    flex-basis: calc(100% - 16px);
-    margin-right: 16px;
-    margin-bottom: 6px;
+      width: 100%;
+      // margin-bottom: 16px;
   }
 
-  .date-input {
-    flex-basis: calc(35% - 16px);
-    margin-bottom: 16px;
-    @media only screen and (max-width: 768px) {
-      flex-basis: calc(100% - 16px);
-    }
+  .date-co-traveller-wrapper {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .date-input {
+          flex-basis: 33%;
+          margin-right: 0;
+        .ant-row  {
+          padding: 0 !important;
+        }
+      }
+
+      .co-traveller-input {
+          flex-basis: 65%;
+      }
+
+      @media only screen and (max-width: 768px) {
+          flex-direction: column;
+
+          .date-input, .co-traveller-input {
+              flex-basis: 100%;
+              padding: 0;
+              // margin-right: 0;
+          }
+      }
   }
 
-  .co-traveller-input {
-    flex-basis: calc(65% - 16px);
-    margin-right: 16px;
-    margin-bottom: 6px;
-    @media only screen and (max-width: 768px) {
-      flex-basis: calc(100% - 16px);
-    }
-  }
+  .button-wrapper {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
 
-  .ant-btn {
-    flex-basis: calc(50% - 16px);
-    margin-bottom: 16px;
-    @media only screen and (max-width: 768px) {
-      flex-basis: calc(100% - 16px);
-    }
+      .ant-btn {
+          flex-basis: 49%;
+          margin-bottom: 16px;
+      }
+
+      @media only screen and (max-width: 768px) {
+          flex-direction: column;
+
+          .ant-btn {
+              flex-basis: 100%;
+              // margin-bottom: 16px;
+          }
+      }
   }
 }
+
 
 @media only screen and (max-width: 768px) {
   .search-box {
@@ -421,35 +444,35 @@ a {
   margin: 0 auto;
   padding: 16px;
 
-  .search-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  // .search-box {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   margin-bottom: 24px;
 
-    .ant-input {
-      flex-basis: calc(50% - 16px);
-      margin-right: 16px;
-      margin-bottom: 16px;
-    }
+  //   .ant-input {
+  //     flex-basis: calc(50% - 16px);
+  //     margin-right: 16px;
+  //     margin-bottom: 16px;
+  //   }
 
-    .ant-picker {
-      flex-basis: calc(50% - 16px);
-      margin-bottom: 16px;
-    }
+  //   .ant-picker {
+  //     flex-basis: calc(50% - 16px);
+  //     margin-bottom: 16px;
+  //   }
 
-    .ant-input-number {
-      flex-basis: calc(50% - 16px);
-      margin-right: 16px;
-      margin-bottom: 16px;
-    }
+  //   .ant-input-number {
+  //     flex-basis: calc(50% - 16px);
+  //     margin-right: 16px;
+  //     margin-bottom: 16px;
+  //   }
 
-    .ant-btn {
-      flex-basis: calc(50% - 16px);
-      margin-bottom: 16px;
-    }
-  }
+  //   .ant-btn {
+  //     flex-basis: calc(50% - 16px);
+  //     margin-bottom: 16px;
+  //   }
+  // }
 
   .feature {
     display: flex;
