@@ -36,7 +36,7 @@ const TripCard = ({
       cover={ 
         <img alt={item.destination} src={bangkokImg} />
       }
-      style={{ width: 300, minHeight: 280 }}
+      style={{ width: 320, minHeight: 300 }}
       hoverable
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
@@ -105,7 +105,7 @@ const MyTrips = () => {
           <h1>Current trips</h1>
           <div className="cards-container">
             <Space wrap size={[20, 20]}>
-              <Card className="create-trip-card" style={{ width: 300, minHeight: 280 }}>
+              <Card className="create-trip-card" style={{ width: 320, minHeight: 300  }}>
                 <Button type="primary" icon={<PlusCircleOutlined />}>Create New Trip</Button>
               </Card>
               {itineraries
