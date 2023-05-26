@@ -1,168 +1,92 @@
-import { apiGet, apiPost } from '../api';
-import { PlaceData } from '../place';
+import { apiGet, apiPost, apiDelete } from "../api";
+import { getProfile } from '../profile';
+import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
+import { PlaceData } from "../../interfaces/IData";
 
-interface AgendaData {
-  id: number;
-  place_id: string;
-  date: Date;
-  arrival_time: Date;
-  leave_time: Date;
-  travel_time: object;
-}
-
-interface AgendaPlaceData {
-  id: number;
-  place: PlaceData;
-  date: Date;
-  arrival_time: Date;
-  leave_time: Date;
-  travel_time: object;
-}
-
-interface ItineraryData {
-  id: number,
-  destination: string,
-  start_date: Date,
-  end_date: Date,
-  start_time: Date,
-  end_time: Date,
-  plan: [AgendaData];
-  co_travelers: [number], 
-  owner: number
-}
-
-interface ItineraryPlaceData {
-  id: number,
-  destination: string,
-  start_date: Date,
-  end_date: Date,
-  start_time: Date,
-  end_time: Date,
-  plan: [AgendaPlaceData];
-  co_travelers: [number], 
-  owner: number
-}
+const getItineraries = async () => {
+  const response = await apiGet(`itinerary`);
+  return response.data;
+};
 
 const getItinerary = async (itineraryId: string | undefined) => {
-  const response = await apiGet(`itinerary/${itineraryId}`);
-  return response;
+  const response = await apiGet(`itinerary/${itineraryId}/`);
+  return response.data;
 };
 
+const createItinerary = async (itineraryItem: IItinerary | undefined) => {
+  const data = itineraryItem;
+  const response = await apiPost(`itinerary/`, data);
+  return response.data;
+};
+
+const deleteItinerary = async (itineraryId: string) => {
+  const response = await apiDelete(`itinerary/${itineraryId}`);
+  return response;
+};
 
 const getPlace = async (placeId: string) => {
-  const response = await apiGet(`places/${placeId}`);
-  return response;
+  const response = await apiGet(`places/${placeId}/`);
+  return response.data;
 };
 
-// const getItinerary = async (itineraryId: string | undefined) => {
-//   if (itineraryId == undefined) {
-//     itineraryId = ""
-//   }
-//   const itineraryData = [
-//     {
-//       id: 1,
-//       name: "Eiffel Tower",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "A dd-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.A wrought-iron lattice tower on the Champ de Mars in Paris, France.",
-//       rating: 4.5,
-//       location: [13.7494, 100.5282],
-//       tags: ["landmark", "architecture"],
-//       date: "2023-04-01",
-//       time: "10:00 AM",
-//     },
-//     {
-//       id: 2,
-//       name: "Louvre Museum",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "The world's largest art museum and a historic monument in Paris, France.",
-//       rating: 4.7,
-//       location: [13.7441, 100.4941],
-//       tags: ["museum", "art"],
-//       date: "2023-04-01",
-//       time: "2:00 PM",
-//     },
-//     {
-//       id: 3,
-//       name: "Notre-Dame Cathedral",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "A medieval Catholic cathedral on the Île de la Cité in Paris, France.",
-//       rating: 4.6,
-//       location: [13.7581, 100.4917],
-//       tags: ["cathedral", "architecture"],
-//       date: "2023-04-02",
-//       time: "10:00 AM",
-//     },
-//     {
-//       id: 4,
-//       name: "Arc de Triomphe",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "One of the most famous monuments in Paris, France.",
-//       rating: 4.4,
-//       location: [13.7641, 100.4991],
-//       tags: ["monument", "history"],
-//       date: "2023-04-02",
-//       time: "2:00 PM",
-//     },
-//     {
-//       id: 5,
-//       name: "Arc de Triomphe",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "One of the most famous monuments in Paris, France.",
-//       rating: 4.4,
-//       location: [13.7499, 100.4916],
-//       tags: ["monument", "history"],
-//       date: "2023-04-09",
-//       time: "2:00 PM",
-//     },
-//     {
-//       id: 5,
-//       name: "Arc de Triomphe",
-//       imageUrl: "https://www.fodors.com/assets/destinations/21/grand-palace-night-bangkok-thailand_980x650.jpg",
-//       description: "One of the most famous monuments in Paris, France.",
-//       rating: 4.4,
-//       location: [13.7641, 100.4991],
-//       tags: ["monument", "history"],
-//       date: "2023-04-09",
-//       time: "2:00 PM",
-//     },
-//   ];
-//   return {
-//     status: 200,
-//     data: JSON.stringify(itineraryData)
-//   }
-  // const response = await apiGet<ItineraryData>('/itinerary/'+itineraryId, 
-  //   {
-  //     headers: {
-  //       Authorization: 'Bearer '+ localStorage.getItem('auth'),
-  //     },
-  //   })
-  //   var iti = {
-  //     destination: response.destination,
-  //     start_date: response.start_date,
-  //     end_date: response.end_date,
-  //     start_time: response.start_time,
-  //     end_time: response.end_time,
-  //     plan: [];
-  //     co_travelers: response.co_travelers, 
-  //     owner: response.owner
-  //   }
-  //   response.data.plan.forEach(agenda => {
-  //     iti.plan.push(getPlace(agenda.place_id))
-  //   });
-    
-  // return {
-  //   status: response.status,
-  //   data: JSON.stringify(iti)
-  // };
-// };
+const getDetailedItinerary = async (
+  itineraryId: string | undefined
+): Promise<IAgenda[]> => {
+  const itinerary = await getItinerary(itineraryId);
+  const plans = itinerary?.plan || [];
+  const places: PlaceData[] = await Promise.all(
+    plans.map((plan: any) => getPlace(plan.place_id))
+  );
+
+  // get detail from place for every place in itinerary
+  const detailedItinerary: IAgenda[] = plans.map((plan: any, index: number) => {
+    const place = places[index] || {};
+    return {
+      id: plan?.id,
+      place_id: plan?.place_id,
+      place_name: place?.place_name,
+      web_picture_urls: place?.web_picture_urls,
+      description: `${place?.introduction} ${place?.detail}`,
+      contact: place?.contact,
+      location: [place?.latitude, place?.longitude],
+      tags: [place?.category_description],
+      date: plan?.date,
+      arrival_time: plan?.arrival_time,
+      leave_time: plan?.leave_time,
+    };
+  });
+  return detailedItinerary;
+};
+
+const createBlankItinerary = async (
+  destination: string,
+  coTravellers: number[],
+  startDate: string,
+  endDate: string
+): Promise<IItinerary> => {
+  const profile = await getProfile()
+
+  const blankItinerary = {
+    owner: profile.id,
+    co_travelers: coTravellers,
+    destination: destination,
+    plan: [],
+    start_date: startDate,
+    end_date: endDate,
+    start_time: "08:00:00",
+    end_time: "20:00:00",
+  }
+
+  const responseItinerary = await createItinerary(blankItinerary);
+  return responseItinerary;
+};
 
 export {
+  getItineraries,
   getItinerary,
+  createItinerary,
   getPlace,
+  deleteItinerary,
+  getDetailedItinerary,
+  createBlankItinerary,
 };
-export type {
-    ItineraryData,
-    ItineraryPlaceData,
-    AgendaData,
-    AgendaPlaceData
-  };

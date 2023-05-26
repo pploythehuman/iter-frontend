@@ -4,38 +4,29 @@ import { useParams } from "react-router-dom";
 import chroma from "chroma-js";
 import tinycolor from "tinycolor2";
 import { format, parse } from "date-fns";
-import {
-  UserAddOutlined,
-  PlusOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { Button, Tabs, Spin } from "antd";
+import { UserAddOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { Button, Tabs, Spin, Result } from "antd";
 
-import ItineraryNavbar from "../components/itinerary/ItineraryNavbar";
+import Navbar from "../components/Navbar";
 import ItineraryTimeline from "../components/timeline/ItineraryTimeline";
-// import GoogleMap from "../components/maps/GoogleMaps";
 import LeafletMaps from "../components/maps/LeafletMaps";
 import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
-// import whiteImg from "../assets/white_img.png";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getItinerary, getPlace } from "../services/itinerary";
+import { getDetailedItinerary, getItinerary, getPlace } from "../services/itinerary";
+
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
 
-interface ItineraryItem extends IAgenda {
-  contact: any;
-}
-
 const Itinerary = () => {
   const { itineraryId } = useParams();
   const [textColor, setTextColor] = useState("var(--color-white)");
-  const [itineraryData, setItineraryData] = useState<ItineraryItem[]>([]);
+  const [itineraryData, setItineraryData] = useState<IAgenda[]>([]);
   const [activeTab, setActiveTab] = useState("timeline");
-  // const [activeIndex, setActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null | unknown>(null);
 
   const uniqueDates = Array.from(
     new Set(itineraryData.map((item) => item.date))
@@ -76,31 +67,24 @@ const Itinerary = () => {
     const updatedItinerary = itineraryData.filter((item) => item.id !== id);
     setItineraryData(updatedItinerary);
   };
-
   console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
-      const itinerary = await getItinerary(itineraryId);
-      setDestination(itinerary?.data?.destination);
-      setCoTravellers([...itinerary?.data?.co_travelers]);
-      setDates([itinerary?.data?.start_date, itinerary?.data?.end_date]);
+      try {
+        setIsLoading(true);
+        const itinerary = await getItinerary(itineraryId);
+        setDestination(itinerary?.destination);
+        setCoTravellers([...itinerary?.co_travelers]);
+        setDates([itinerary?.start_date, itinerary?.end_date]);
 
-      let plans = itinerary.data.plan;
-      for (const plan of plans) {
-        const place: any = await getPlace(plan.place_id);
-        const newPlace = {
-          id: plan.place_id,
-          name: place.data.place_name,
-          imageUrl: place.data.web_picture_urls,
-          description: `${place.data.introduction} ${place.data.detail}`,
-          contact: place.data.contact,
-          location: [place.data.latitude, place.data.longitude],
-          tags: [place.data.category_description],
-          date: plan.date,
-          arrival_time: plan.arrival_time,
-          leave_time: plan.leave_time,
-        };
-        setItineraryData((prevData) => [...prevData, newPlace]);
+        const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
+        setItineraryData(detailedItinerary);
+        setIsLoading(false);
+
+      } catch (error) {
+        console.log("error", error);
+        setError(error);
+        setIsLoading(false)
       }
     };
 
@@ -108,13 +92,9 @@ const Itinerary = () => {
     setIsLoading(false);
   }, [itineraryId]);
 
-  useEffect(() => {
-    // setSelectedDate("");
-  }, [activeTab]);
-
   return (
     <div className="itinerary-page">
-      <ItineraryNavbar />
+      <Navbar />
       <div className="banner">
         <img
           src={bangkokImg}
@@ -169,42 +149,50 @@ const Itinerary = () => {
         <TabPane tab="Calendar" key="calendar" />
         <TabPane tab="Map" key="map" />
       </Tabs>
-
+      
       <Spin tip="Loading" spinning={isLoading}>
-      <div className="itinerary-wrapper">
-        <div className="itinerary-date-tab-container">
-          <ItineraryDateTab
-            dates={uniqueDates}
-            onDateTabClick={(date) => setSelectedDate(date)}
-          />
-        </div>
-        <div className="itinerary-content">
-          {activeTab === "timeline" &&
-            <ItineraryTimeline 
-              itineraryData={itineraryData} 
-              selectedDate={selectedDate}
-              itineraryRefs={itineraryRefs}
-              onDelete={handleDelete}
+        <div>
+          {error ? (
+            <Result
+              status="404"
+              title="404"
+              subTitle="Sorry, the page you visited does not exist."
+              extra={<Button type="primary" href="/">Back Home</Button>}
             />
-          }
-          {activeTab === "calendar" && 
-            <MyCalendar 
-              itineraryData={itineraryData} 
-              selectedDate={selectedDate}
-            />
-          }
-          {activeTab === "map" && (
-            // <GoogleMap
-            //   itineraryData={itineraryData}
-            //   selectedDate={selectedDate}
-            // />
-            <LeafletMaps
-            itineraryData={itineraryData}
-            selectedDate={selectedDate}
-            />
+          ) : (
+            <div className="itinerary-wrapper">
+              <div className="itinerary-date-tab-container">
+                <ItineraryDateTab
+                  dates={uniqueDates}
+                  onDateTabClick={(date) => setSelectedDate(date)}
+                />
+              </div>
+              <div className="itinerary-content">
+                {activeTab === "timeline" &&
+                  <ItineraryTimeline 
+                    itineraryData={itineraryData} 
+                    selectedDate={selectedDate}
+                    itineraryRefs={itineraryRefs}
+                    onDelete={handleDelete}
+                  />
+                }
+                {activeTab === "calendar" && 
+                  <MyCalendar 
+                    itineraryData={itineraryData} 
+                    selectedDate={selectedDate}
+                  />
+                }
+                {activeTab === "map" && (
+                  <LeafletMaps
+                  itineraryData={itineraryData}
+                  selectedDate={selectedDate}
+                  activeTab={activeTab}
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
-      </div>
       </Spin>
     </div>
   );

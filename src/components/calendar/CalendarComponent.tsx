@@ -172,7 +172,7 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   function transformRealDataToEventData(itineraryData: IAgenda[]) {
     return itineraryData.map((item: IAgenda) => ({
       id: `${item.id}`,
-      title: item.name,
+      title: item.place_name,
       description: item.description,
       start: `${item.date}T${item.arrival_time}`,
       end: `${item.date}T${item.leave_time}`, 

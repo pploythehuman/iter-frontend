@@ -1,6 +1,6 @@
 //del later
 export interface IEvent {
-  name?: string;
+  place_name?: string;
   endTime?: string;
   startTime?: string;
 }

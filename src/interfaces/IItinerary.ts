@@ -10,13 +10,27 @@ export interface IEvent {
 }
 
 export interface IAgenda {
-  id: string | number;
-  name: string;
-  imageUrl: string[];
+  id?: string | number;
+  place_id: string | number;
+  place_name: string;
+  web_picture_urls: string[];
   description: string;
-  location: number[];
-  tags: string[];
+  contact: any;
+  location?: number[];
+  tags?: string[];
   date: string;
   arrival_time: string;
   leave_time: string;
+}
+
+export interface IItinerary {
+  id?: number;
+  owner: number;
+  co_travelers: number[];
+  destination: string;
+  plan: any[];
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
 }

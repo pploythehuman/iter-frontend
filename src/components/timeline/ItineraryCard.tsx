@@ -12,15 +12,15 @@ interface ItineraryCardProps extends IAgenda {
 
 const ItineraryCard: React.FC<ItineraryCardProps> = ({
   id,
-  name,
-  imageUrl,
+  place_id,
+  place_name,
+  web_picture_urls,
   description,
   contact,
   tags,
   date,
   arrival_time,
   leave_time,
-  location,
   onDelete,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -91,14 +91,14 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
     <div className={`itinerary-card ${showMore ? 'column-direction' : ''}`}>
       <div className="card-image">
         <img
-          alt={name}
-          src={imageUrl[0]? imageUrl[0] : noImg}
+          alt={place_name}
+          src={web_picture_urls[0]? web_picture_urls[0] : noImg}
         />
       </div>
       <div className="card-content">
         <div className="card-header">
           <div className="header-top">
-            <h3>{name}</h3>
+            <h3>{place_name}</h3>
             <Dropdown overlay={menu}>
               <Button type="ghost">
                 <EllipsisOutlined className="ellipsis" />
@@ -106,7 +106,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
             </Dropdown>
           </div>
           <div className="tags">
-          {tags.map((tag, index) => (
+          {tags && tags.map((tag, index) => (
             <a key={index} href='/'>
               <Tag color="var(--color-secondary-light)">{tag}</Tag>
             </a>

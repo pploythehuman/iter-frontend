@@ -3,8 +3,6 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import placeholder from '../../assets/placeholder.png';
 import L, { LatLngExpression } from "leaflet";
-import Itinerary from "../../pages/Itinerary";
-import { AgendaPlaceData } from "../../services/itinerary";
 import { getDirection } from "../../services/direction";
 import { GeoJsonObject } from "geojson";
 
@@ -23,27 +21,10 @@ interface Position {
     lat: number; lng: number;
 }
 
-function ResetCenterView({pos}: {pos: Position}) {
-  const map = useMap();
-    console.log('POS', pos)
-  useEffect(() => {
-    if (pos.lat && pos.lng) {
-      map.setView(
-        L.latLng(pos.lat, pos.lng),
-        map.getZoom(),
-        {
-          animate: true
-        }
-      )
-    }
-  }, [pos]);
-
-  return null;
-}
-
 interface LeafletMapProps {
     itineraryData: any[];
     selectedDate: string;
+    activeTab: string;
 }
 
 function createArrivalTime( agenda:any ) {
@@ -84,18 +65,37 @@ function ResetDirection({dir, filteredMarkers}: { dir: GeoJsonObject, filteredMa
         L.geoJSON(dir).addTo(map)
         map.fitBounds(L.latLngBounds(coordinates));
 
-    }, [dir]);
+    }, [dir, filteredMarkers, map]);
   
     return null;
 }
 
-const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) => {
+const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate, activeTab}) => {
+    const [tab, setTab] = useState(activeTab);
     const [itinerary, setItinerary] = useState(itineraryData);
     const [date, setDate] = useState(selectedDate);
     const [filteredMarkers, setFilteredMarkers] = useState<any[]>([])
     const [directionJSON, setDirectionJSON] = useState<GeoJsonObject>()
 
     const [center, setCenter] = useState<Position>(defaultCenter)
+
+    function ResetCenterView({pos}: {pos: Position}) {
+      const map = useMap();
+        console.log('POS', pos)
+      useEffect(() => {
+        if (pos.lat && pos.lng) {
+          map.setView(
+            L.latLng(pos.lat, pos.lng),
+            map.getZoom(),
+            {
+              animate: true
+            }
+          )
+        }
+      }, [pos, map, tab]);
+    
+      return null;
+    }
 
     useEffect(() => {
         let tempFilteredMarkers = selectedDate ? 
@@ -104,28 +104,36 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
         setFilteredMarkers(
             tempFilteredMarkers.sort(compareArrivalTime)
         );
-    }, [date, itinerary]);
+    }, [selectedDate, itineraryData]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            let coordList = filteredMarkers.map((marker) => [marker.location[1], marker.location[0]])
-            
-            if (coordList.length > 0) {
-                const directions = await getDirection(coordList);
-                console.log(directions)
-                setDirectionJSON(directions.data)
-            }
-          };
-        fetchData();
-
-        setCenter(calculateCenter(filteredMarkers))
+      const fetchData = async () => {
+          let coordList = filteredMarkers.map((marker) => [marker.location[1], marker.location[0]])
+          
+          if (coordList.length >= 2) {
+              const directions = await getDirection(coordList);
+              console.log(directions)
+              setDirectionJSON(directions.data)
+          }
+          else {
+              setDirectionJSON(undefined)
+          }
+      };
+      fetchData();
+    
+      setCenter(calculateCenter(filteredMarkers))
     }, [filteredMarkers]);
+    
 
+  useEffect(() => {
+    setTab(activeTab);
+}, [activeTab]);
+  
 
     return (
         <MapContainer
         center={center}
-        zoom={9}
+        zoom={15}
         style={{ width: "100%", height: "100%" }}
         >
             <TileLayer
@@ -137,7 +145,7 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
                 <Marker position={marker.location} icon={icon}>
                     <Popup>
                         <center>
-                        <b>{marker.name}</b> <br/>
+                        <b>{marker.place_name}</b> <br/>
                         {new Date(marker.date).toDateString()} <br/>
                         {marker.arrival_time}-{marker.leave_time}
                         </center>
@@ -147,7 +155,7 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
             ))}
 
         <ResetCenterView pos={center}/>
-        {directionJSON != undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
+        {directionJSON !== undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
         
         </MapContainer>
     );
