@@ -5,6 +5,8 @@ export interface PlaceData {
   introduction: string;
   detail: string;
   contact: any;
+  latitude: number;
+  longitude: number;
   category_description: string;
   date: string;
   arrival_time: string;

@@ -34,7 +34,7 @@ function ResetCenterView({pos}: {pos: Position}) {
         }
       )
     }
-  }, [pos]);
+  }, [pos, map]);
 
   return null;
 }
@@ -82,7 +82,7 @@ function ResetDirection({dir, filteredMarkers}: { dir: GeoJsonObject, filteredMa
         L.geoJSON(dir).addTo(map)
         map.fitBounds(L.latLngBounds(coordinates));
 
-    }, [dir]);
+    }, [dir, filteredMarkers, map]);
   
     return null;
 }
@@ -102,22 +102,23 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
         setFilteredMarkers(
             tempFilteredMarkers.sort(compareArrivalTime)
         );
-    }, [date, itinerary]);
+    }, [selectedDate, itineraryData]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            let coordList = filteredMarkers.map((marker) => [marker.location[1], marker.location[0]])
-            
-            if (coordList.length > 0) {
-                const directions = await getDirection(coordList);
-                console.log(directions)
-                setDirectionJSON(directions.data)
-            }
-          };
-        fetchData();
-
-        setCenter(calculateCenter(filteredMarkers))
-    }, [filteredMarkers]);
+      const fetchData = async () => {
+          let coordList = filteredMarkers.map((marker) => [marker.location[1], marker.location[0]])
+          
+          if (coordList.length >= 2) {
+              const directions = await getDirection(coordList);
+              console.log(directions)
+              setDirectionJSON(directions.data)
+          }
+      };
+      fetchData();
+  
+      setCenter(calculateCenter(filteredMarkers))
+  }, [filteredMarkers]);
+  
 
 
     return (
@@ -145,7 +146,7 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
             ))}
 
         <ResetCenterView pos={center}/>
-        {directionJSON != undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
+        {directionJSON !== undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
         
         </MapContainer>
     );

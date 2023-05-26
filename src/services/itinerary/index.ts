@@ -48,6 +48,7 @@ const getDetailedItinerary = async (
       web_picture_urls: place?.web_picture_urls,
       description: `${place?.introduction} ${place?.detail}`,
       contact: place?.contact,
+      location: [place?.latitude, place?.longitude],
       tags: [place?.category_description],
       date: plan?.date,
       arrival_time: plan?.arrival_time,

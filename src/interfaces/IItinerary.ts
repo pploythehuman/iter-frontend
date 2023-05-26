@@ -16,6 +16,7 @@ export interface IAgenda {
   web_picture_urls: string[];
   description: string;
   contact: any;
+  location?: number[];
   tags?: string[];
   date: string;
   arrival_time: string;
