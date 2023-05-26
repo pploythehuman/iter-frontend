@@ -186,6 +186,7 @@ const Itinerary = () => {
                   <LeafletMaps
                   itineraryData={itineraryData}
                   selectedDate={selectedDate}
+                  activeTab={activeTab}
                   />
                 )}
               </div>

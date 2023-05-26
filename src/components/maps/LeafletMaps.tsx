@@ -21,27 +21,10 @@ interface Position {
     lat: number; lng: number;
 }
 
-function ResetCenterView({pos}: {pos: Position}) {
-  const map = useMap();
-    console.log('POS', pos)
-  useEffect(() => {
-    if (pos.lat && pos.lng) {
-      map.setView(
-        L.latLng(pos.lat, pos.lng),
-        map.getZoom(),
-        {
-          animate: true
-        }
-      )
-    }
-  }, [pos, map]);
-
-  return null;
-}
-
 interface LeafletMapProps {
     itineraryData: any[];
     selectedDate: string;
+    activeTab: string;
 }
 
 function createArrivalTime( agenda:any ) {
@@ -87,13 +70,32 @@ function ResetDirection({dir, filteredMarkers}: { dir: GeoJsonObject, filteredMa
     return null;
 }
 
-const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) => {
+const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate, activeTab}) => {
+    const [tab, setTab] = useState(activeTab);
     const [itinerary, setItinerary] = useState(itineraryData);
     const [date, setDate] = useState(selectedDate);
     const [filteredMarkers, setFilteredMarkers] = useState<any[]>([])
     const [directionJSON, setDirectionJSON] = useState<GeoJsonObject>()
 
     const [center, setCenter] = useState<Position>(defaultCenter)
+
+    function ResetCenterView({pos}: {pos: Position}) {
+      const map = useMap();
+        console.log('POS', pos)
+      useEffect(() => {
+        if (pos.lat && pos.lng) {
+          map.setView(
+            L.latLng(pos.lat, pos.lng),
+            map.getZoom(),
+            {
+              animate: true
+            }
+          )
+        }
+      }, [pos, map, tab]);
+    
+      return null;
+    }
 
     useEffect(() => {
         let tempFilteredMarkers = selectedDate ? 
@@ -113,18 +115,25 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate}) =
               console.log(directions)
               setDirectionJSON(directions.data)
           }
+          else {
+              setDirectionJSON(undefined)
+          }
       };
       fetchData();
-  
+    
       setCenter(calculateCenter(filteredMarkers))
-  }, [filteredMarkers]);
-  
+    }, [filteredMarkers]);
+    
 
+  useEffect(() => {
+    setTab(activeTab);
+}, [activeTab]);
+  
 
     return (
         <MapContainer
         center={center}
-        zoom={9}
+        zoom={15}
         style={{ width: "100%", height: "100%" }}
         >
             <TileLayer
