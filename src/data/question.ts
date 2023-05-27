@@ -52,7 +52,7 @@ const questionData: QuestionData[] = [
         {
           key: "Nature",
           label: "Which attraction do you prefer for Nature?",
-          options: ["Nature & Wildlife", "Mountain (Doi)", "National Parks & Marine Reserves", "Islands"],
+          options: ["Nature & Wildlife", "Mountain (Doi)", "National Parks & Marine Reserves", "Islands", "Flower Field", "Caves", "Hot Spring", "Beaches & Bay", "Dam, Reservoir, Lake", "River, Canal", "Other Nature Sites", "Waterfalls", "Green Travel"],
           allowSelect: 2,
         },
       ],
@@ -60,7 +60,7 @@ const questionData: QuestionData[] = [
         {
           key: "Religious",
           label: "Which attraction do you prefer for Religious?",
-          options: ["Churches", "Mosque", "Temple", "Other Religious & Spiritual Sites"],
+          options: ["Churches", "Mosque", "Temple", "Other Religious & Spiritual Sites", "Other Religious & Spiritual Sites", "Places of Worship"],
           allowSelect: 2,
         },
       ],
