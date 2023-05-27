@@ -1,5 +1,4 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-
 const api = axios.create({
   baseURL: "http://dev.se.kmitl.ac.th:1337/api/",
 });
@@ -20,7 +19,6 @@ api.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   if (error.response.status === 401) {
-    alert('Unauthorized, redirecting to login page');
     window.location.href = '/login';
   }
 

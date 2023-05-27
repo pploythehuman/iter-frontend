@@ -1,137 +1,231 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "../pages/styles/auth.scss";
-import { Input, Button, Divider, DatePicker } from "antd";
-import type { DatePickerProps } from 'antd';
+import { Form, Input, Button, DatePicker, message, Divider, Spin } from "antd";
+import type { DatePickerProps } from "antd";
 import { MailOutlined, LockOutlined, CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { ReactComponent as SignInImage } from "../assets/PalmTree.svg";
-import { register } from '../services/auth';
+import { register } from "../services/auth";
 
 const SignInPage = () => {
-  const [fullName, setFullName] = useState('');
-  const [birthdate, setBirthdate] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
-
-  const handleRegister = async() => {
-    // const registerData = {
-    //   email: 'pployTest@gmail.com',
-    //   firstname: 'Test',
-    //   lastname: 'Test',
-    //   password: 'password',
-    //   password2: 'password',
-    //   tc: true,
-    // }
+  const onFinish = async (values: any) => {
     const registerData = {
-      email: email,
-      firstname: fullName.split(' ')[0],
-      lastname: fullName.split(' ')[1] || '',
-      password: password,
-      password2: confirmPassword,
+      email: values.email,
+      firstname: values.firstName,
+      lastname: values.lastName,
+      password: values.password,
+      password2: values.confirmPassword,
       tc: true,
-    }
-
+    };
+  
     try {
-      // const response = await axios.post('http://dev.se.kmitl.ac.th:1337/api/user/register/', testData);
+      setIsLoading(true);
       const response = await register(registerData);
-      console.log('Registration response:', response);
-    } catch (error) {
-      console.log("Error", error);
+      setIsLoading(false);
+      message.success("Login successfully")
+      console.log("Registration response:", response);
+      navigate('/login');
+    } catch (error: any) {
+      setIsLoading(false);
+      if (error.response && error.response.data) {
+        if (error.response.data.email) {
+          console.error("Error:", error.response.data.email[0]);
+          message.error(error.response.data.email[0]);
+        } else if (error.response.data.errors && error.response.data.errors.non_field_errors) {
+          console.error("Error:", error.response.data.errors.non_field_errors[0]);
+          message.error(error.response.data.errors.non_field_errors[0]);
+        } else {
+          message.error("Registration unsuccessful");
+          console.error(error);
+        }
+      } else {
+        message.error("Registration unsuccessful");
+        console.error(error);
+      }
     }
-  }
+  };
+  
 
   return (
-    <div className="main-container" style={{ backgroundColor: 'var(--color-secondary)'}}>
+    <div
+      className="main-container"
+      style={{ backgroundColor: "var(--color-secondary)" }}
+    >
       <div className="main-row">
-        <div className="form-container" style={{ backgroundColor: 'var(--color-secondary)'}}>
-          <a href="/" style={{ textDecoration: 'none' }}>
-            <h2 style={{ color: 'var(--color-white)', marginBottom: '10px', fontFamily: 'Montserrat-ExtraBold', display: 'flex' }}>
+        <div
+          className="form-container"
+          style={{ backgroundColor: "var(--color-secondary)" }}
+        >
+          <a href="/" style={{ textDecoration: "none" }}>
+            <h2
+              style={{
+                color: "var(--color-white)",
+                marginBottom: "10px",
+                fontFamily: "Montserrat-ExtraBold",
+                display: "flex",
+              }}
+            >
               <span className="iter-text">ITER</span>
             </h2>
-          </a>          
+          </a>
           <div className="form-container-element">
-            <h1 
-              style={{ 
-                fontFamily: 'Asap-Bold', 
-                fontSize: 25, 
-                alignItems: 'center', 
+            <h1
+              style={{
+                fontFamily: "Asap-Bold",
+                fontSize: 25,
+                alignItems: "center",
                 marginBottom: 0,
-                color: 'var(--color-white)'
+                color: "var(--color-white)",
               }}
             >
               Join Our Community
             </h1>
             <div
               style={{
-                margin: '0px 0px 10px 0px',
-                width: '20%',
-                height: '2px',
-                border: '1px solid var(--color-white)',
-                backgroundColor: 'var(--color-white)',
+                margin: "0px 0px 10px 0px",
+                width: "20%",
+                height: "2px",
+                border: "1px solid var(--color-white)",
+                backgroundColor: "var(--color-white)",
               }}
             ></div>
+            <Form name="register" form={form} onFinish={onFinish}>
+              <Form.Item
+                className="bottom-margin"
+                name="firstName"
+                rules={[
+                  { required: true, message: "Please input your First Name!" },
+                ]}
+              >
+                <Input prefix={<UserOutlined />} placeholder="First Name" />
+              </Form.Item>
+              <Form.Item
+                className="bottom-margin"
+                name="lastName"
+                rules={[
+                  { required: true, message: "Please input your Last Name!" },
+                ]}
+              >
+                <Input prefix={<UserOutlined />} placeholder="Last Name" />
+              </Form.Item>
+              {/* <Form.Item
+                name="birthdate"
+                rules={[
+                  { required: true, message: "Please select your Birthdate!" },
+                ]}
+              >
+                <DatePicker placeholder="Birthdate" />
+              </Form.Item> */}
 
-            <Input
-              prefix={<UserOutlined />}
-              placeholder="Full Name"
-              className="sign-in-input"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
-            <DatePicker 
-              className="sign-in-input custom-date-picker" 
-              placeholder="Birthdate" 
-              onChange={(_, dateString) => setBirthdate(dateString)}
-              // onChange={onChange} 
-            />
-            <Input
-              prefix={<MailOutlined />}
-              placeholder="Email"
-              className="sign-in-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Password"
-              className="sign-in-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Confirm Password"
-              className="sign-in-input"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <Button type="primary" className="sign-in-button" onClick={handleRegister} style={{ margin: '0px'}}>
-              Sign Up
+              <Form.Item
+                className="bottom-margin"
+                name="email"
+                rules={[
+                  {
+                    type: "email",
+                    required: true,
+                    message: "Please input a valid Email!",
+                  },
+                ]}
+              >
+                <Input prefix={<MailOutlined />} placeholder="Email" />
+              </Form.Item>
+
+              <Form.Item
+                className="bottom-margin"
+                name="password"
+                rules={[
+                  { required: true, message: "Please input your Password!" },
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="Password"
+                />
+              </Form.Item>
+
+              <Form.Item
+                className="bottom-margin"
+                name="confirmPassword"
+                dependencies={["password"]}
+                rules={[
+                  { required: true, message: "Please confirm your Password!" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          "The two passwords that you entered do not match!"
+                        )
+                      );
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="Confirm Password"
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Sign Up
+                </Button>
+              </Form.Item>
+            </Form>
+            <Divider
+              style={{
+                color: "var(--color-white)",
+                borderColor: "var(--color-white)",
+                fontSize: "13px",
+              }}
+            >
+              or login using
+            </Divider>
+            <Button className="third-party-button google-button">
+              Sign Up with Google
             </Button>
-            <Divider style={{ color: 'var(--color-white)', borderColor: 'var(--color-white)', fontSize: '13px'}}>or login using</Divider>
-            <Button className="third-party-button google-button">Sign Up with Google</Button>
-            <Button className="third-party-button facebook-button">Sign Up with Facebook</Button>
+            {/* <Button className="third-party-button facebook-button">
+              Sign Up with Facebook
+            </Button> */}
           </div>
           <div className="join-us-button">
-            <p style={{ color: 'var(--color-white)'}}>Already have an account?</p>
-            <a href="/login" style={{ color: 'var(--color-white)', marginLeft: '5px'}}> Sign in</a>
+            <p style={{ color: "var(--color-white)" }}>
+              Already have an account?
+            </p>
+            <a
+              href="/login"
+              style={{ color: "var(--color-white)", marginLeft: "5px" }}
+            >
+              {" "}
+              Sign in
+            </a>
           </div>
         </div>
-        <div className="image-col" style={{ backgroundColor: 'var(--color-white)'}}>
+        <div
+          className="image-col"
+          style={{ backgroundColor: "var(--color-white)" }}
+        >
           <SignInImage className="image" />
-          <h5 
-            style={{ 
-              color: 'var(--color-secondary)', 
-              margin: '0px 0px 5px 0px'}}
-            >
+          <h5
+            style={{
+              color: "var(--color-secondary)",
+              margin: "0px 0px 5px 0px",
+            }}
+          >
             Already have an account?
           </h5>
           <a href="/login">
-          <Button className="mobile-join-us-button" type="primary">Sign in</Button>
+            <Button className="mobile-join-us-button" type="primary">
+              Sign in
+            </Button>
           </a>
         </div>
       </div>

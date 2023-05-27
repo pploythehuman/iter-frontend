@@ -258,6 +258,9 @@ a {
   display: none;
   margin-left: 8px;
 }
+.username-desktop {
+  margin-left: 8px;
+}
 
 @media (max-width: 767px) {
   .menuButton {
@@ -379,7 +382,6 @@ a {
 
   .destination-input {
       width: 100%;
-      // margin-bottom: 16px;
   }
 
   .date-co-traveller-wrapper {
@@ -401,6 +403,10 @@ a {
 
       @media only screen and (max-width: 768px) {
           flex-direction: column;
+
+          .date-input {
+            margin-bottom: 16px;
+          }
 
           .date-input, .co-traveller-input {
               flex-basis: 100%;

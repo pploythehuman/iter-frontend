@@ -194,6 +194,7 @@ export default function Home() {
             <Form.Item
               className="destination-input"
               name="destination"
+              style={{ marginBottom: "16px" }}
               rules={[
                 { required: true, message: "Please input your destination!" },
               ]}
@@ -246,7 +247,7 @@ export default function Home() {
               </Form.Item>
             </div>
 
-            <div style={{ marginBottom: "16px", width: "100%" }}>
+            <div style={{ margin: "16px 0px", width: "100%" }}>
               {emails.map((email) => (
                 <Tag
                   color="var(--color-secondary)"
