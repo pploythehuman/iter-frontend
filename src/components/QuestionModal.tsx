@@ -22,8 +22,31 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
 
   const handleNext = () => {
+    // If the current question has subQuestions, add them to the questionData
+    const currentQuestion = questionData[currentStep];
+    if (currentQuestion.subQuestions) {
+      // Get the selected options for the current question
+      const selected = selectedOptions[currentStep] || [];
+      // Get the subQuestions for the selected options
+      const selectedSubQuestions = selected
+        .map(option => currentQuestion.subQuestions?.[option.toLowerCase().replace(/ /g, '')])
+        .flat()
+        .filter((subQuestion): subQuestion is QuestionData => subQuestion !== undefined);
+  
+      // Check if the sub-questions are already present in the questionData
+      const newSubQuestions = selectedSubQuestions.filter(subQuestion => !questionData.includes(subQuestion));
+  
+      // Only add new sub-questions to the questionData
+      setQuestionData(prevState => [
+        ...prevState.slice(0, currentStep + 1),
+        ...newSubQuestions,
+        ...prevState.slice(currentStep + 1)
+      ]);
+    }
+    // Move to the next question
     setCurrentStep(currentStep + 1);
   };
+  
 
   const handlePrev = () => {
     setCurrentStep(currentStep - 1);
@@ -38,6 +61,12 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
       if (selected.includes(option)) { // deselect option if already selected
         const index = selected.indexOf(option);
         selected.splice(index, 1);
+        
+        // Remove subQuestions related to unselected option
+        if(currentQuestion.subQuestions) {
+          const optionSubQuestions = currentQuestion.subQuestions[option.toLowerCase().replace(/ /g, '')] || [];
+          setQuestionData(prevState => prevState.filter(q => !optionSubQuestions.includes(q)));
+        }
       } else if (allowSelect === 1) { // replace current selection with the new choice
         selected = [option];
       } else if (selected.length < allowSelect) { // select new option
@@ -49,6 +78,7 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
     updatedOptions[currentStep] = selected;
     setSelectedOptions(updatedOptions);
   };
+  
   
 
   const handleSubmit = () => {

@@ -15,10 +15,11 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ mode }) => {
   }
   return (
     <Menu mode={mode} onClick={handleMenuClick}>
-      <Menu.Item key="explore">Explore</Menu.Item>
       <Menu.Item key="my-trips">My Trips</Menu.Item>
-      <Menu.Item key="about">About Us</Menu.Item>
-      <Menu.Item key="contact">Contact Us</Menu.Item>
+      {/* <Menu.Item key="explore">Explore</Menu.Item> */}
+      <Menu.Item key="about">Activities</Menu.Item>
+      <Menu.Item key="contact">Accomondation</Menu.Item>
+      <Menu.Item key="contact">Restaurants</Menu.Item>
     </Menu>
   );
 };
