@@ -32,8 +32,9 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import Navbar from "../components/Navbar";
 import QuestionModal from "../components/QuestionModal";
 import { createBlankItinerary } from "../services/itinerary";
-import { IItinerary } from "../interfaces/IItinerary";
 import { getIdFromEmail } from "../services/profile";
+import { IItinerary } from "../interfaces/IItinerary";
+import { IDestination, getDestinations } from "../data/destination";
 
 dayjs.extend(customParseFormat);
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
@@ -78,6 +79,7 @@ const options = [
 export default function Home() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [destinations, setDestinations] = useState<IDestination[]>([]);
   const [emails, setEmails] = useState<any[]>([]);
   const [coTravellerIds, setCoTravellerIds] = useState<number[]>([]);
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
@@ -172,6 +174,13 @@ export default function Home() {
       });
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      setDestinations(await getDestinations());
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <QuestionModal visible={isModalOpen} onCancel={handleCancel} />
@@ -190,8 +199,9 @@ export default function Home() {
               ]}
             >
               <AutoComplete
+                allowClear
                 className="destination-input"
-                options={options}
+                options={destinations}
                 style={{ textAlign: "left" }}
                 // value={destination}
                 // onSelect={(e) => { setDestination(e)}}
@@ -229,7 +239,7 @@ export default function Home() {
                 <Input
                   value={emails.join(", ")}
                   onChange={handleInputChange}
-                  placeholder="Input email and press Enter"
+                  placeholder="Co-travellers"
                   onPressEnter={handleInputChange}
                   onKeyDown={handleKeyDown}
                 />
