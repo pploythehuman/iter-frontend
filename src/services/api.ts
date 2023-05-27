@@ -27,6 +27,17 @@ export const handleResponse = async <T = any>(responsePromise: Promise<AxiosResp
   }
 };
 
+api.interceptors.response.use((response) => {
+  return response;
+}, (error) => {
+  if (error.response.status === 401) {
+    alert('Unauthorized, redirecting to login page');
+    window.location.href = '/login';
+  }
+
+  return Promise.reject(error);
+});
+
 api.interceptors.request.use((config) => {
   const excludedEndpoints = [
     'user/login/',
