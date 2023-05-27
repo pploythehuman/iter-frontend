@@ -12,18 +12,7 @@ export const handleResponse = async <T = any>(responsePromise: Promise<AxiosResp
       data: response.data,
     };
   } catch (error) {
-    console.error(error);
-    if (error instanceof AxiosError) {
-      return {
-        status: error.response?.status || 500,
-        data: error.response?.data,
-      };
-    } else {
-      return {
-        status: 500,
-        // data: 'An unknown error occurred',
-      };
-    }
+    throw error;
   }
 };
 

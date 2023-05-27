@@ -33,6 +33,7 @@ import Navbar from "../components/Navbar";
 import QuestionModal from "../components/QuestionModal";
 import { createBlankItinerary } from "../services/itinerary";
 import { IItinerary } from "../interfaces/IItinerary";
+import { getIdFromEmail } from "../services/profile";
 
 dayjs.extend(customParseFormat);
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
@@ -76,11 +77,11 @@ const options = [
 
 export default function Home() {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [emails, setEmails] = useState<any[]>([]);
   const [form] = Form.useForm();
+  const [emails, setEmails] = useState<any[]>([]);
+  const [coTravellerIds, setCoTravellerIds] = useState<number[]>([]);
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -89,20 +90,26 @@ export default function Home() {
   };
 
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  const handleInputChange = (event: any) => {
-    if (event.key === "Enter" || event.target.value.includes(',')) {
-      let newEmail = event.target.value.replace(',', '');  // remove comma if any
+  const handleInputChange = async (event: any) => {
+    if (event.key === "Enter" || event.target.value.includes(",")) {
+      let newEmail = event.target.value.replace(",", "");
       if (emailPattern.test(newEmail)) {
-        setEmails([...emails, newEmail]);
-        form.setFieldsValue({ coTravellerEmails: '' });  // clear the input field
+        try {
+          const userId = await getIdFromEmail(newEmail);
+          setCoTravellerIds([...coTravellerIds, userId.user_id]);
+          setEmails([...emails, newEmail]);
+          form.setFieldsValue({ coTravellerEmails: "" });
+        } catch (error) {
+          message.error("Make sure the co-traveller has an account in our system");
+        }
       } else {
         message.error("Input email is incorrect");
       }
     }
-  };  
+  };
 
-  const handleClose = (removedEmail: string) => {
-    const newEmails = emails.filter((email) => email !== removedEmail);
+  const handleClose = (removedEmailIndex: number) => {
+    const newEmails = emails.filter((_, index) => index !== removedEmailIndex);
     setEmails(newEmails);
   };
 
@@ -118,10 +125,12 @@ export default function Home() {
     try {
       setHasFormBeenSubmitted(true);
       const values = await form.validateFields();
-      console.log(values);
       showModal();
+
+      // clear fields
       form.resetFields();
       setEmails([]);
+      setCoTravellerIds([]);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
@@ -136,14 +145,17 @@ export default function Home() {
 
       const blankItinerary: IItinerary = await createBlankItinerary(
         values.destination,
-        [4],
+        coTravellerIds, // have to convert email to id here to warn user 
         startDate,
         endDate
       );
       console.log("blankItinerary", blankItinerary);
       navigate(`itinerary/${blankItinerary.id}`);
+
+      // clear fields
       form.resetFields();
       setEmails([]);
+      setCoTravellerIds([]);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
@@ -206,8 +218,8 @@ export default function Home() {
                 rules={[
                   {
                     validator: (_, value, callback) => {
-                      if (emails.length === 0  && hasFormBeenSubmitted) {
-                        return Promise.reject(new Error('Please input co-travellers\' emails!'));
+                      if (emails.length === 0 && hasFormBeenSubmitted) {
+                        return Promise.reject(new Error("Please input co-travellers' emails!"));
                       }
                       return Promise.resolve();
                     },
@@ -215,19 +227,22 @@ export default function Home() {
                 ]}
               >
                 <Input
-                  value={emails.join(', ')}
+                  value={emails.join(", ")}
                   onChange={handleInputChange}
                   placeholder="Input email and press Enter"
                   onPressEnter={handleInputChange}
                   onKeyDown={handleKeyDown}
                 />
               </Form.Item>
-
             </div>
 
-            <div style={{ marginBottom: '16px', width: '100%' }}>
+            <div style={{ marginBottom: "16px", width: "100%" }}>
               {emails.map((email) => (
-                <Tag closable onClose={() => handleClose(email)}>
+                <Tag
+                  color="var(--color-secondary)"
+                  closable
+                  onClose={() => handleClose(email)}
+                >
                   {email}
                 </Tag>
               ))}
