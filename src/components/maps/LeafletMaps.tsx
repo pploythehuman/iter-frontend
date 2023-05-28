@@ -5,7 +5,7 @@ import placeholder from '../../assets/placeholder.png';
 import L, { LatLngExpression } from "leaflet";
 import { getDirection } from "../../services/direction";
 import { GeoJsonObject } from "geojson";
-
+import '../../../src/index.scss';
 
 const icon = L.icon({
   iconUrl: placeholder,
@@ -131,33 +131,36 @@ const LeafletMaps: React.FC<LeafletMapProps> = ({itineraryData, selectedDate, ac
   
 
     return (
-        <MapContainer
-        center={center}
-        zoom={15}
-        style={{ width: "100%", height: "100%" }}
-        >
-            <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        <div className="map-container">
+          <MapContainer
+            center={center}
+            zoom={15}
+            style={{ width: "100%", height: "100%" }}
+            >
+                <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-            {filteredMarkers.map((marker, index) => (
-                <Marker position={marker.location} icon={icon}>
-                    <Popup>
-                        <center>
-                        <b>{marker.place_name}</b> <br/>
-                        {new Date(marker.date).toDateString()} <br/>
-                        {marker.arrival_time}-{marker.leave_time}
-                        </center>
-                        
-                    </Popup>
-                </Marker>
-            ))}
+                {filteredMarkers.map((marker, index) => (
+                    <Marker position={marker.location} icon={icon}>
+                        <Popup>
+                            <center>
+                            <b>{marker.place_name}</b> <br/>
+                            {new Date(marker.date).toDateString()} <br/>
+                            {marker.arrival_time}-{marker.leave_time}
+                            </center>
+                            
+                        </Popup>
+                    </Marker>
+                ))}
 
-        <ResetCenterView pos={center}/>
-        {directionJSON !== undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
+            <ResetCenterView pos={center}/>
+            {directionJSON !== undefined && (<ResetDirection dir={directionJSON} filteredMarkers={filteredMarkers}/>)}
+            
+            </MapContainer>
+        </div>
         
-        </MapContainer>
     );
 }
 

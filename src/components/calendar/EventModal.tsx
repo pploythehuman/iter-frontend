@@ -132,7 +132,7 @@ const EventModal: React.FC<EventModalProps> = ({
   return(
     <>
       <Modal 
-        title={eventItem?.title || 'Create Place'} //does not change when var title changes
+        title={eventItem?.title || 'Create Agenda'} //does not change when var title changes
         open={modalVisible} 
         onOk={handleOk} 
         onCancel={handleCancel}
