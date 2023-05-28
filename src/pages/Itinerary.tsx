@@ -15,7 +15,7 @@ import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
 import { getDetailedItinerary, getItinerary } from "../services/itinerary";
-import { createAndAddAgenda } from "../services/agenda";
+import { createAndAddAgenda, deleteAgenda } from "../services/agenda";
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
@@ -92,17 +92,15 @@ const Itinerary = () => {
     setIsLoading(false);
   }, [itineraryId]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const travel_time = {};
-      // const result = await createAndAddAgenda("P02000168", travel_time, "2023-07-11", "11:00", "20:00", 54);
-      // console.log("resul", result);
-    }
-    fetchData();
-  }, [])
+  const buttonClick = async () => {
+    const result = await deleteAgenda(621, 54);
+    // const result = await createAndAddAgenda("P03014001", {}, "2023-07-19", "9:00", "16:00", 54);
+    console.log("resul", result);
+  }
 
   return (
     <div className="itinerary-page">
+      <Button onClick={buttonClick}>Click</Button>
       <Navbar />
       <div className="banner">
         <img

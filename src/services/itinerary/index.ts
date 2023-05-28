@@ -27,7 +27,7 @@ const editItinerary = async (itineraryId: string | number | undefined, itinerary
 
 const deleteItinerary = async (itineraryId: string) => {
   const response = await apiDelete(`itinerary/${itineraryId}`);
-  return response;
+  return response; // bc no data back?
 };
 
 const getPlace = async (placeId: string) => {

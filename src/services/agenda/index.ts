@@ -4,7 +4,7 @@ import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
 import { PlaceData, AgendaData } from "../../interfaces/IData";
 import { getItinerary, editItinerary } from "../../services/itinerary";
 
-const getAgenda = async (agendaId: string | undefined) => {
+const getAgenda = async (agendaId: string | number | undefined) => {
   const response = await apiGet(`itinerary/agendas/${agendaId}/`);
   return response.data;
 };
@@ -26,6 +26,33 @@ const createAgenda = async (
 
   const response = await apiPost(`itinerary/agendas/`, newAgenda);
   return response.data;
+};
+
+const deleteAgenda = async (agendaId: string | number | undefined, itineraryId: string | number | undefined) => {
+  const deletedAgenda = await getAgenda(agendaId);
+  const response = await apiDelete(`itinerary/agendas/${agendaId}/`);
+
+  // update itinerary date
+  const itinerary = await getItinerary(itineraryId);
+  if (new Date(deletedAgenda.date) <= new Date(itinerary.start_date) || new Date(deletedAgenda.date) >= new Date(itinerary.end_date)) {
+    const updatedItinerary = await getItinerary(itineraryId);
+    const remainingAgendas = updatedItinerary.plan;
+
+    if (remainingAgendas.length === 0) {
+      return response;
+    }
+    const dates = remainingAgendas.map((agenda: AgendaData) => new Date(agenda.date));
+    const newStartDate = new Date(Math.min(...dates)).toISOString().split('T')[0];
+    const newEndDate = new Date(Math.max(...dates)).toISOString().split('T')[0];
+    const newItinerary = {
+      ...updatedItinerary,
+      start_date: newStartDate,
+      end_date: newEndDate,
+    };
+    await editItinerary(itineraryId, newItinerary);
+  }
+
+  return response;
 };
 
 const createAndAddAgenda = async (
@@ -61,4 +88,4 @@ const createAndAddAgenda = async (
   return response;
 };
 
-export { getAgenda, createAgenda, createAndAddAgenda };
+export { getAgenda, deleteAgenda, createAgenda, createAndAddAgenda };
