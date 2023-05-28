@@ -17,7 +17,6 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[][]>([]);
-  // const currentQuestion = questionData[currentStep];
   const [sliderInputMinValue, setSliderInputMinValue] = useState(20);
   const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
 

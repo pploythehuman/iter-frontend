@@ -48,13 +48,6 @@ const RightMenu: React.FC<RightMenuProps> = ({ mode }) => {
           </>
         }
       >
-        {/* <Menu.Item key="project">
-          <CodeOutlined /> Projects
-        </Menu.Item>
-        <Menu.Item key="about-us">
-          <UserOutlined /> Profile
-        </Menu.Item> */}
-
         {!localStorage.getItem("auth") ? (
           <>
             <Menu.Item
