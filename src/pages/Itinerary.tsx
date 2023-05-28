@@ -89,6 +89,7 @@ const Itinerary = () => {
         setDates([itinerary?.start_date, itinerary?.end_date]);
 
         const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
+        detailedItinerary.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         setItineraryData(detailedItinerary);
         setIsLoading(false);
 

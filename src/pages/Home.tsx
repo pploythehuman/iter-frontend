@@ -151,7 +151,7 @@ export default function Home() {
         startDate,
         endDate
       );
-      console.log("blankItinerary", blankItinerary);
+      // console.log("blankItinerary", blankItinerary);
       navigate(`itinerary/${blankItinerary.id}`);
 
       // clear fields
