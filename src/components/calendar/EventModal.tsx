@@ -138,8 +138,8 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);
   }, [eventItem]);
 
-  console.log("event", eventItem);
-  return(
+  console.log("event in eventmodal", eventItem);
+  return( 
     <>
       <Modal 
         title={eventItem?.title || 'Create Agenda'} //does not change when var title changes

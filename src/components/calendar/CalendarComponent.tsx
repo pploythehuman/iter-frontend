@@ -148,13 +148,27 @@ export default function CalendarComponent({ itineraryData, selectedDate, itinera
     });
   }
 
-  function editEvent(event: IEvent, updatedEvent: IEvent) {
-    // onEdit(event)
+  async function editEvent(event: IEvent, updatedEvent: IEvent) {
     setEvents(prevEvents => {
       const newEvents = prevEvents.map(e => e.id === event.id ? updatedEvent : e)
       const checkedEvents = checkEventOverlap(newEvents);
       return checkedEvents;
     })
+
+    // try {
+    //   setIsLoading(true);
+    //   const result = await onEdit(event?.id, event?.place_id, {}, event?.date, event?.start, event?.end);
+    //   console.log("result", result)
+    //   setEvents(prevEvents => {
+    //     const newEvents = prevEvents.map(e => e.id === event.id ? updatedEvent : e)
+    //     const checkedEvents = checkEventOverlap(newEvents);
+    //     return checkedEvents;
+    //   })
+    //   setIsLoading(false);
+    // } catch(error) {
+    //   setIsLoading(false);
+    //   console.log("Error", error);
+    // }
   }
 
   async function deleteEvent(event: IEvent) {

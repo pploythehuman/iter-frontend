@@ -12,7 +12,7 @@ export interface IEvent {
 
 export interface IAgenda {
   id?: string | number;
-  place_id: string | number;
+  place_id: string;
   place_name: string;
   web_picture_urls: string[];
   description: string;
