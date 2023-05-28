@@ -307,7 +307,7 @@ export default function CalendarComponent({
       let calendarApi = calendarRef.current.getApi();
       calendarApi.gotoDate(selectedDate || events[0]?.date);
     }
-  }, [selectedDate, events]); //added events here
+  }, [selectedDate]); //added events here
 
   return (
     <>
