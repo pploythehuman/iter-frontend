@@ -269,51 +269,33 @@ const EventModal: React.FC<EventModalProps> = ({
             </>
           ) : (
             <>
-              {/* <ImageUpload />
-              <Input 
-                placeholder="Enter Name" 
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                style={{ marginTop: '10px'}}
-              />
-
-              <Input 
-                placeholder="Enter Descriptions" 
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                style={{ marginTop: '10px'}}
-              /> */}
             </>
           )}
-          <DatePicker
-            value={date ? dayjs(date) : null}
-            onChange={onDateChange}
-            style={{ marginTop: "10px", marginRight: "10px" }}
-          />
-          <TimePicker.RangePicker
-            value={[startTime, endTime]}
-            onChange={onTimeChange}
-            style={{ marginTop: "10px" }}
-          />
-          {!isEditMode && (
-            <Select
-              // mode="tags"
-              style={{ width: "100%" }}
-              placeholder="Search for place..."
-              onPopupScroll={onScroll}
-            >
-              {!loading
-                ? places.map((place) => (
-                    <Option key={place.id}>{place.place_name}</Option>
-                  ))
-                : [
-                    ...places.map((place) => (
-                      <Option key={place.id}>{place.place_name}</Option>
-                    )),
-                    <Option key="loading">Loading...</Option>,
-                  ]}
-            </Select>
-          )}
+          <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+              <DatePicker 
+                value={date? dayjs(date) : null}
+                onChange={onDateChange} 
+                style={{ marginTop: '10px',  width: '33%' }}
+              />
+              <TimePicker.RangePicker 
+                value={[startTime, endTime]}
+                onChange={onTimeChange}
+                style={{ marginTop: '10px', width: '63%' }}
+              />
+            </div>
+            {!isEditMode && (
+              <Select
+                // mode="tags"
+                // options={options}
+                style={{ width: '100%', marginTop: '16px', marginBottom: '16px' }}
+                placeholder="Search for place..."
+                onPopupScroll={onScroll}
+              >
+                {!loading ? places.map(place => <Option key={place.id}>{place.place_name}</Option>) : [...places.map(place => <Option key={place.id}>{place.place_name}</Option>), <Option key="loading">Loading...</Option>]}
+              </Select>
+            )}
+          </div>
         </div>
       </Modal>
     </>
