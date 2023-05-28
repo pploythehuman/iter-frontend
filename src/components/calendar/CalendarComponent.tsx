@@ -74,19 +74,17 @@ export default function CalendarComponent({
   }
 
   async function handleEventDrop(info: any) {
-    console.log("info", info.event.endStr);
     try {
       setIsLoading(true);
-      const result = await onEdit(
-        info.event.id,
-        info.event.extendedProps?.place_id,
-        {},
-        format(info.event.start, 'yyyy-MM-dd'),
-        format(info.event.start, "HH:mm"),
-        format(info.event.end, "HH:mm"),
-        itineraryId,
-      );
-      console.log("resut ss", result);
+      // const result = await onEdit(
+      //   info.event.id,
+      //   info.event.extendedProps?.place_id,
+      //   {},
+      //   format(info.event.start, 'yyyy-MM-dd'),
+      //   format(info.event.start, "HH:mm"),
+      //   format(info.event.end, "HH:mm"),
+      //   itineraryId,
+      // );
       let event = {
         id: info.event.id,
         place_id: info.event.extendedProps?.place_id,
@@ -108,7 +106,6 @@ export default function CalendarComponent({
   }
 
   async function handleEventResize(info: any) {
-    console.log("info", info.event.endStr);
     try {
       setIsLoading(true);
       const result = await onEdit(
@@ -120,7 +117,6 @@ export default function CalendarComponent({
         format(info.event.end, "HH:mm"),
         itineraryId,
       );
-      console.log("resut ss", result);
       let event = {
         id: info.event.id,
         place_id: info.event.extendedProps?.place_id,
@@ -326,6 +322,7 @@ export default function CalendarComponent({
         <EventModal
           modalVisible={eventModalVisible}
           setModalVisible={setEventModalVisible}
+          itineraryId={itineraryId}
           eventItem={selectedEvent}
           addEvent={addEvent}
           editEvent={editEvent}
