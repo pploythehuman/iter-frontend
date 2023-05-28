@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import { 
   Modal, 
   Input, 
@@ -7,15 +6,20 @@ import {
   TimePicker, 
   DatePicker,
   message,
-  Image
+  Image,
+  Spin,
+  AutoComplete,
+  Select
 } from 'antd';
 import type { DatePickerProps, TimeRangePickerProps } from 'antd';
 import { EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
-
 import { IEvent } from '../../interfaces/IItinerary';
+import { IPlace, getPlaces } from '../../services/place';
 import ImageUpload from './ImageUpload';
 import '../../pages/styles/calendar.scss'
+
+const { Option } = Select;
 
 interface EventModalProps {
   modalVisible: boolean;
@@ -35,7 +39,6 @@ const EventModal: React.FC<EventModalProps> = ({
   deleteEvent,
 }) => {
   const { Search } = Input;
-  const onSearch = (value: string) => console.log(value);
 
   const isEditMode = Boolean(eventItem?.id);
 
@@ -44,8 +47,45 @@ const EventModal: React.FC<EventModalProps> = ({
   const [date, setDate] = useState(eventItem?.date? dayjs(eventItem.date) : null);
   const [startTime, setStartTime] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
   const [endTime, setEndTime] = useState(eventItem?.end ? dayjs(eventItem.end) : null);
-
+  const [loading, setLoading] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [places, setPlaces] = useState<IPlace[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const options = places.map(place => ({ value: place.place_name, key: place.id })); 
+
+
+  const fetchPlaces = async (page: number | string) => {
+    setLoading(true);
+    const response = await getPlaces(page);
+    console.log("response", response.results);
+    if (response.results.length === 0) {
+      setHasMore(false);
+    } else {
+      setPlaces(prev => [...prev, ...response.results]);
+
+      setPage(prev => prev + 1);
+    }
+    setLoading(false);
+  };
+
+  const onScroll = (event: any) => {
+    var target = event.target;
+    if (!loading && target.scrollTop + target.offsetHeight === target.scrollHeight) {
+      fetchPlaces(page);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlaces(page);
+  }, []);
+  
+  const onSearch = async (value: string) => {
+    setPlaces([]);
+    setPage(1);
+    setHasMore(true);
+    fetchPlaces(1);
+  };
 
   const handleShowMoreLess = () => {
       setShowFullDescription(!showFullDescription);
@@ -194,7 +234,7 @@ const EventModal: React.FC<EventModalProps> = ({
             </>
           ) : (
             <>
-              <ImageUpload />
+              {/* <ImageUpload />
               <Input 
                 placeholder="Enter Name" 
                 value={title}
@@ -207,7 +247,7 @@ const EventModal: React.FC<EventModalProps> = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 style={{ marginTop: '10px'}}
-              />
+              /> */}
             </>
           )}
           <DatePicker 
@@ -221,13 +261,14 @@ const EventModal: React.FC<EventModalProps> = ({
             style={{ marginTop: '10px' }}
           />
           {!isEditMode && (
-            <Search 
-              prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
-              placeholder="Search for place..." 
-              onSearch={onSearch} 
-              // enterButton
-              style={{ marginTop: '10px', marginBottom: '10px' }}
-            />
+            <Select
+              // mode="tags"
+              style={{ width: '100%' }}
+              placeholder="Search for place..."
+              onPopupScroll={onScroll}
+            >
+              {!loading ? places.map(place => <Option key={place.id}>{place.place_name}</Option>) : [...places.map(place => <Option key={place.id}>{place.place_name}</Option>), <Option key="loading">Loading...</Option>]}
+            </Select>
           )}
         </div>
       </Modal>

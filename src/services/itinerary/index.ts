@@ -2,6 +2,7 @@ import { apiGet, apiPost, apiDelete, apiPut } from "../api";
 import { getProfile } from '../profile';
 import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
 import { PlaceData } from "../../interfaces/IData";
+import { getPlace } from '../../services/place';
 
 const getItineraries = async () => {
   const response = await apiGet(`itinerary`);
@@ -30,10 +31,10 @@ const deleteItinerary = async (itineraryId: string) => {
   return response; // bc no data back?
 };
 
-const getPlace = async (placeId: string) => {
-  const response = await apiGet(`places/${placeId}/`);
-  return response.data;
-};
+// const getPlace = async (placeId: string) => {
+//   const response = await apiGet(`places/${placeId}/`);
+//   return response.data;
+// };
 
 const getDetailedItinerary = async (
   itineraryId: string | undefined
@@ -92,7 +93,6 @@ export {
   getItinerary,
   createItinerary,
   editItinerary,
-  getPlace,
   deleteItinerary,
   getDetailedItinerary,
   createBlankItinerary,
