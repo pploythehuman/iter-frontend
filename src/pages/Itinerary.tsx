@@ -63,10 +63,21 @@ const Itinerary = () => {
     }
   };
 
-  const handleDelete = (id: number | string) => {
-    const updatedItinerary = itineraryData.filter((item) => item.id !== id);
-    setItineraryData(updatedItinerary);
+  const handleDelete = async (id: number | string) => {
+    try {
+      setIsLoading(true);
+      const result = await deleteAgenda(id, itineraryId);
+      console.log("del agenda", result)
+
+      const updatedItinerary = itineraryData.filter((item) => item.id !== id);
+      setItineraryData(updatedItinerary);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("Error", error)
+    }
   };
+
   console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
