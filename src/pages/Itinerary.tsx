@@ -15,7 +15,7 @@ import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
 import { getDetailedItinerary, getItinerary } from "../services/itinerary";
-import { createAndAddAgenda, deleteAgenda } from "../services/agenda";
+import { createAndAddAgenda, deleteAgenda, editAgenda } from "../services/agenda";
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
@@ -93,7 +93,8 @@ const Itinerary = () => {
   }, [itineraryId]);
 
   const buttonClick = async () => {
-    const result = await deleteAgenda(621, 54);
+    // const result = await deleteAgenda(621, 54);
+    const result = await editAgenda(637, "P03014001", {}, "2023-07-8", "6:00", "21:00", 54)
     // const result = await createAndAddAgenda("P03014001", {}, "2023-07-19", "9:00", "16:00", 54);
     console.log("resul", result);
   }

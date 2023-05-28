@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiDelete } from "../api";
+import { apiGet, apiPost, apiDelete, apiPut } from "../api";
 import { getProfile } from "../profile";
 import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
 import { PlaceData, AgendaData } from "../../interfaces/IData";
@@ -28,22 +28,79 @@ const createAgenda = async (
   return response.data;
 };
 
-const deleteAgenda = async (agendaId: string | number | undefined, itineraryId: string | number | undefined) => {
+const editAgenda = async (
+  agendaId: number,
+  placeId: string,
+  travelTime: { [key: string]: number },
+  date: string,
+  arrivalTime: string,
+  leaveTime: string,
+  itineraryId: number | string | undefined
+) => {
+  const updatedAgenda: AgendaData = {
+    id: agendaId,
+    place_id: placeId,
+    travel_time: travelTime,
+    date: date,
+    arrival_time: arrivalTime,
+    leave_time: leaveTime,
+  };
+
+  const response = await apiPut(`/itinerary/agendas/${agendaId}/`, updatedAgenda);
+  
+  // update itinerary date
+  const itinerary = await getItinerary(itineraryId);
+  if (
+    new Date(updatedAgenda.date) < new Date(itinerary.start_date) ||
+    new Date(updatedAgenda.date) > new Date(itinerary.end_date)
+  ) {
+    const updatedItinerary = await getItinerary(itineraryId);
+    const remainingAgendas = updatedItinerary.plan;
+    
+    const dates = remainingAgendas.map(
+      (agenda: AgendaData) => new Date(agenda.date)
+    );
+    const newStartDate = new Date(Math.min(...dates))
+      .toISOString()
+      .split("T")[0];
+    const newEndDate = new Date(Math.max(...dates)).toISOString().split("T")[0];
+    const newItinerary = {
+      ...updatedItinerary,
+      start_date: newStartDate,
+      end_date: newEndDate,
+    };
+    await editItinerary(itineraryId, newItinerary);
+  }
+
+  return response.data;
+};
+
+const deleteAgenda = async (
+  agendaId: string | number | undefined,
+  itineraryId: string | number | undefined
+) => {
   const deletedAgenda = await getAgenda(agendaId);
   const response = await apiDelete(`itinerary/agendas/${agendaId}/`);
 
   // update itinerary date
   const itinerary = await getItinerary(itineraryId);
-  if (new Date(deletedAgenda.date) <= new Date(itinerary.start_date) || new Date(deletedAgenda.date) >= new Date(itinerary.end_date)) {
+  if (
+    new Date(deletedAgenda.date) <= new Date(itinerary.start_date) ||
+    new Date(deletedAgenda.date) >= new Date(itinerary.end_date)
+  ) {
     const updatedItinerary = await getItinerary(itineraryId);
     const remainingAgendas = updatedItinerary.plan;
 
     if (remainingAgendas.length === 0) {
       return response;
     }
-    const dates = remainingAgendas.map((agenda: AgendaData) => new Date(agenda.date));
-    const newStartDate = new Date(Math.min(...dates)).toISOString().split('T')[0];
-    const newEndDate = new Date(Math.max(...dates)).toISOString().split('T')[0];
+    const dates = remainingAgendas.map(
+      (agenda: AgendaData) => new Date(agenda.date)
+    );
+    const newStartDate = new Date(Math.min(...dates))
+      .toISOString()
+      .split("T")[0];
+    const newEndDate = new Date(Math.max(...dates)).toISOString().split("T")[0];
     const newItinerary = {
       ...updatedItinerary,
       start_date: newStartDate,
@@ -61,7 +118,7 @@ const createAndAddAgenda = async (
   date: string,
   arrivalTime: string,
   leaveTime: string,
-  itineraryId: number | string | undefined,
+  itineraryId: number | string | undefined
 ) => {
   const newAgenda = await createAgenda(
     placeId,
@@ -70,7 +127,7 @@ const createAndAddAgenda = async (
     arrivalTime,
     leaveTime
   );
-  const itineraryItem = await getItinerary(itineraryId)
+  const itineraryItem = await getItinerary(itineraryId);
   const updatedItinerary = {
     ...itineraryItem,
     start_date:
@@ -88,4 +145,4 @@ const createAndAddAgenda = async (
   return response;
 };
 
-export { getAgenda, deleteAgenda, createAgenda, createAndAddAgenda };
+export { getAgenda, editAgenda, deleteAgenda, createAgenda, createAndAddAgenda };
