@@ -73,38 +73,72 @@ export default function CalendarComponent({
     setEventModalVisible(true);
   }
 
-  function handleEventDrop(info: any) {
-    console.log("info", info);
-    let event = {
-      id: info.event.id,
-      place_id: info.event.extendedProps?.place_id,
-      title: info.event.title,
-      description: info.event.extendedProps?.description,
-      start: info.event.startStr,
-      end: info.event.endStr,
-      date: info.event.startStr, // not sure
-      color: info.event.backgroundColor,
-      web_picture_urls: info.event.extendedProps?.web_picture_urls,
-      allDay: info.event.allDay,
-    };
-    handleUpdateEvent(event);
+  async function handleEventDrop(info: any) {
+    console.log("info", info.event.endStr);
+    try {
+      setIsLoading(true);
+      const result = await onEdit(
+        info.event.id,
+        info.event.extendedProps?.place_id,
+        {},
+        format(info.event.start, 'yyyy-MM-dd'),
+        format(info.event.start, "HH:mm"),
+        format(info.event.end, "HH:mm"),
+        itineraryId,
+      );
+      console.log("resut ss", result);
+      let event = {
+        id: info.event.id,
+        place_id: info.event.extendedProps?.place_id,
+        title: info.event.title,
+        description: info.event.extendedProps?.description,
+        start: info.event.startStr,
+        end: info.event.endStr,
+        date: info.event.startStr, // not sure
+        color: info.event.backgroundColor,
+        web_picture_urls: info.event.extendedProps?.web_picture_urls,
+        allDay: info.event.allDay,
+      };
+      setIsLoading(false);
+      handleUpdateEvent(event);
+    } catch(errror) {
+      setIsLoading(false);
+      console.log("error", errror);
+    }
   }
 
-  function handleEventResize(info: any) {
-    console.log("info", info);
-    let event = {
-      id: info.event.id,
-      place_id: info.event.extendedProps?.place_id,
-      title: info.event.title,
-      description: info.event.extendedProps?.description,
-      start: info.event.startStr,
-      end: info.event.endStr,
-      date: info.event.startStr, // not sure
-      color: info.event.backgroundColor,
-      web_picture_urls: info.event.extendedProps?.web_picture_urls,
-      allDay: info.event.allDay,
-    };
-    handleUpdateEvent(event);
+  async function handleEventResize(info: any) {
+    console.log("info", info.event.endStr);
+    try {
+      setIsLoading(true);
+      const result = await onEdit(
+        info.event.id,
+        info.event.extendedProps?.place_id,
+        {},
+        format(info.event.start, 'yyyy-MM-dd'),
+        format(info.event.start, "HH:mm"),
+        format(info.event.end, "HH:mm"),
+        itineraryId,
+      );
+      console.log("resut ss", result);
+      let event = {
+        id: info.event.id,
+        place_id: info.event.extendedProps?.place_id,
+        title: info.event.title,
+        description: info.event.extendedProps?.description,
+        start: info.event.startStr,
+        end: info.event.endStr,
+        date: info.event.startStr, // not sure
+        color: info.event.backgroundColor,
+        web_picture_urls: info.event.extendedProps?.web_picture_urls,
+        allDay: info.event.allDay,
+      };
+      setIsLoading(false);
+      handleUpdateEvent(event);
+    } catch(errror) {
+      setIsLoading(false);
+      console.log("error", errror);
+    }
   }
 
   function handleEvents(events: any) {
