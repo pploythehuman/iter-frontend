@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Menu } from "antd";
 
 interface LeftMenuProps {
@@ -8,7 +8,6 @@ interface LeftMenuProps {
 
 const LeftMenu: React.FC<LeftMenuProps> = ({ mode }) => {
   let navigate = useNavigate();
-  let { pathname: location } = useLocation();
 
   const handleMenuClick = (e: any) => {
     navigate(`/${e.key}`);

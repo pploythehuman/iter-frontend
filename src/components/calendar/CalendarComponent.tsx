@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 
 import { Button, Card } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
@@ -43,6 +43,7 @@ export default function CalendarComponent({
   const [isLoading, setIsLoading] = useState(false);
   console.log("itineraryData from calendar", itineraryData);
   console.log("my events", events);
+  console.log("temp", isLoading);
 
   function goToNext() {
     let calendarApi = calendarRef.current.getApi();
@@ -243,6 +244,7 @@ export default function CalendarComponent({
     try {
       setIsLoading(true);
       const result = await onDelete(event.id, itineraryId);
+      console.log(result);
       setEvents((prevEvents) => {
         const newEvents = prevEvents.filter((e) => e.id !== event.id);
         const checkedEvents = checkEventOverlap(newEvents);
@@ -279,20 +281,20 @@ export default function CalendarComponent({
     }));
   }
 
-  const getDeviceType = () => {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-      return "tablet";
-    }
-    if (
-      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
-        ua
-      )
-    ) {
-      return "mobile";
-    }
-    return "desktop";
-  };
+  // const getDeviceType = () => {
+  //   const ua = navigator.userAgent;
+  //   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+  //     return "tablet";
+  //   }
+  //   if (
+  //     /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
+  //       ua
+  //     )
+  //   ) {
+  //     return "mobile";
+  //   }
+  //   return "desktop";
+  // };
 
   useEffect(() => {
     const transformedData = transformRealDataToEventData(itineraryData);
@@ -305,7 +307,7 @@ export default function CalendarComponent({
       let calendarApi = calendarRef.current.getApi();
       calendarApi.gotoDate(selectedDate || events[0]?.date);
     }
-  }, [selectedDate]);
+  }, [selectedDate, events]); //added events here
 
   return (
     <>

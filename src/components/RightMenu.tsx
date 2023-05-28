@@ -2,7 +2,6 @@ import React from "react";
 import { Menu, Avatar } from "antd";
 import {
   UserOutlined,
-  CodeOutlined,
   LogoutOutlined,
   LoginOutlined,
 } from "@ant-design/icons";

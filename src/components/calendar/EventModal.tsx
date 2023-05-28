@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Modal, 
-  Input, 
   Button, 
   TimePicker, 
   DatePicker,
   message,
   Image,
-  Spin,
-  AutoComplete,
   Select
 } from 'antd';
 import type { DatePickerProps, TimeRangePickerProps } from 'antd';
-import { EnvironmentOutlined } from "@ant-design/icons";
+// import { EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
 import { IEvent } from '../../interfaces/IItinerary';
 import { IPlace, getPlaces } from '../../services/place';
-import ImageUpload from './ImageUpload';
+// import ImageUpload from './ImageUpload';
 import '../../pages/styles/calendar.scss'
 
 const { Option } = Select;
@@ -38,8 +35,6 @@ const EventModal: React.FC<EventModalProps> = ({
   editEvent,
   deleteEvent,
 }) => {
-  const { Search } = Input;
-
   const isEditMode = Boolean(eventItem?.id);
 
   const [title, setTitle] = useState(eventItem?.title || '');
@@ -52,8 +47,8 @@ const EventModal: React.FC<EventModalProps> = ({
   const [places, setPlaces] = useState<IPlace[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const options = places.map(place => ({ value: place.place_name, key: place.id })); 
 
+  console.log(description, hasMore);
 
   const fetchPlaces = async (page: number | string) => {
     setLoading(true);
@@ -78,14 +73,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
   useEffect(() => {
     fetchPlaces(page);
-  }, []);
-  
-  const onSearch = async (value: string) => {
-    setPlaces([]);
-    setPage(1);
-    setHasMore(true);
-    fetchPlaces(1);
-  };
+  }, [page]); //added here
 
   const handleShowMoreLess = () => {
       setShowFullDescription(!showFullDescription);
@@ -226,9 +214,9 @@ const EventModal: React.FC<EventModalProps> = ({
                     }
                 </p>
                 {/\S/.test(eventItem?.extendedProps?.description || '') && (
-                  <a style={{ fontSize: '12px', display: 'inline' }} onClick={handleShowMoreLess}>
+                  <Button type="link" style={{ fontSize: '12px', display: 'inline' }} onClick={handleShowMoreLess}>
                       {showFullDescription ? 'Show less' : 'Show more'}
-                  </a>
+                  </Button>
                 )}
               </div>
             </>
