@@ -8,6 +8,8 @@ export interface IEvent {
   date: any;
   color?: string;
   allDay?: boolean;
+  extendedProps?: any;
+  web_picture_urls?: string;
 }
 
 export interface IAgenda {

@@ -86,15 +86,17 @@ const EventModal: React.FC<EventModalProps> = ({
       alert("in edit");
       const newEvent: IEvent = {
         id: eventItem?.id,
-        place_id: eventItem?.place_id,
+        place_id: eventItem?.extendedProps?.place_id,
         title: title,
-        description: description,
+        description: eventItem?.extendedProps?.description,
         start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
         end: `${date.format('YYYY-MM-DD')}T${endTime.format('HH:mm:ss')}`,
         date: date,
         allDay: false, 
-        color: 'var(--color-secondary-light)'
+        color: 'var(--color-secondary-light)',
+        web_picture_urls: eventItem?.extendedProps?.web_picture_urls,
       };
+      console.log("in edit in event modal", newEvent);
       editEvent(eventItem, newEvent);
       setModalVisible(false);
       clearInputs();
