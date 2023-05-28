@@ -14,8 +14,8 @@ import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getDetailedItinerary, getItinerary, getPlace } from "../services/itinerary";
-
+import { getDetailedItinerary, getItinerary } from "../services/itinerary";
+import { createAndAddAgenda } from "../services/agenda";
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
@@ -91,6 +91,15 @@ const Itinerary = () => {
     fetchData();
     setIsLoading(false);
   }, [itineraryId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const travel_time = {};
+      // const result = await createAndAddAgenda("P02000168", travel_time, "2023-07-11", "11:00", "20:00", 54);
+      // console.log("resul", result);
+    }
+    fetchData();
+  }, [])
 
   return (
     <div className="itinerary-page">

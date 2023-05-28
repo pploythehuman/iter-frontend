@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiDelete } from "../api";
+import { apiGet, apiPost, apiDelete, apiPut } from "../api";
 import { getProfile } from '../profile';
 import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
 import { PlaceData } from "../../interfaces/IData";
@@ -8,7 +8,7 @@ const getItineraries = async () => {
   return response.data;
 };
 
-const getItinerary = async (itineraryId: string | undefined) => {
+const getItinerary = async (itineraryId: string | number | undefined) => {
   const response = await apiGet(`itinerary/${itineraryId}/`);
   return response.data;
 };
@@ -16,6 +16,12 @@ const getItinerary = async (itineraryId: string | undefined) => {
 const createItinerary = async (itineraryItem: IItinerary | undefined) => {
   const data = itineraryItem;
   const response = await apiPost(`itinerary/`, data);
+  return response.data;
+};
+
+const editItinerary = async (itineraryId: string | number | undefined, itineraryItem: IItinerary | undefined) => {
+  const data = itineraryItem;
+  const response = await apiPut(`itinerary/${itineraryId}/`, data);
   return response.data;
 };
 
@@ -85,6 +91,7 @@ export {
   getItineraries,
   getItinerary,
   createItinerary,
+  editItinerary,
   getPlace,
   deleteItinerary,
   getDetailedItinerary,
