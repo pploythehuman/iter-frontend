@@ -7,6 +7,7 @@ import {
   TimePicker, 
   DatePicker,
   message,
+  Image
 } from 'antd';
 import type { DatePickerProps, TimeRangePickerProps } from 'antd';
 import { EnvironmentOutlined } from "@ant-design/icons";
@@ -14,6 +15,7 @@ import dayjs from 'dayjs';
 
 import { IEvent } from '../../interfaces/IItinerary';
 import ImageUpload from './ImageUpload';
+import '../../pages/styles/calendar.scss'
 
 interface EventModalProps {
   modalVisible: boolean;
@@ -42,6 +44,12 @@ const EventModal: React.FC<EventModalProps> = ({
   const [date, setDate] = useState(eventItem?.date? dayjs(eventItem.date) : null);
   const [startTime, setStartTime] = useState(eventItem?.start ? dayjs(eventItem.start) : null);
   const [endTime, setEndTime] = useState(eventItem?.end ? dayjs(eventItem.end) : null);
+
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const handleShowMoreLess = () => {
+      setShowFullDescription(!showFullDescription);
+  };
 
   const clearInputs = () => {
     setTitle('');
@@ -78,6 +86,7 @@ const EventModal: React.FC<EventModalProps> = ({
       alert("in edit");
       const newEvent: IEvent = {
         id: eventItem?.id,
+        place_id: eventItem?.place_id,
         title: title,
         description: description,
         start: `${date.format('YYYY-MM-DD')}T${startTime.format('HH:mm:ss')}`,
@@ -129,6 +138,7 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);
   }, [eventItem]);
 
+  console.log("event", eventItem);
   return(
     <>
       <Modal 
@@ -161,13 +171,28 @@ const EventModal: React.FC<EventModalProps> = ({
         }
       >
         <div style={{ marginBottom: '15px' }}>
-          <ImageUpload />
           {isEditMode ? (
-            <p style={{ margin: 0 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
+            <>
+              <div className={/\S/.test(eventItem?.extendedProps?.description || '') ? 'event-floating-image' : ''}>
+                <Image width="260px" style={{ borderRadius: '8px' }} src={eventItem?.extendedProps?.web_picture_urls}/>
+              </div>
+              <div>
+                <p style={{ margin: 0 }}>
+                    {showFullDescription || !/\S/.test(eventItem?.extendedProps?.description || '') 
+                        ? eventItem?.extendedProps?.description
+                        : eventItem?.extendedProps?.description.substring(0, 470) + '...'
+                    }
+                </p>
+                {/\S/.test(eventItem?.extendedProps?.description || '') && (
+                  <a style={{ fontSize: '12px', display: 'inline' }} onClick={handleShowMoreLess}>
+                      {showFullDescription ? 'Show less' : 'Show more'}
+                  </a>
+                )}
+              </div>
+            </>
           ) : (
             <>
+              <ImageUpload />
               <Input 
                 placeholder="Enter Name" 
                 value={title}
@@ -193,7 +218,7 @@ const EventModal: React.FC<EventModalProps> = ({
             onChange={onTimeChange}
             style={{ marginTop: '10px' }}
           />
-          {isEditMode && (
+          {!isEditMode && (
             <Search 
               prefix={<EnvironmentOutlined style={{ color: '#bfbfbf' }}/>}
               placeholder="Search for place..." 

@@ -13,9 +13,12 @@ import EventModal from './EventModal';
 interface CalendarComponentProps {
   itineraryData: any[];
   selectedDate: string;
+  itineraryId: string | undefined;
+  onEdit: Function;
+  onDelete: Function;
 }
 
-export default function CalendarComponent({ itineraryData, selectedDate }: CalendarComponentProps) {
+export default function CalendarComponent({ itineraryData, selectedDate, itineraryId, onEdit, onDelete }: CalendarComponentProps) {
   const calendarRef = useRef<any>(null);
 
   const transformedData = transformRealDataToEventData(itineraryData)
@@ -24,6 +27,7 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   const [eventModalVisible, setEventModalVisible] = useState(false);
   const [dateRange, setDateRange] = useState<string | null>(null);
   const [initialDate, setInitialDate] = useState<string>(selectedDate || events[0]?.date);
+  const [isLoading, setIsLoading] = useState(false);
   console.log("itineraryData from calendar", itineraryData);
   console.log("my events", events);
 
@@ -145,6 +149,7 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   }
 
   function editEvent(event: IEvent, updatedEvent: IEvent) {
+    // onEdit(event)
     setEvents(prevEvents => {
       const newEvents = prevEvents.map(e => e.id === event.id ? updatedEvent : e)
       const checkedEvents = checkEventOverlap(newEvents);
@@ -152,12 +157,20 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
     })
   }
 
-  function deleteEvent(event: IEvent) {
-    setEvents(prevEvents => {
-      const newEvents = prevEvents.filter((e) => e.id !== event.id);
-      const checkedEvents = checkEventOverlap(newEvents);
-      return checkedEvents;
-    });
+  async function deleteEvent(event: IEvent) {
+    try {
+      setIsLoading(true);
+      const result = await onDelete(event.id, itineraryId);
+      setEvents(prevEvents => {
+        const newEvents = prevEvents.filter((e) => e.id !== event.id);
+        const checkedEvents = checkEventOverlap(newEvents);
+        return checkedEvents;
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("Error", error);
+    }
   }
   
   function renderEventContent(eventInfo: any) {
@@ -172,8 +185,10 @@ export default function CalendarComponent({ itineraryData, selectedDate }: Calen
   function transformRealDataToEventData(itineraryData: IAgenda[]) {
     return itineraryData.map((item: IAgenda) => ({
       id: `${item.id}`,
+      place_id: item.place_id,
       title: item.place_name,
       description: item.description,
+      web_picture_urls: item.web_picture_urls[0],
       start: `${item.date}T${item.arrival_time}`,
       end: `${item.date}T${item.leave_time}`, 
       date: item.date,

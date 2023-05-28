@@ -199,6 +199,9 @@ const Itinerary = () => {
                   <MyCalendar 
                     itineraryData={itineraryData} 
                     selectedDate={selectedDate}
+                    itineraryId={itineraryId}
+                    onEdit={editAgenda}
+                    onDelete={deleteAgenda}
                   />
                 }
                 {activeTab === "map" && (

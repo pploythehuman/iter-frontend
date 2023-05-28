@@ -1,5 +1,6 @@
 export interface IEvent {
   id: string | undefined;
+  place_id?: string | undefined;
   title: string;
   description?: string
   start: any;
