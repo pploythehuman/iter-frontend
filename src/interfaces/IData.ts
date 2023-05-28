@@ -12,3 +12,12 @@ export interface PlaceData {
   arrival_time: string;
   leave_time: string;
 }
+
+export interface AgendaData {
+  id?: number;
+  place_id: string;
+  travel_time: {[key: string]: number};
+  date: string;
+  arrival_time: string;
+  leave_time: string;
+}

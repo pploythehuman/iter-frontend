@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useDeferredValue } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Steps, Slider, Input, InputNumber } from "antd";
-import "../index.scss";
 
+import "../index.scss";
+import { QuestionData, getQuestions } from '../data/question';
+ 
 const { Step } = Steps;
 
 interface ModalProps {
@@ -10,86 +12,128 @@ interface ModalProps {
   onCancel: () => void;
 }
 
-interface QuestionData {
-  label: string;
-  slider?: boolean;
-  range?: [number, number];
-  step?: number;
-  options?: string[];
-}
-
-const questionData: QuestionData[] = [
-  // {
-  //   label: 'What is your budget for this trip?',
-  //   slider: true,
-  //   range: [0, 10000],
-  //   step: 500,
-  // },
-  {
-    label: 'What is kind of trip you are going for?',
-    options: ['Fast-paced', 'Medium', 'Slow & easy'],
-  },
-  {
-    label: 'What is your target types of attraction for this trip?',
-    options: ['Educational', 'Historical', 'Market & Shopping', 'Nature', 'Recreational & Entertainment', 'Chillout', 'Cultural', 'Sport'],
-  },
-  {
-    label: 'What is your preferred activities?',
-    options: ['Educational Activities', 'Extreme Sports ', 'Shopping', 'Religious Activities', 'Sports', 'Nature Sightseeing', 'Cultural Activities', 'Relaxing'],
-  },
-  {
-    label: 'What is your preferred cuisine?',
-    options: ['Japanese', 'Italian', 'Mediterranean', 'Thai', 'Indian', 'French / Bistro', 'Chinese', 'Spanish', 'Random'],
-  },
-  {
-    label: 'What is your (or person in a group) diet restriction?',
-    options: ['Halal', 'Vegetarian', 'Vegan', 'Allergies'],
-  },
-];
-
 const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   const navigate = useNavigate();
-  
+  const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]); // new state to store selected options for each question
+  const [selectedOptions, setSelectedOptions] = useState<string[][]>([]);
   // const currentQuestion = questionData[currentStep];
   const [sliderInputMinValue, setSliderInputMinValue] = useState(20);
   const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
 
   const handleNext = () => {
+    // If the current question has subQuestions, add them to the questionData
+    const currentQuestion = questionData[currentStep];
+    if (currentQuestion.subQuestions) {
+      // Get the selected options for the current question
+      const selected = selectedOptions[currentStep] || [];
+      // Get the subQuestions for the selected options
+      const selectedSubQuestions = selected
+        .map(option => currentQuestion.subQuestions?.[option])
+        .flat()
+        .filter((subQuestion): subQuestion is QuestionData => subQuestion !== undefined);
+  
+      // Store the grandparent key
+      selectedSubQuestions.forEach(sq => {
+        sq.grandparentKey = currentQuestion.parentKey || currentQuestion.key;
+      });
+      
+      // Check if the sub-questions are already present in the questionData
+      const newSubQuestions = selectedSubQuestions.filter(subQuestion => !questionData.includes(subQuestion));
+  
+      // Only add new sub-questions to the questionData
+      setQuestionData(prevState => [
+        ...prevState.slice(0, currentStep + 1),
+        ...newSubQuestions,
+        ...prevState.slice(currentStep + 1)
+      ]);
+    }
+    // Move to the next question
     setCurrentStep(currentStep + 1);
   };
-
+  
   const handlePrev = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleOptionSelect = (option: any ) => {
-    const selected = [...selectedOptions];
-    if (selected.includes(option)) {
-      // deselect option if already selected
-      const index = selected.indexOf(option);
-      selected.splice(index, 1);
-    } else {
-      // select option if not already selected
-      selected.push(option);
+  const handleOptionSelect = (option: string) => {
+    let selected = selectedOptions[currentStep] ? [...selectedOptions[currentStep]] : [];
+    const currentQuestion = questionData[currentStep];
+    console.log("curretn question", currentQuestion);
+  
+    if (currentQuestion !== undefined) {
+      const allowSelect = currentQuestion.allowSelect !== null ? currentQuestion.allowSelect : Infinity;
+      const optionKey = option;
+      console.log("optionKey", optionKey);
+      if (selected.includes(option)) {
+        const index = selected.indexOf(option);
+        console.log("index", index);
+        selected.splice(index, 1);
+        
+        if(currentQuestion.subQuestions) {
+          console.log("currentQuestion.subQuestions", currentQuestion.subQuestions)
+          const optionSubQuestions = currentQuestion.subQuestions[optionKey] || [];
+          console.log("optionSubQuestions", optionSubQuestions);
+          setQuestionData(prevState => prevState.filter(q => !optionSubQuestions.includes(q)));
+        }
+      } else if (allowSelect === 1) {
+        selected = [option];
+      } else if (selected.length < allowSelect) {
+        selected.push(option);
+      }
     }
-    setSelectedOptions(selected);
+  
+    const updatedOptions = [...selectedOptions];
+    updatedOptions[currentStep] = selected;
+    setSelectedOptions(updatedOptions);
   };
-
+  
   const handleSubmit = () => {
-    // do something with the selected options, e.g. send them to a server
-    let resultArray = [[sliderInputMinValue, sliderInputMaxValue], ...selectedOptions]
-    console.log(resultArray);
-    alert(resultArray);
-    onCancel();
-    navigate('/itinerary/001');
-  };
+    const resultObject: { [key: string]: string[] } = {};
+  
+    selectedOptions.forEach((selected, index) => {
+      if (selected.length > 0) {
+        let parentKey = questionData[index].grandparentKey;
+        if (!parentKey) {
+          parentKey = questionData[index].key;
+        }
+  
+        // Initialize the key if not yet created
+        if (!resultObject[parentKey]) {
+          resultObject[parentKey] = [];
+        }
+        
+        selected.forEach(option => {
+          const optionKey = `${option}`;
 
+          // Only include options where the first letter is upper case
+          if (/^[A-Z]/.test(optionKey)) {
+            // Ensure resultObject[parentKey] is not undefined before calling includes on it
+            if (parentKey && resultObject[parentKey] && !resultObject[parentKey].includes(optionKey)) {
+              resultObject[parentKey].push(optionKey);
+            }
+          }
+        });
+      }
+    });
+  
+    console.log(resultObject);
+    alert(JSON.stringify(resultObject, null, 2));
+};
+
+  
+  
   const handleSliderAfterChange = (value: number | [number, number]) => {
     // handleOptionSelect(value)
     console.log('onAfterChange: ', value); 
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setQuestionData(await getQuestions());
+    }
+    fetchData();
+  }, [])
   
   return (
     <Modal
@@ -131,8 +175,8 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
       }
     >
       <div className="question-modal-content">
-        <h4 style={{ color: 'var(--color-black)' }}>{questionData[currentStep].label}</h4>
-        {questionData[currentStep].slider ? (
+        <h4 style={{ color: 'var(--color-black)' }}>{questionData[currentStep]?.label}</h4>
+        {questionData[currentStep]?.slider ? (
           <div className="question-modal-slider">
             <div style={{ display: 'flex', alignItems: 'center'}}>
             Price range:
@@ -165,14 +209,14 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
           </div>
         ) : (
           <div className="question-modal-answers">
-            {questionData[currentStep].options?.map((option, index) => (
+            {questionData[currentStep]?.options?.map((option, index) => (
               <Button 
-                type={selectedOptions.includes(option) ? "primary" : "default"} // set button type to primary if option is selected
+                type={selectedOptions[currentStep]?.includes(option) ? "primary" : "default"} 
+                onClick={() => handleOptionSelect(option)}              
                 key={index} 
                 className="question-modal-answer-btn" 
-                onClick={() => handleOptionSelect(option)} // handle option selection
               >
-                {option}
+                {questionData[currentStep]?.optionsDisplays?.[index] || option}
               </Button>
             ))}
           </div>
@@ -182,22 +226,4 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
   );
 };
 
-      
 export default QuestionModal;
-
-// const renderAnswerOptions = () => {
-//   if (currentQuestion.slider) {
-//     // Render a slider component for a slider question
-//     return <div>Render slider component here</div>;
-//   } else if (currentQuestion.options) {
-//     // Render a list of answer options for a multiple-choice question
-//     return currentQuestion.options.map((option, index) => (
-//       <Button type="primary" key={index} className="question-modal-answer-btn">
-//         {option}
-//       </Button>
-//     ));
-//   } else {
-//     // Render a text input component for a short-answer question
-//     return <div>Render text input component here</div>;
-//   }
-// };

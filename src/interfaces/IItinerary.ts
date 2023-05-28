@@ -1,5 +1,6 @@
 export interface IEvent {
   id: string | undefined;
+  place_id?: string | undefined;
   title: string;
   description?: string
   start: any;
@@ -7,11 +8,13 @@ export interface IEvent {
   date: any;
   color?: string;
   allDay?: boolean;
+  extendedProps?: any;
+  web_picture_urls?: string;
 }
 
 export interface IAgenda {
   id?: string | number;
-  place_id: string | number;
+  place_id: string;
   place_name: string;
   web_picture_urls: string[];
   description: string;

@@ -14,8 +14,8 @@ import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getDetailedItinerary, getItinerary, getPlace } from "../services/itinerary";
-
+import { getDetailedItinerary, getItinerary } from "../services/itinerary";
+import { createAndAddAgenda, deleteAgenda, editAgenda } from "../services/agenda";
 import { IAgenda } from "../interfaces/IItinerary";
 
 const { TabPane } = Tabs;
@@ -63,10 +63,21 @@ const Itinerary = () => {
     }
   };
 
-  const handleDelete = (id: number | string) => {
-    const updatedItinerary = itineraryData.filter((item) => item.id !== id);
-    setItineraryData(updatedItinerary);
+  const handleDelete = async (id: number | string) => {
+    try {
+      setIsLoading(true);
+      const result = await deleteAgenda(id, itineraryId);
+      console.log("del agenda", result)
+
+      const updatedItinerary = itineraryData.filter((item) => item.id !== id);
+      setItineraryData(updatedItinerary);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("Error", error)
+    }
   };
+
   console.log("itineraryData", itineraryData);
   useEffect(() => {
     const fetchData = async () => {
@@ -92,8 +103,16 @@ const Itinerary = () => {
     setIsLoading(false);
   }, [itineraryId]);
 
+  const buttonClick = async () => {
+    // const result = await deleteAgenda(621, 54);
+    const result = await editAgenda(637, "P03014001", {}, "2023-07-8", "6:00", "21:00", 54)
+    // const result = await createAndAddAgenda("P03014001", {}, "2023-07-19", "9:00", "16:00", 54);
+    console.log("resul", result);
+  }
+
   return (
     <div className="itinerary-page">
+      <Button onClick={buttonClick}>Click</Button>
       <Navbar />
       <div className="banner">
         <img
@@ -180,6 +199,9 @@ const Itinerary = () => {
                   <MyCalendar 
                     itineraryData={itineraryData} 
                     selectedDate={selectedDate}
+                    itineraryId={itineraryId}
+                    onEdit={editAgenda}
+                    onDelete={deleteAgenda}
                   />
                 }
                 {activeTab === "map" && (

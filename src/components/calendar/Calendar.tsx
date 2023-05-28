@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Table, Button } from 'antd';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-
 import '../../pages/styles/calendar.scss';
 
 import CalendarComponent from './CalendarComponent';
@@ -9,28 +6,23 @@ import CalendarComponent from './CalendarComponent';
 interface MyCalendarProps {
   itineraryData: any[];
   selectedDate: string;
+  itineraryId: string | undefined;
+  onEdit: Function;
+  onDelete: Function;
 }
 
-const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate }) => {
+const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate, itineraryId, onEdit, onDelete }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="calendar-container" ref={calendarRef}>
-      {/* <Card
-        className="calendar-card"
-        title={
-          <div className="calendar-header">
-            <Button type="link" icon={<LeftOutlined />} />
-            <span>April 1 - April 4</span>
-            <Button type="link" icon={<RightOutlined />} />
-          </div>
-        }
-      > */}
-        <CalendarComponent 
-          itineraryData={itineraryData}
-          selectedDate={selectedDate}
-        />
-      {/* </Card> */}
+      <CalendarComponent 
+        itineraryData={itineraryData}
+        selectedDate={selectedDate}
+        itineraryId={itineraryId}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </div>
   );
 };

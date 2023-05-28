@@ -1,4 +1,5 @@
 import { apiGet, apiPost } from '../api';
+import { getProfile } from '../profile';
 
 interface LoginData {
   email: string;
@@ -30,6 +31,10 @@ const login = async (data: LoginData) => {
   const response = await apiPost<LoginData, LoginResponse>('user/login/', data);
   if (response.status === 200 && response.data) {
     localStorage.setItem('auth', response.data.token.access);
+
+    const profile = await getProfile();
+    localStorage.setItem('firstname', profile?.firstname);
+    localStorage.setItem('lastname', profile?.lastname);
   }
   return response;
 };
@@ -44,8 +49,15 @@ const forgotPassword = async (data: ForgotPasswordData) => {
   return response;
 };
 
+const logout = () => {
+  localStorage.removeItem('auth');
+  localStorage.removeItem('firstname');
+  localStorage.removeItem('lastname');
+};
+
 export {
   login,
   register,
-  forgotPassword
+  forgotPassword,
+  logout,
 };
