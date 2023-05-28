@@ -1,7 +1,7 @@
 import { apiGet, apiPost, apiDelete, apiPut } from "../api";
-import { getProfile } from "../profile";
-import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
-import { PlaceData, AgendaData } from "../../interfaces/IData";
+// import { getProfile } from "../profile";
+// import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
+import { AgendaData } from "../../interfaces/IData";
 import { getItinerary, editItinerary } from "../../services/itinerary";
 
 const getAgenda = async (agendaId: string | number | undefined) => {

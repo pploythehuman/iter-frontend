@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useDeferredValue } from "react";
-import { useNavigate } from "react-router-dom";
-import { Modal, Button, Steps, Slider, Input, InputNumber } from "antd";
+import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+import { Modal, Button, Steps, Slider, Input } from "antd";
 
 import "../index.scss";
 import { QuestionData, getQuestions } from '../data/question';
@@ -13,11 +13,10 @@ interface ModalProps {
 }
 
 const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[][]>([]);
-  // const currentQuestion = questionData[currentStep];
   const [sliderInputMinValue, setSliderInputMinValue] = useState(20);
   const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
 
