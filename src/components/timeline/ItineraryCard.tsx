@@ -8,6 +8,7 @@ import { IAgenda } from '../../interfaces/IItinerary';
 interface ItineraryCardProps extends IAgenda {
   contact: any;
   onDelete: Function; 
+  travel_time: any;
 }
 
 const ItineraryCard: React.FC<ItineraryCardProps> = ({
@@ -22,6 +23,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   arrival_time,
   leave_time,
   onDelete,
+  travel_time
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [showMore, setShowMore] = useState(false);
@@ -32,7 +34,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
 
   const menu = (
     <Menu>
-      <Menu.Item key="1">Edit</Menu.Item>
+      {/* <Menu.Item key="1">Edit</Menu.Item> */}
       <Menu.Item key="2" onClick={() => onDelete(id)}>Delete</Menu.Item>
     </Menu>
   );
@@ -143,8 +145,8 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
               )}
             </>
           )}
+          
         </p>
-
         {/* <Button type="primary" className="book-button" onClick={info}
         >
           Book Now

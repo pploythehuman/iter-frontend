@@ -24,6 +24,7 @@ export interface IAgenda {
   date: string;
   arrival_time: string;
   leave_time: string;
+  travel_time: any;
 }
 
 export interface IItinerary {

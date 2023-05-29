@@ -61,6 +61,7 @@ const getDetailedItinerary = async (
       date: plan?.date,
       arrival_time: plan?.arrival_time,
       leave_time: plan?.leave_time,
+      travel_time: plan?.travel_time,
     };
   });
   return detailedItinerary;
