@@ -107,7 +107,7 @@ const MyTrips = () => {
           <h1>Current trips</h1>
           <div className="cards-container">
             <Space wrap size={[20, 20]}>
-              <Card className="create-trip-card" style={{ width: 320, minHeight: 300  }}>
+              <Card className="create-trip-card" style={{ width: 300, minHeight: 300  }}>
                 <Button type="primary" onClick={()=>{navigate('/')}}icon={<PlusCircleOutlined />}>Create New Trip</Button>
               </Card>
               {itineraries
