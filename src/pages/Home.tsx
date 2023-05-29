@@ -31,7 +31,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import Navbar from "../components/Navbar";
 import QuestionModal from "../components/QuestionModal";
-import { createBlankItinerary } from "../services/itinerary";
+import { createBlankItinerary, createRecommendedItinerary } from "../services/itinerary";
 import { getIdFromEmail } from "../services/profile";
 import { IItinerary } from "../interfaces/IItinerary";
 import { IDestination, getDestinations } from "../data/destination";
@@ -84,6 +84,7 @@ export default function Home() {
   const [coTravellerIds, setCoTravellerIds] = useState<number[]>([]);
   const [hasFormBeenSubmitted, setHasFormBeenSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [personalizeAnswers, setPersonalizedAnswers] = useState({});
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -130,9 +131,9 @@ export default function Home() {
       showModal();
 
       // clear fields
-      form.resetFields();
-      setEmails([]);
-      setCoTravellerIds([]);
+      // form.resetFields();
+      // setEmails([]);
+      // setCoTravellerIds([]);
     } catch (errorInfo) {
       console.log("Failed:", errorInfo);
     }
@@ -142,8 +143,8 @@ export default function Home() {
     try {
       setHasFormBeenSubmitted(true);
       const values = await form.validateFields();
-      const startDate = dayjs(values.dateRange[0]).format("YYYY-MM-DD");
-      const endDate = dayjs(values.dateRange[1]).format("YYYY-MM-DD");
+      const startDate = dayjs(values.dateRange[0])?.format("YYYY-MM-DD");
+      const endDate = dayjs(values.dateRange[1])?.format("YYYY-MM-DD");
 
       const blankItinerary: IItinerary = await createBlankItinerary(
         values.destination,
@@ -155,6 +156,26 @@ export default function Home() {
       navigate(`itinerary/${blankItinerary.id}`);
 
       // clear fields
+      // form.resetFields();
+      // setEmails([]);
+      // setCoTravellerIds([]);
+    } catch (errorInfo) {
+      console.log("Failed:", errorInfo);
+    }
+  };
+
+  const handleCreateRecommendedPlanButton = async (tripType: any, targetTypes: any, preferredActivities: any, preferredCuisine: any) => {
+    try {
+      console.log("has been called")
+      setHasFormBeenSubmitted(true);
+      const values = await form.validateFields();
+      const startDate = dayjs(values.dateRange[0])?.format("YYYY-MM-DD");
+      const endDate = dayjs(values.dateRange[1])?.format("YYYY-MM-DD");
+
+      console.log([values.destination, coTravellerIds, startDate, endDate, tripType, targetTypes, preferredActivities, preferredCuisine])
+      const itinerary = await createRecommendedItinerary(values.destination, coTravellerIds, startDate, endDate, tripType, targetTypes, preferredActivities, preferredCuisine);
+      return itinerary;
+      // clear fields
       form.resetFields();
       setEmails([]);
       setCoTravellerIds([]);
@@ -162,6 +183,7 @@ export default function Home() {
       console.log("Failed:", errorInfo);
     }
   };
+
 
   const submitForm = () => {
     form
@@ -181,9 +203,14 @@ export default function Home() {
     fetchData();
   }, []);
 
+
   return (
     <>
-      <QuestionModal visible={isModalOpen} onCancel={handleCancel} />
+      <QuestionModal 
+        visible={isModalOpen} 
+        onCancel={handleCancel} 
+        onSubmit={handleCreateRecommendedPlanButton}
+      />
       <Navbar />
       <div className="top-home-page">
         <div className="search-box">

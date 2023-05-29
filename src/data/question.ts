@@ -18,7 +18,7 @@ const questionData: QuestionData[] = [
   {
     key: "tripType",
     label: "What is kind of trip you are going for?",
-    options: ["Fast-paced", "Medium", "Slow & easy"],
+    options: ["Fast", "Medium", "Slow"],
     allowSelect: 1,
   },
   {

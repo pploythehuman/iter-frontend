@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import chroma from "chroma-js";
 import tinycolor from "tinycolor2";
 import { format, parse } from "date-fns";
 import { UserAddOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Tabs, Spin, Result } from "antd";
+import queryString from 'query-string';
+
 
 import Navbar from "../components/Navbar";
 import ItineraryTimeline from "../components/timeline/ItineraryTimeline";
@@ -14,7 +16,7 @@ import ItineraryDateTab from "../components/itinerary/ItineraryDateTab";
 import MyCalendar from "../components/calendar/Calendar";
 import bangkokImg from "../assets/bangkok_img.jpeg";
 
-import { getDetailedItinerary, getItinerary } from "../services/itinerary";
+import { getDetailedItinerary, getItinerary, createRecommendedItinerary } from "../services/itinerary";
 import { createAndAddAgenda, deleteAgenda, editAgenda } from "../services/agenda";
 import { IAgenda } from "../interfaces/IItinerary";
 
@@ -40,6 +42,10 @@ const Itinerary = () => {
   const [coTravellers, setCoTravellers] = useState<any[]>([]);
   const [dates, setDates] = useState<string[]>([]);
 
+  const location = useLocation();
+  const { placeId } = queryString.parse(location.search);
+  console.log("pla", placeId)
+  
   const convertDateFormat = (date: string) => {
     return date
       ? format(parse(date, "yyyy-MM-dd", new Date()), "MMMM d, yyyy")
@@ -99,21 +105,28 @@ const Itinerary = () => {
         setIsLoading(false)
       }
     };
-
     fetchData();
     setIsLoading(false);
   }, [itineraryId]);
 
+  useEffect(() => {
+    if (placeId && itineraryData.length > 0) {
+      setActiveTab("calendar");
+      console.log("tab", activeTab);
+    }
+  }, [placeId, itineraryData]);
+
   const buttonClick = async () => {
     // const result = await deleteAgenda(621, 54);
-    const result = await editAgenda(637, "P03014001", {}, "2023-07-8", "6:00", "21:00", 54)
+    // const result = await editAgenda(637, "P03014001", {}, "2023-07-8", "6:00", "21:00", 54)
+    // const result = await createRecommendedItinerary();
     // const result = await createAndAddAgenda("P03014001", {}, "2023-07-19", "9:00", "16:00", 54);
-    console.log("resul", result);
+    // console.log("resul", result);
   }
 
   return (
     <div className="itinerary-page">
-      <Button onClick={buttonClick}>Click</Button>
+      {/* <Button onClick={buttonClick}>Click</Button> */}
       <Navbar />
       <div className="banner">
         <img
@@ -160,6 +173,7 @@ const Itinerary = () => {
         </div>
       </div>
       <Tabs
+        activeKey={activeTab}
         defaultActiveKey="timeline"
         onChange={(key) => setActiveTab(key)}
         centered
@@ -187,8 +201,8 @@ const Itinerary = () => {
                   onDateTabClick={(date) => setSelectedDate(date)}
                 />
               </div>
-              <div className="itinerary-content">
-                {activeTab === "timeline" &&
+              <div className="itinerary-content" >
+                {activeTab === "timeline" && itineraryData && itineraryId && 
                   <ItineraryTimeline 
                     itineraryData={itineraryData} 
                     selectedDate={selectedDate}
@@ -196,7 +210,7 @@ const Itinerary = () => {
                     onDelete={handleDelete}
                   />
                 }
-                {activeTab === "calendar" && 
+                {activeTab === "calendar" && itineraryData && itineraryId && 
                   <MyCalendar 
                     itineraryData={itineraryData} 
                     selectedDate={selectedDate}
@@ -205,7 +219,7 @@ const Itinerary = () => {
                     onDelete={deleteAgenda}
                   />
                 }
-                {activeTab === "map" && (
+                {activeTab === "map" && itineraryData && itineraryId && (
                   <LeafletMaps
                   itineraryData={itineraryData}
                   selectedDate={selectedDate}

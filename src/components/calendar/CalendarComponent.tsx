@@ -20,12 +20,13 @@ interface CalendarComponentProps {
 }
 
 export default function CalendarComponent({
-  itineraryData,
+  itineraryData = [],
   selectedDate,
   itineraryId,
   onEdit,
   onDelete,
 }: CalendarComponentProps) {
+  console.log("itineraryId", itineraryId)
   const calendarRef = useRef<any>(null);
 
   const transformedData = transformRealDataToEventData(itineraryData);
@@ -38,12 +39,13 @@ export default function CalendarComponent({
   const [eventModalVisible, setEventModalVisible] = useState(false);
   const [dateRange, setDateRange] = useState<string | null>(null);
   const [initialDate, setInitialDate] = useState<string>(
-    selectedDate || events[0]?.date
+    selectedDate || events?.[0]?.date
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+
   console.log("itineraryData from calendar", itineraryData);
   console.log("my events", events);
-  console.log("temp", isLoading);
 
   function goToNext() {
     let calendarApi = calendarRef.current.getApi();
@@ -77,15 +79,15 @@ export default function CalendarComponent({
   async function handleEventDrop(info: any) {
     try {
       setIsLoading(true);
-      // const result = await onEdit(
-      //   info.event.id,
-      //   info.event.extendedProps?.place_id,
-      //   {},
-      //   format(info.event.start, 'yyyy-MM-dd'),
-      //   format(info.event.start, "HH:mm"),
-      //   format(info.event.end, "HH:mm"),
-      //   itineraryId,
-      // );
+      const result = await onEdit(
+        info.event.id,
+        info.event.extendedProps?.place_id,
+        {},
+        format(info?.event?.start, 'YYYY-MM-DD'),
+        format(info?.event?.start, "HH:mm"),
+        format(info?.event?.end, "HH:mm"),
+        itineraryId,
+      );
       let event = {
         id: info.event.id,
         place_id: info.event.extendedProps?.place_id,
@@ -110,12 +112,12 @@ export default function CalendarComponent({
     try {
       setIsLoading(true);
       const result = await onEdit(
-        info.event.id,
-        info.event.extendedProps?.place_id,
+        info.event?.id,
+        info.event?.extendedProps?.place_id,
         {},
-        format(info.event.start, 'yyyy-MM-dd'),
-        format(info.event.start, "HH:mm"),
-        format(info.event.end, "HH:mm"),
+        format(info.event?.start, 'YYYY-MM-DD'),
+        format(info.event?.start, "HH:mm"),
+        format(info.event?.end, "HH:mm"),
         itineraryId,
       );
       let event = {
@@ -218,7 +220,7 @@ export default function CalendarComponent({
         event?.id,
         event?.extendedProps?.place_id,
         {},
-        format(event?.start, 'yyyy-MM-dd'),
+        format(event?.start, 'YYYY-MM-DD'),
         format(event?.start, "HH:mm"),
         format(event?.end, "HH:mm"),
         itineraryId,
@@ -277,28 +279,13 @@ export default function CalendarComponent({
     }));
   }
 
-  // const getDeviceType = () => {
-  //   const ua = navigator.userAgent;
-  //   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-  //     return "tablet";
-  //   }
-  //   if (
-  //     /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/i.test(
-  //       ua
-  //     )
-  //   ) {
-  //     return "mobile";
-  //   }
-  //   return "desktop";
-  // };
-
   useEffect(() => {
     const transformedData = transformRealDataToEventData(itineraryData);
     setEvents(checkEventOverlap([...transformedData]));
   }, [itineraryData]);
 
   useEffect(() => {
-    setInitialDate(selectedDate || events[0]?.date);
+    setInitialDate(selectedDate || (events.length > 0 ? events[0].date : null));
     if (calendarRef.current) {
       let calendarApi = calendarRef.current.getApi();
       calendarApi.gotoDate(selectedDate || events[0]?.date);
@@ -329,6 +316,7 @@ export default function CalendarComponent({
           addEvent={addEvent}
           editEvent={editEvent}
           deleteEvent={deleteEvent}
+          selectedPlaceId={selectedPlaceId}
         />
         <FullCalendar
           ref={calendarRef}

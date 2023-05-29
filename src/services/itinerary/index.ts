@@ -3,6 +3,7 @@ import { getProfile } from '../profile';
 import { IAgenda, IItinerary } from "../../interfaces/IItinerary";
 import { PlaceData } from "../../interfaces/IData";
 import { getPlace } from '../../services/place';
+import axios from 'axios';
 
 const getItineraries = async () => {
   const response = await apiGet(`itinerary`);
@@ -88,6 +89,67 @@ const createBlankItinerary = async (
   return responseItinerary;
 };
 
+const createRecommendedItinerary = async (
+  destination: string,
+  coTravellers: number[],
+  start_date: string,
+  end_date: string,
+  tripType: any,
+  targetTypes: any,
+  preferredActivities: any,
+  preferredCuisine: any,
+): Promise<any> => {
+  const profile = await getProfile()
+  const data = {
+    destination: destination,
+      start_date: start_date,
+      end_date: end_date,
+      co_travelers: coTravellers,
+      start_time: '08:00:00',
+      end_time: '19:00:00',
+      tripType: tripType,
+      targetTypes: targetTypes,
+      preferredActivities: preferredActivities,
+      preferredCuisine: preferredCuisine,
+      owner: profile.id
+  }
+
+  const data_2 = {
+    "destination": "BANGKOK",
+    "start_date":"2023-07-11",
+    "end_date":"2023-07-15",
+    "start_time":"08:00:00",
+    "end_time":"19:00:00",
+    "tripType":"Fast",
+    "targetTypes": [
+        "Educational Places",
+        "Museums",
+        "Training Centers",
+        "Art Galleries",
+        "Royal Palace",
+        "Archaeological",
+        "Local Market"
+    ],
+    "preferredActivities": [
+        "Jogging",
+        "Swimming",
+        "Massage"
+    ],
+    "preferredCuisine": [
+        "Greek",
+        "Italian"
+    ],
+    "co_travelers": [1], 
+    "owner": 3 
+}
+  console.log("this data", data);
+  const response = await axios.post('http://dev.se.kmitl.ac.th:3200/api/recommenditinerary/', data);
+  console.log("recc res", response);
+  const itinerary = await createItinerary(response.data);
+  console.log("itinerary", itinerary);
+  return itinerary;
+};
+
 export {
   getItineraries,
   getItinerary,
@@ -96,4 +158,5 @@ export {
   deleteItinerary,
   getDetailedItinerary,
   createBlankItinerary,
+  createRecommendedItinerary
 };
