@@ -21,6 +21,9 @@ import { IPlace, getPlaces } from "../../services/place";
 import { editAgenda } from "../../services/agenda";
 import "../../pages/styles/calendar.scss";
 import queryString from 'query-string';
+import { parse } from "date-fns";
+import { createAndAddAgenda } from '../../services/agenda';
+import { getPlace } from '../../services/place';
 
 const { Option } = Select;
 
@@ -47,8 +50,11 @@ const EventModal: React.FC<EventModalProps> = ({
 }) => {
   const location = useLocation();
   const { Search } = Input;
-  const { placeId, eventStart, eventEnd } = queryString.parse(location.search);
-
+  const { placeId, eventStart, eventEnd } = queryString.parse(location.search) as {
+    placeId: string,
+    eventStart: string,
+    eventEnd: string
+  };
 
   const isEditMode = Boolean(eventItem?.id);
 
@@ -120,12 +126,15 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime(null);
   };
 
-  const handleAddEvent = () => {
-    if (title && date && startTime && endTime) {
+  const handleAddEvent = async() => {
+    if (date && startTime && endTime) {
       alert("in");
+      console.log("date.toString()", date.toString())
+      const result = await createAndAddAgenda(placeId, {}, date.format('YYYY-MM-DD'), startTime.format('HH:mm'), endTime.format('HH:mm'), itineraryId);
+      const place = await getPlace(placeId);
       const newEvent: IEvent = {
         id: Date.now().toString(), // need fix
-        title: title,
+        title: place.place_name,
         start: `${date.format("YYYY-MM-DD")}T${startTime.format("HH:mm:ss")}`,
         end: `${date.format("YYYY-MM-DD")}T${endTime.format("HH:mm:ss")}`,
         date: date,
@@ -212,8 +221,16 @@ const EventModal: React.FC<EventModalProps> = ({
   console.log("selectedPlaceId", selectedPlaceId);
   useEffect(() => {
     if (placeId) {
-      setStartTime(dayjs((eventStart as string)?.split("T")[1]));
-      setEndTime(dayjs((eventEnd as string)?.split("T")[1]));
+      console.log("create1", eventStart)
+      let [dateTime, offset] = eventStart.split(" ");
+      let date = parse(dateTime, "yyyy-MM-dd'T'HH:mm:ss", new Date());
+
+      let [endDateTime, eOffset] = eventStart.split(" ");
+      let endDate = parse(endDateTime, "yyyy-MM-dd'T'HH:mm:ss", new Date());
+
+      setDate(dayjs(date));
+      setStartTime(dayjs(date));
+      setEndTime(dayjs(date));
       setModalVisible(true);
     }
   }, [placeId]);
