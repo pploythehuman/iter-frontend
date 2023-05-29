@@ -240,9 +240,9 @@ export default function Home() {
               <Form.Item
                 className="date-input"
                 name="dateRange"
-                rules={[
-                  { required: true, message: "Please select the date range!" },
-                ]}
+                // rules={[
+                //   { required: true, message: "Please select the date range!" },
+                // ]}
               >
                 <DatePicker.RangePicker
                   style={{ width: "100%" }}
