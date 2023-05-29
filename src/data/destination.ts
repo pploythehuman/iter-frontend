@@ -1,5 +1,6 @@
 export interface IDestination {
   value: string;
+  indexOf?: any;
 }
 
 export const destinations = [

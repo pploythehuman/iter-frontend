@@ -302,7 +302,7 @@ const EventModal: React.FC<EventModalProps> = ({
             </div>
             {!isEditMode && (
               <>
-              <Select
+              {/* <Select
                 // mode="tags"
                 // options={options}
                 style={{ width: '100%', marginTop: '16px', marginBottom: '16px' }}
@@ -310,8 +310,8 @@ const EventModal: React.FC<EventModalProps> = ({
                 onPopupScroll={onScroll}
               >
                 {!loading ? places.map(place => <Option key={place.id}>{place.place_name}</Option>) : [...places.map(place => <Option key={place.id}>{place.place_name}</Option>), <Option key="loading">Loading...</Option>]}
-              </Select>
-              <Button style={{ width: '40%' }} href={`/explore/?itineraryId=${itineraryId}&action=addAgenda&eventStart=${eventItem?.start}&eventEnd=${eventItem?.end}`} type='primary'>Explore more</Button>
+              </Select> */}
+              <Button style={{ width: '40%', marginTop: '16px' }} href={`/explore/?itineraryId=${itineraryId}&action=addAgenda&eventStart=${eventItem?.start}&eventEnd=${eventItem?.end}`} type='primary'>Explore more</Button>
               </>
             )}
           </div>

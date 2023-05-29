@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pagination, Tabs, Input, Select, Card } from 'antd';
+import { Pagination, Tabs, Input, Select, Card, FloatButton } from 'antd';
 import '../pages/styles/explore.scss';
 import Navbar from '../components/Navbar';
 import PlaceCard from '../components/PlaceCard';
@@ -60,15 +60,20 @@ const Explore: React.FC<ExploreProps> = ({
 
   return (
     <>
+      <FloatButton.BackTop
+        shape="circle"
+        type="primary"
+        style={{ right: 20 }}
+      />
       <Navbar />
       {/* <h2 className="explore-title">Explore</h2> */}
       <div className="explore-container">
         <div className="explore-filter">
-          <Search
+          {/* <Search
             className="explore-search"
             placeholder="Search..."
             onSearch={value => onSearch(value)}
-          />
+          /> */}
           {/* <Select 
             className="explore-select"
             defaultValue="Sort by"

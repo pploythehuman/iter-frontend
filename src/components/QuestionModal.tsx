@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Modal, Button, Steps, Slider, Input, Spin } from "antd";
+import { Modal, Button, Steps, Slider, Input, Spin, message } from "antd";
 
 import "../index.scss";
 import { QuestionData, getQuestions } from '../data/question';
@@ -138,6 +138,8 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel, onSubmit }) =>
       setIsLoading(false);
     } catch(error) {
       setIsLoading(false);
+      message.error("Cannot generate itinrary");
+      navigate(`/`);
       console.log(error)
     }
     

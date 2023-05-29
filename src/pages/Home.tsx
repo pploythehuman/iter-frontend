@@ -203,6 +203,19 @@ export default function Home() {
     fetchData();
   }, []);
 
+  const handleSearch = (searchText: string) => {
+    let res: any = [];
+    if (!searchText) {
+      res = [];
+    } else {
+      // filter the options based on the input
+      res = destinations.filter(option =>
+        option.value.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    setDestinations(res); // update the state
+  };
+
 
   return (
     <>
@@ -227,14 +240,14 @@ export default function Home() {
               ]}
             >
               <AutoComplete
-                allowClear
-                className="destination-input"
-                options={destinations}
-                style={{ textAlign: "left" }}
-                // value={destination}
-                // onSelect={(e) => { setDestination(e)}}
-                placeholder="Destination"
+                  allowClear
+                  className="destination-input"
+                  options={destinations}
+                  style={{ textAlign: "left" }}
+                  placeholder="Destination"
+                  onSearch={handleSearch}
               />
+
             </Form.Item>
             <div className="date-co-traveller-wrapper">
               <Form.Item
@@ -253,16 +266,16 @@ export default function Home() {
               <Form.Item
                 className="co-traveller-input"
                 name="coTravellerEmails"
-                rules={[
-                  {
-                    validator: (_, value, callback) => {
-                      if (emails.length === 0 && hasFormBeenSubmitted) {
-                        return Promise.reject(new Error("Please input co-travellers' emails!"));
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
+                // rules={[
+                  // {
+                  //   validator: (_, value, callback) => {
+                  //     if (emails.length === 0 && hasFormBeenSubmitted) {
+                  //       return Promise.reject(new Error("Please input co-travellers' emails!"));
+                  //     }
+                  //     return Promise.resolve();
+                  //   },
+                  // },
+                // ]}
               >
                 <Input
                   value={emails.join(", ")}

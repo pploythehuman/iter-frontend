@@ -106,7 +106,7 @@ const MyTrips = () => {
           <div className="cards-container">
             <Space wrap size={[20, 20]}>
               <Card className="create-trip-card" style={{ width: 320, minHeight: 300  }}>
-                <Button type="primary" icon={<PlusCircleOutlined />}>Create New Trip</Button>
+                <Button type="primary" href='/' icon={<PlusCircleOutlined />}>Create New Trip</Button>
               </Card>
               {itineraries
                   .filter((item) => new Date(item.end_date) >= new Date())

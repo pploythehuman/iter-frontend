@@ -151,7 +151,7 @@ const Itinerary = () => {
             )}`}
           </h5>
         </div>
-        <div className="banner-button">
+        {/* <div className="banner-button">
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -170,7 +170,7 @@ const Itinerary = () => {
             icon={<SettingOutlined />}
             style={{ color: textColor, fontSize: "20px" }}
           />
-        </div>
+        </div> */}
       </div>
       <Tabs
         activeKey={activeTab}
