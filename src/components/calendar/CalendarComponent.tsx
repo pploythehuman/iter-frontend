@@ -26,7 +26,6 @@ export default function CalendarComponent({
   onEdit,
   onDelete,
 }: CalendarComponentProps) {
-  console.log("itineraryId", itineraryId)
   const calendarRef = useRef<any>(null);
 
   const transformedData = transformRealDataToEventData(itineraryData);
@@ -83,7 +82,7 @@ export default function CalendarComponent({
         info.event.id,
         info.event.extendedProps?.place_id,
         {},
-        format(info?.event?.start, 'YYYY-MM-DD'),
+        format(info?.event?.start, 'yyyy-MM-dd'),
         format(info?.event?.start, "HH:mm"),
         format(info?.event?.end, "HH:mm"),
         itineraryId,
@@ -115,7 +114,7 @@ export default function CalendarComponent({
         info.event?.id,
         info.event?.extendedProps?.place_id,
         {},
-        format(info.event?.start, 'YYYY-MM-DD'),
+        format(info.event?.start, 'yyyy-MM-dd'),
         format(info.event?.start, "HH:mm"),
         format(info.event?.end, "HH:mm"),
         itineraryId,
@@ -151,6 +150,7 @@ export default function CalendarComponent({
         event.id === updatedEvent.id ? updatedEvent : event
       );
       const checkedEvents = checkEventOverlap(newEvents);
+      console.log("check overlap", checkedEvents);
       return checkedEvents;
     });
 
@@ -220,7 +220,7 @@ export default function CalendarComponent({
         event?.id,
         event?.extendedProps?.place_id,
         {},
-        format(event?.start, 'YYYY-MM-DD'),
+        format(event?.start, 'yyyy-MM-dd'),
         format(event?.start, "HH:mm"),
         format(event?.end, "HH:mm"),
         itineraryId,
