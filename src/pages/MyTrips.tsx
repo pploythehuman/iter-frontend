@@ -37,7 +37,7 @@ const TripCard = ({
       cover={ 
         <img alt={item.destination} src={bangkokImg} />
       }
-      style={{ width: 320, minHeight: 300 }}
+      style={{ width: 300, minHeight: 300 }}
       hoverable
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
