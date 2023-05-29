@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, Divider, Space, Spin, Menu, Dropdown, Empty } from "antd";
 import { EllipsisOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { format, parseISO } from "date-fns";
@@ -64,6 +65,7 @@ const TripCard = ({
 };
 
 const MyTrips = () => {
+  const navigate = useNavigate();
   const [itineraries, setItineraries] = useState<IItinerary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -106,7 +108,7 @@ const MyTrips = () => {
           <div className="cards-container">
             <Space wrap size={[20, 20]}>
               <Card className="create-trip-card" style={{ width: 320, minHeight: 300  }}>
-                <Button type="primary" href='/' icon={<PlusCircleOutlined />}>Create New Trip</Button>
+                <Button type="primary" onClick={()=>{navigate('/')}}icon={<PlusCircleOutlined />}>Create New Trip</Button>
               </Card>
               {itineraries
                   .filter((item) => new Date(item.end_date) >= new Date())
