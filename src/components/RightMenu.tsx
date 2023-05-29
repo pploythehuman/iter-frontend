@@ -71,7 +71,6 @@ const RightMenu: React.FC<RightMenuProps> = ({ mode }) => {
             <Menu.Item
               key="my-trips"
               onClick={() => {
-                logout();
                 navigate("/my-trips");
               }}
             >

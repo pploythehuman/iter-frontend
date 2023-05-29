@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-import { Modal, Button, Steps, Slider, Input } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Modal, Button, Steps, Slider, Input, Spin } from "antd";
 
 import "../index.scss";
 import { QuestionData, getQuestions } from '../data/question';
@@ -10,15 +10,17 @@ const { Step } = Steps;
 interface ModalProps {
   visible: boolean;
   onCancel: () => void;
+  onSubmit: Function
 }
 
-const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
-  // const navigate = useNavigate();
+const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel, onSubmit }) => {
+  const navigate = useNavigate();
   const [questionData, setQuestionData] = useState<QuestionData[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[][]>([]);
   const [sliderInputMinValue, setSliderInputMinValue] = useState(20);
   const [sliderInputMaxValue, setSliderInputMaxValue] = useState(50);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = () => {
     // If the current question has subQuestions, add them to the questionData
@@ -87,7 +89,9 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
     setSelectedOptions(updatedOptions);
   };
   
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
+    try{
+      setIsLoading(true);
     const resultObject: { [key: string]: string[] } = {};
   
     selectedOptions.forEach((selected, index) => {
@@ -115,9 +119,29 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
         });
       }
     });
-  
-    console.log(resultObject);
-    alert(JSON.stringify(resultObject, null, 2));
+    
+    //first item is not a list
+    const resultObjectTransformed: { [key: string]: string[] | string } = {};
+    Object.keys(resultObject).forEach((key, index) => {
+      if (index === 0 && resultObject[key].length === 1) {
+        resultObjectTransformed[key] = resultObject[key][0];
+      } else {
+        resultObjectTransformed[key] = resultObject[key];
+      }
+    });
+    console.log(resultObjectTransformed);
+
+    
+      
+      const itinerary = await onSubmit(resultObjectTransformed.tripType, resultObjectTransformed.targetTypes, resultObjectTransformed.preferredActivities, resultObjectTransformed.preferredCuisine);
+      navigate(`itinerary/${itinerary.id}`);
+      setIsLoading(false);
+    } catch(error) {
+      setIsLoading(false);
+      console.log(error)
+    }
+    
+
 };
 
   
@@ -173,6 +197,7 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
         </>
       }
     >
+      <Spin style={{ zIndex: 999999 }} spinning={isLoading}>
       <div className="question-modal-content">
         <h4 style={{ color: 'var(--color-black)' }}>{questionData[currentStep]?.label}</h4>
         {questionData[currentStep]?.slider ? (
@@ -221,6 +246,7 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel }) => {
           </div>
         )}
       </div>
+      </Spin>
     </Modal>
   );
 };

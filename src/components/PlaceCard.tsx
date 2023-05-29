@@ -3,6 +3,8 @@ import { Tag, Button, Menu, Dropdown, message } from 'antd';
 import { EllipsisOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import noImg from '../assets/no_img.jpeg';
 import '../../src/index.scss'
+import { useLocation } from 'react-router-dom';
+
 
 
 const PlaceCard: React.FC<any> = ({
@@ -19,9 +21,18 @@ const PlaceCard: React.FC<any> = ({
   const [messageApi, contextHolder] = message.useMessage();
   const [showMore, setShowMore] = useState(false);
   
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isAddAgenda = searchParams.get('action') === 'addAgenda';
+  const itineraryId = searchParams.get('itineraryId');
+  const eventStart = searchParams.get('eventStart');
+  const eventEnd = searchParams.get('eventEnd');
+
+
   const info = () => {
     messageApi.success('Booked Successfully');
   };
+
 
   // const menu = (
   //   <Menu>
@@ -30,7 +41,7 @@ const PlaceCard: React.FC<any> = ({
   //   </Menu>
   // );
 
-  console.log("images", images?.[0],  images?.length);
+  console.log("place_id", id);
   const renderDescription = () => {
     if (description?.length > 150) {
       return showMore
@@ -146,10 +157,10 @@ const PlaceCard: React.FC<any> = ({
             )}
           </p>
 
-          <Button type="primary" className="book-button" onClick={info}
+          {isAddAgenda && <Button href={`/itinerary/${itineraryId}/?modal=true&placeId=${id}&eventStart=${eventStart}&eventEnd=${eventEnd}`} type="primary" className="book-button" onClick={info}
           >
             Book Now
-          </Button>
+          </Button>}
         </div>
       </div>
     );

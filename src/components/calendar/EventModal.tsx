@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import {
   Modal,
   Input,
@@ -14,10 +15,12 @@ import {
 import type { DatePickerProps, TimeRangePickerProps } from "antd";
 import { EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { format } from "date-fns";
 import { IEvent } from "../../interfaces/IItinerary";
 import { IPlace, getPlaces } from "../../services/place";
 import { editAgenda } from "../../services/agenda";
 import "../../pages/styles/calendar.scss";
+import queryString from 'query-string';
 
 const { Option } = Select;
 
@@ -29,6 +32,7 @@ interface EventModalProps {
   addEvent: Function;
   editEvent: Function;
   deleteEvent: Function;
+  selectedPlaceId: string | null;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -39,8 +43,12 @@ const EventModal: React.FC<EventModalProps> = ({
   addEvent,
   editEvent,
   deleteEvent,
+  selectedPlaceId,
 }) => {
+  const location = useLocation();
   const { Search } = Input;
+  const { placeId, eventStart, eventEnd } = queryString.parse(location.search);
+
 
   const isEditMode = Boolean(eventItem?.id);
 
@@ -201,7 +209,15 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);
   }, [eventItem]);
 
-  console.log("event in eventmodal", eventItem);
+  console.log("selectedPlaceId", selectedPlaceId);
+  useEffect(() => {
+    if (placeId) {
+      setStartTime(dayjs((eventStart as string)?.split("T")[1]));
+      setEndTime(dayjs((eventEnd as string)?.split("T")[1]));
+      setModalVisible(true);
+    }
+  }, [placeId]);
+  
   return (
     <>
       <Modal
@@ -285,6 +301,7 @@ const EventModal: React.FC<EventModalProps> = ({
               />
             </div>
             {!isEditMode && (
+              <>
               <Select
                 // mode="tags"
                 // options={options}
@@ -294,6 +311,8 @@ const EventModal: React.FC<EventModalProps> = ({
               >
                 {!loading ? places.map(place => <Option key={place.id}>{place.place_name}</Option>) : [...places.map(place => <Option key={place.id}>{place.place_name}</Option>), <Option key="loading">Loading...</Option>]}
               </Select>
+              <Button style={{ width: '40%' }} href={`/explore/?itineraryId=${itineraryId}&action=addAgenda&eventStart=${eventItem?.start}&eventEnd=${eventItem?.end}`} type='primary'>Explore more</Button>
+              </>
             )}
           </div>
         </div>

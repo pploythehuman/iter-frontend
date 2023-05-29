@@ -50,6 +50,7 @@ const Explore: React.FC<ExploreProps> = ({
     const result = await getPlaces(currentPage);
     const updatedPlaces = result.results.map((place: any) => ({
       ...place,
+      place_id: place.place_id,
       fullAddress: `${place.location.address} ${place.location.sub_district} ${place.location.district} ${place.location.province} ${place.location.postcode}`,
       description: `${place.introduction}, ${place.detail}`,
       images: [...place.web_picture_urls, ...place.mobile_picture_urls],
