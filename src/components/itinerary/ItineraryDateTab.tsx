@@ -84,18 +84,18 @@ const ItineraryDateTab: React.FC<ItineraryDateTabProps> = ({ dates, onDateTabCli
     // getItem('Option 2', '2', <DesktopOutlined />),
     // getItem('Option 3', '3', <ContainerOutlined />),
   
-    getItem('Accomondation', 'sub1', <HomeOutlined />, [
-      getItem('Option 5', '5'),
-      getItem('Option 6', '6'),
-      getItem('Option 7', '7'),
-      getItem('Option 8', '8'),
-    ]),
-    getItem('Restaurant', 'sub1', <CoffeeOutlined />, [
-      getItem('Option 5', '5'),
-      getItem('Option 6', '6'),
-      getItem('Option 7', '7'),
-      getItem('Option 8', '8'),
-    ]),
+    // getItem('Accomondation', 'sub1', <HomeOutlined />, [
+    //   getItem('Option 5', '5'),
+    //   getItem('Option 6', '6'),
+    //   getItem('Option 7', '7'),
+    //   getItem('Option 8', '8'),
+    // ]),
+    // getItem('Restaurant', 'sub1', <CoffeeOutlined />, [
+    //   getItem('Option 5', '5'),
+    //   getItem('Option 6', '6'),
+    //   getItem('Option 7', '7'),
+    //   getItem('Option 8', '8'),
+    // ]),
   
     // getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
     //   getItem('Option 9', '9'),

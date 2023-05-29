@@ -14,9 +14,9 @@ const LeftMenu: React.FC<LeftMenuProps> = ({ mode }) => {
   }
   return (
     <Menu mode={mode} onClick={handleMenuClick}>
-      <Menu.Item key="my-trips">My Trips</Menu.Item>
-      {/* <Menu.Item key="explore">Explore</Menu.Item> */}
-      <Menu.Item key="activities">Activities</Menu.Item>
+      <Menu.Item key="my-trips">Trips</Menu.Item>
+      <Menu.Item key="explore">Explore</Menu.Item>
+      {/* <Menu.Item key="activities">Activities</Menu.Item> */}
       {/* <Menu.Item key="activities">Activities</Menu.Item>
       <Menu.Item key="hotels">Hotels</Menu.Item>
       <Menu.Item key="restaurants">Restaurants</Menu.Item>
