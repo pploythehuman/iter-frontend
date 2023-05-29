@@ -116,6 +116,10 @@ const Itinerary = () => {
     }
   }, [placeId, itineraryData]);
 
+  useEffect(() => {
+    
+  }, [activeTab])
+
   const buttonClick = async () => {
     // const result = await deleteAgenda(621, 54);
     // const result = await editAgenda(637, "P03014001", {}, "2023-07-8", "6:00", "21:00", 54)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Modal,
   Input,
@@ -48,12 +48,19 @@ const EventModal: React.FC<EventModalProps> = ({
   deleteEvent,
   selectedPlaceId,
 }) => {
+
+  const navigate = useNavigate();
   const location = useLocation();
   const { Search } = Input;
   const { placeId, eventStart, eventEnd } = queryString.parse(location.search) as {
     placeId: string,
     eventStart: string,
     eventEnd: string
+  };
+
+  const clearQueryParameters = () => {
+    let currentPathname = location.pathname;
+    navigate(currentPathname);
   };
 
   const isEditMode = Boolean(eventItem?.id);
@@ -145,6 +152,7 @@ const EventModal: React.FC<EventModalProps> = ({
       addEvent(newEvent);
       setModalVisible(false);
       clearInputs();
+      clearQueryParameters();
       message.success("Add event successfully");
     } else {
       message.error(`Add event unsuccessfully`);
