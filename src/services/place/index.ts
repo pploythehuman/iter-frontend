@@ -48,19 +48,14 @@ export interface IPlace {
   services?: string[] | null;
 }
 
-const getPlace = async (placeId: string) => {
-  const response = await apiGet(`places/${placeId}/`);
-  return response.data;
-};
-
 const getPlaces = async (pageNumber: number | string) => {
   console.log(`places/?page=${pageNumber}`)
   const response = await apiGet(`places/?page=${pageNumber}`);
   return response.data;
 };
 
-const getRestaurant = async (placeId: string) => {
-  const response = await apiGet(`places/restaurants/${placeId}/`);
+const getPlace = async (placeId: string) => {
+  const response = await apiGet(`places/${placeId}/`);
   return response.data;
 };
 
@@ -69,32 +64,37 @@ const getRestaurants = async () => {
   return response.data;
 };
 
-const getShop = async (placeId: string) => {
+const getRestaurant = async (placeId: string) => {
+  const response = await apiGet(`places/restaurants/${placeId}/`);
+  return response.data;
+};
+
+const getShops = async () => {
   const response = await apiGet(`places/shops/`);
   return response.data;
 };
 
-const getShops = async (placeId: string) => {
+const getShop = async (placeId: string) => {
   const response = await apiGet(`places/shops/${placeId}/`);
   return response.data;
 };
 
-const getAttraction = async (placeId: string) => {
+const getAttractions = async () => {
   const response = await apiGet(`places/attractions/`);
   return response.data;
 };
 
-const getAttractions = async (placeId: string) => {
+const getAttraction = async (placeId: string) => {
   const response = await apiGet(`places/attractions/${placeId}/`);
   return response.data;
 };
 
-const getAccomondation = async (placeId: string) => {
+const getAccomondations = async () => {
   const response = await apiGet(`places/accommodations/`);
   return response.data;
 };
 
-const getAccomondations = async (placeId: string) => {
+const getAccomondation = async (placeId: string) => {
   const response = await apiGet(`places/accommodations/${placeId}/`);
   return response.data;
 };

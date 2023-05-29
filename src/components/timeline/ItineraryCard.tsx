@@ -38,7 +38,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
   );
 
   const renderDescription = () => {
-    if (description.length > 150) {
+    if (description?.length > 150) {
       return showMore
         ? (
           <>
@@ -54,7 +54,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         )
         : (
           <>
-            {description.substring(0, getDeviceType() === 'mobile'? 120 : 350)}
+            {description?.substring(0, getDeviceType() === 'mobile'? 120 : 350)}
             <p 
               className="show-more-less-button"
               onClick={() => setShowMore(!showMore)}
@@ -114,7 +114,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         </div>
         </div>
         <p className="date-time">
-          {`${date} ${arrival_time.substring(0, 5)}-${leave_time.substring(0, 5)}`}
+          {`${date} ${arrival_time?.substring(0, 5)}-${leave_time?.substring(0, 5)}`}
         </p>
         <p style={{ marginTop: '0px', marginBottom: '0px' }}>
           {renderDescription()}
@@ -122,7 +122,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
         {contextHolder}
           
         <p className="contact">
-          {contact.mobile_number.concat(contact.phone_number).length > 0 && (
+          {contact.mobile_number?.concat(contact.phone_number)?.length > 0 && (
             <>
               <Button type="primary" shape="circle" size="small">
                 <PhoneOutlined />
@@ -133,7 +133,7 @@ const ItineraryCard: React.FC<ItineraryCardProps> = ({
             </>
           )}
           
-          {contact.emails.length > 0 && (
+          {contact?.emails?.length > 0 && (
             <>
               <Button type="primary" shape="circle" size="small">
                 <MailOutlined />

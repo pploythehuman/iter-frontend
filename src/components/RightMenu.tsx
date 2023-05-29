@@ -1,10 +1,6 @@
 import React from "react";
 import { Menu, Avatar } from "antd";
-import {
-  UserOutlined,
-  LogoutOutlined,
-  LoginOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, LoginOutlined, GlobalOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../services/auth";
 // import '../../src/index.scss';
@@ -15,7 +11,9 @@ interface RightMenuProps {
 
 const RightMenu: React.FC<RightMenuProps> = ({ mode }) => {
   const navigate = useNavigate();
-  const userName = `${localStorage.getItem("firstname") || ''} ${localStorage.getItem("lastname") || ''}`;
+  const userName = `${localStorage.getItem("firstname") || ""} ${
+    localStorage.getItem("lastname") || ""
+  }`;
 
   const getDeviceType = () => {
     const ua = navigator.userAgent;
@@ -59,7 +57,7 @@ const RightMenu: React.FC<RightMenuProps> = ({ mode }) => {
               <LoginOutlined /> Login
             </Menu.Item>
             <Menu.Item
-              key="log-out"
+              key="register"
               onClick={() => {
                 logout();
                 navigate("/register");
@@ -69,15 +67,27 @@ const RightMenu: React.FC<RightMenuProps> = ({ mode }) => {
             </Menu.Item>
           </>
         ) : (
-          <Menu.Item
-            key="log-out"
-            onClick={() => {
-              logout();
-              navigate("/");
-            }}
-          >
-            <LogoutOutlined /> Logout
-          </Menu.Item>
+          <>
+            <Menu.Item
+              key="my-trips"
+              onClick={() => {
+                logout();
+                navigate("/my-trips");
+              }}
+            >
+              <GlobalOutlined /> My Trips
+            </Menu.Item>
+
+            <Menu.Item
+              key="log-out"
+              onClick={() => {
+                logout();
+                navigate("/");
+              }}
+            >
+              <LogoutOutlined /> Logout
+            </Menu.Item>
+          </>
         )}
       </Menu.SubMenu>
     </Menu>

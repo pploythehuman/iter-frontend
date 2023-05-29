@@ -1,0 +1,62 @@
+.explore-title {
+    color: #4a4a4a;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .explore-container {
+    width: 100%;
+    padding: 0 2rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .explore-filter {
+    display: flex;
+    justify-content: space-between;
+    width: 65%;
+    margin-bottom: 20px;
+  
+    .explore-search {
+        margin-top: 2rem;
+      width: 100%;
+    }
+  
+    .explore-select {
+      width: 30%;
+    }
+  }
+  
+  .explore-tabs {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+  
+    .ant-tabs-tab {
+      font-size: 18px;
+      color: #333;
+    }
+  
+    .ant-tabs-tab-active {
+      color: #1890ff;
+      font-weight: bold;
+    }
+  
+    .ant-tabs-ink-bar {
+      background-color: #1890ff;
+    }
+  }
+  
+  .explore-pagination {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  // Card styling
+  .ant-card {
+    margin: 10px;
+  }
+  
