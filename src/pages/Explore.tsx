@@ -60,7 +60,7 @@ const Explore: React.FC<ExploreProps> = ({
   return (
     <>
       <Navbar />
-      <h2 className="explore-title">Explore</h2>
+      {/* <h2 className="explore-title">Explore</h2> */}
       <div className="explore-container">
         <div className="explore-filter">
           <Search
@@ -68,14 +68,14 @@ const Explore: React.FC<ExploreProps> = ({
             placeholder="Search..."
             onSearch={value => onSearch(value)}
           />
-          <Select 
+          {/* <Select 
             className="explore-select"
             defaultValue="Sort by"
             onChange={value => onSort(value)}
           >
             <Option value="date">Date</Option>
             <Option value="rating">Rating</Option>
-          </Select>
+          </Select> */}
         </div>
         <Tabs 
           defaultActiveKey="1" 
@@ -93,7 +93,7 @@ const Explore: React.FC<ExploreProps> = ({
               />
             )}
           </TabPane>
-          <TabPane tab="Activities" key="2">
+          {/* <TabPane tab="Activities" key="2">
             {renderTabContent('Activities')}
           </TabPane>
           <TabPane tab="Restaurants" key="3">
@@ -101,7 +101,7 @@ const Explore: React.FC<ExploreProps> = ({
           </TabPane>
           <TabPane tab="Accommodations" key="4">
             {renderTabContent('Accommodations')}
-          </TabPane>
+          </TabPane> */}
         </Tabs>
       </div>
     </>
