@@ -137,9 +137,11 @@ const EventModal: React.FC<EventModalProps> = ({
     if (date && startTime && endTime) {
       // alert("in");
       const result = await createAndAddAgenda(placeId, {}, date.format('YYYY-MM-DD'), startTime.format('HH:mm'), endTime.format('HH:mm'), itineraryId);
+      console.log("rereresult", result);
       const place = await getPlace(placeId);
       const newEvent: IEvent = {
-        id: place.id, // need fix
+        id: result.id, // need fix
+        place_id: place.place_id,
         title: place.place_name,
         start: `${date.format("YYYY-MM-DD")}T${startTime.format("HH:mm:ss")}`,
         end: `${date.format("YYYY-MM-DD")}T${endTime.format("HH:mm:ss")}`,
@@ -159,14 +161,17 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const handleEditEvent = async () => {
+    console.log("inedit", eventItem?.start, typeof eventItem?.start)
     if (title && date && startTime && endTime) {
       const result = await editAgenda(
         eventItem?.id,
         eventItem?.extendedProps?.place_id,
         {},
         date.format("YYYY-MM-DD"),
-        startTime.format("HH:mm:ss"),
-        endTime.format("HH:mm:ss"),
+        // eventItem?.start?.format("HH:mm:ss"),
+        format(eventItem?.start, 'HH:mm'),
+        // eventItem?.end?.format("HH:mm:ss"),
+        format(eventItem?.end, 'HH:mm'),
         itineraryId
       );
       const newEvent: IEvent = {

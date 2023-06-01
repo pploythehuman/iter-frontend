@@ -101,9 +101,9 @@ export default function CalendarComponent({
       };
       setIsLoading(false);
       handleUpdateEvent(event);
-    } catch(errror) {
+    } catch(error) {
       setIsLoading(false);
-      console.log("error", errror);
+      console.log("error", error);
     }
   }
 
@@ -147,7 +147,7 @@ export default function CalendarComponent({
     // sync internal events
     setEvents((prevEvents) => {
       const newEvents = prevEvents.map((event) =>
-        event.id === updatedEvent.id ? updatedEvent : event
+        event?.id === updatedEvent?.id ? updatedEvent : event
       );
       const checkedEvents = checkEventOverlap(newEvents);
       console.log("check overlap", checkedEvents);
@@ -211,6 +211,9 @@ export default function CalendarComponent({
       const checkedEvents = checkEventOverlap(newEvents);
       return checkedEvents;
     });
+
+    // const transformedData = transformRealDataToEventData(itineraryData);
+    // setEvents(checkEventOverlap([...transformedData]));
   }
 
   async function editEvent(event: IEvent, updatedEvent: IEvent) {
@@ -285,7 +288,7 @@ export default function CalendarComponent({
   }, [itineraryData]);
 
   useEffect(() => {
-    setInitialDate(selectedDate || (events.length > 0 ? events[0].date : null));
+    setInitialDate(selectedDate || (events?.length > 0 ? events?.[0].date : new Date()));
     if (calendarRef.current) {
       let calendarApi = calendarRef.current.getApi();
       calendarApi.gotoDate(selectedDate || events[0]?.date);

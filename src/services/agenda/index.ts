@@ -47,6 +47,8 @@ const editAgenda = async (
   };
 
   const response = await apiPut(`/itinerary/agendas/${agendaId}/`, updatedAgenda);
+
+  console.log("edit", response, updatedAgenda);
   
   // update itinerary date
   const itinerary = await getItinerary(itineraryId);
@@ -79,8 +81,10 @@ const deleteAgenda = async (
   agendaId: string | number | undefined,
   itineraryId: string | number | undefined
 ) => {
+  console.log("getAgenda", agendaId);
   const deletedAgenda = await getAgenda(agendaId);
   console.log("deletedAgenda", deletedAgenda);
+  console.log(`itinerary/agendas/${agendaId}/`);
   const response = await apiDelete(`itinerary/agendas/${agendaId}/`);
   console.log(`itinerary/agendas/${agendaId}/`, response);
 
@@ -129,6 +133,8 @@ const createAndAddAgenda = async (
     arrivalTime,
     leaveTime
   );
+  console.log("new Agenda", newAgenda);
+  
   const itineraryItem = await getItinerary(itineraryId);
   const updatedItinerary = {
     ...itineraryItem,
@@ -144,7 +150,7 @@ const createAndAddAgenda = async (
   };
 
   const response = await editItinerary(itineraryId, updatedItinerary);
-  return response;
+  return newAgenda;
 };
 
 export { getAgenda, editAgenda, deleteAgenda, createAgenda, createAndAddAgenda };
