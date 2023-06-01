@@ -115,37 +115,7 @@ const createRecommendedItinerary = async (
       owner: profile.id
   }
 
-  const data_2 = {
-    "destination": "BANGKOK",
-    "start_date":"2023-07-11",
-    "end_date":"2023-07-15",
-    "start_time":"08:00:00",
-    "end_time":"19:00:00",
-    "tripType":"Fast",
-    "targetTypes": [
-        "Educational Places",
-        "Museums",
-        "Training Centers",
-        "Art Galleries",
-        "Royal Palace",
-        "Archaeological",
-        "Local Market"
-    ],
-    "preferredActivities": [
-        "Jogging",
-        "Swimming",
-        "Massage"
-    ],
-    "preferredCuisine": [
-        "Greek",
-        "Italian"
-    ],
-    "co_travelers": [1], 
-    "owner": 3 
-}
-  console.log("this data", data);
   const response = await axios.post('http://dev.se.kmitl.ac.th:3200/api/recommenditinerary/', data);
-  console.log("recc res", response);
   const itinerary = await createItinerary(response.data);
   console.log("itinerary", itinerary);
   return itinerary;

@@ -166,13 +166,12 @@ export default function Home() {
 
   const handleCreateRecommendedPlanButton = async (tripType: any, targetTypes: any, preferredActivities: any, preferredCuisine: any) => {
     try {
-      console.log("has been called")
       setHasFormBeenSubmitted(true);
       const values = await form.validateFields();
       const startDate = dayjs(values.dateRange[0])?.format("YYYY-MM-DD");
       const endDate = dayjs(values.dateRange[1])?.format("YYYY-MM-DD");
 
-      console.log([values.destination, coTravellerIds, startDate, endDate, tripType, targetTypes, preferredActivities, preferredCuisine])
+      // console.log([values.destination, coTravellerIds, startDate, endDate, tripType, targetTypes, preferredActivities, preferredCuisine])
       const itinerary = await createRecommendedItinerary(values.destination, coTravellerIds, startDate, endDate, tripType, targetTypes, preferredActivities, preferredCuisine);
       return itinerary;
       // clear fields

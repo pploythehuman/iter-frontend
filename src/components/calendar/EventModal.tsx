@@ -136,7 +136,6 @@ const EventModal: React.FC<EventModalProps> = ({
   const handleAddEvent = async() => {
     if (date && startTime && endTime) {
       alert("in");
-      console.log("date.toString()", date.toString())
       const result = await createAndAddAgenda(placeId, {}, date.format('YYYY-MM-DD'), startTime.format('HH:mm'), endTime.format('HH:mm'), itineraryId);
       const place = await getPlace(placeId);
       const newEvent: IEvent = {
@@ -182,7 +181,6 @@ const EventModal: React.FC<EventModalProps> = ({
         color: "var(--color-secondary-light)",
         web_picture_urls: eventItem?.extendedProps?.web_picture_urls,
       };
-      console.log("in edit in event modal", newEvent);
       editEvent(eventItem, newEvent);
       setModalVisible(false);
       clearInputs();
@@ -226,7 +224,6 @@ const EventModal: React.FC<EventModalProps> = ({
     setEndTime(eventItem?.end ? dayjs(eventItem.end) : null);
   }, [eventItem]);
 
-  console.log("selectedPlaceId", selectedPlaceId);
   useEffect(() => {
     if (placeId) {
       console.log("create1", eventStart)

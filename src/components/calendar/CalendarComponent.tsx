@@ -225,7 +225,7 @@ export default function CalendarComponent({
         format(event?.end, "HH:mm"),
         itineraryId,
       );
-      console.log("result", result);
+      // console.log("result", result);
       setEvents(prevEvents => {
         const newEvents = prevEvents.map(e => e.id === event.id ? updatedEvent : e)
         const checkedEvents = checkEventOverlap(newEvents);
@@ -242,7 +242,7 @@ export default function CalendarComponent({
     try {
       setIsLoading(true);
       const result = await onDelete(event.id, itineraryId);
-      console.log(result);
+      // console.log(result);
       setEvents((prevEvents) => {
         const newEvents = prevEvents.filter((e) => e.id !== event.id);
         const checkedEvents = checkEventOverlap(newEvents);

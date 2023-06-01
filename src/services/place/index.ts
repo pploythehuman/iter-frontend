@@ -49,7 +49,6 @@ export interface IPlace {
 }
 
 const getPlaces = async (pageNumber: number | string) => {
-  console.log(`places/?page=${pageNumber}`)
   const response = await apiGet(`places/?page=${pageNumber}`);
   return response.data;
 };

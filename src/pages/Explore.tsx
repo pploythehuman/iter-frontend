@@ -26,7 +26,7 @@ const Explore: React.FC<ExploreProps> = ({
   const [currentTab, setCurrentTab] = useState('1');
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("places", places[0]);
+  // console.log("places", places[0]);
   const renderTabContent = (tab: string) => {
     return places.map((place: any) => (
       <PlaceCard key={place.id} {...place} />

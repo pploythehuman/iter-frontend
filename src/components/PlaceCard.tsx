@@ -33,14 +33,6 @@ const PlaceCard: React.FC<any> = ({
     messageApi.success('Booked Successfully');
   };
 
-
-  // const menu = (
-  //   <Menu>
-  //     <Menu.Item key="1">Edit</Menu.Item>
-  //     <Menu.Item key="2" onClick={() => onDelete(id)}>Delete</Menu.Item>
-  //   </Menu>
-  // );
-
   console.log("place_id", id);
   const renderDescription = () => {
     if (description?.length > 150) {

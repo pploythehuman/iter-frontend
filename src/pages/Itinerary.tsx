@@ -44,7 +44,6 @@ const Itinerary = () => {
 
   const location = useLocation();
   const { placeId } = queryString.parse(location.search);
-  console.log("pla", placeId)
   
   const convertDateFormat = (date: string) => {
     return date
@@ -73,7 +72,6 @@ const Itinerary = () => {
     try {
       setIsLoading(true);
       const result = await deleteAgenda(id, itineraryId);
-      console.log("del agenda", result)
 
       const updatedItinerary = itineraryData.filter((item) => item.id !== id);
       setItineraryData(updatedItinerary);
