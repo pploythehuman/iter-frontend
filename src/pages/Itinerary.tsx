@@ -72,9 +72,9 @@ const Itinerary = () => {
     try {
       setIsLoading(true);
       const result = await deleteAgenda(id, itineraryId);
-
       const updatedItinerary = itineraryData.filter((item) => item.id !== id);
       setItineraryData(updatedItinerary);
+      console.log("delete", result);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -93,8 +93,14 @@ const Itinerary = () => {
         setDates([itinerary?.start_date, itinerary?.end_date]);
 
         const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
-        detailedItinerary.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-        setItineraryData(detailedItinerary);
+        console.log("unsorted itinerary", detailedItinerary);
+        const sortedItinerary = [...detailedItinerary].sort((a, b) => {
+          const aDate = new Date(`${a.date}T${a.arrival_time}`);
+          const bDate = new Date(`${b.date}T${b.arrival_time}`);
+          return aDate.getTime() - bDate.getTime();
+        });        
+        console.log("sorted itinerary", sortedItinerary);
+        setItineraryData(sortedItinerary);
         setIsLoading(false);
 
       } catch (error) {
@@ -105,7 +111,7 @@ const Itinerary = () => {
     };
     fetchData();
     setIsLoading(false);
-  }, [itineraryId]);
+  }, [itineraryId, activeTab]);
 
   useEffect(() => {
     if (placeId && itineraryData.length > 0) {

@@ -13,7 +13,7 @@ import {
   Select,
 } from "antd";
 import type { DatePickerProps, TimeRangePickerProps } from "antd";
-import { EnvironmentOutlined } from "@ant-design/icons";
+import { ConsoleSqlOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { format } from "date-fns";
 import { IEvent } from "../../interfaces/IItinerary";
@@ -48,7 +48,7 @@ const EventModal: React.FC<EventModalProps> = ({
   deleteEvent,
   selectedPlaceId,
 }) => {
-
+  console.log("event item", eventItem)
   const navigate = useNavigate();
   const location = useLocation();
   const { Search } = Input;
@@ -135,11 +135,11 @@ const EventModal: React.FC<EventModalProps> = ({
 
   const handleAddEvent = async() => {
     if (date && startTime && endTime) {
-      alert("in");
+      // alert("in");
       const result = await createAndAddAgenda(placeId, {}, date.format('YYYY-MM-DD'), startTime.format('HH:mm'), endTime.format('HH:mm'), itineraryId);
       const place = await getPlace(placeId);
       const newEvent: IEvent = {
-        id: Date.now().toString(), // need fix
+        id: place.id, // need fix
         title: place.place_name,
         start: `${date.format("YYYY-MM-DD")}T${startTime.format("HH:mm:ss")}`,
         end: `${date.format("YYYY-MM-DD")}T${endTime.format("HH:mm:ss")}`,
@@ -226,16 +226,15 @@ const EventModal: React.FC<EventModalProps> = ({
 
   useEffect(() => {
     if (placeId) {
-      console.log("create1", eventStart)
       let [dateTime, offset] = eventStart.split(" ");
       let date = parse(dateTime, "yyyy-MM-dd'T'HH:mm:ss", new Date());
 
-      let [endDateTime, eOffset] = eventStart.split(" ");
+      let [endDateTime, eOffset] = eventEnd.split(" ");
       let endDate = parse(endDateTime, "yyyy-MM-dd'T'HH:mm:ss", new Date());
 
       setDate(dayjs(date));
       setStartTime(dayjs(date));
-      setEndTime(dayjs(date));
+      setEndTime(dayjs(endDate));
       setModalVisible(true);
     }
   }, [placeId]);

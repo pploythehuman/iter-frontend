@@ -80,7 +80,9 @@ const deleteAgenda = async (
   itineraryId: string | number | undefined
 ) => {
   const deletedAgenda = await getAgenda(agendaId);
+  console.log("deletedAgenda", deletedAgenda);
   const response = await apiDelete(`itinerary/agendas/${agendaId}/`);
+  console.log(`itinerary/agendas/${agendaId}/`, response);
 
   // update itinerary date
   const itinerary = await getItinerary(itineraryId);

@@ -140,7 +140,7 @@ export default function CalendarComponent({
   }
 
   function handleEvents(events: any) {
-    console.log("full calendar events", events);
+    // console.log("full calendar events", events);
   }
 
   function handleUpdateEvent(updatedEvent: IEvent) {
