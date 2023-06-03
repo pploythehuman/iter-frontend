@@ -7,7 +7,7 @@ import { format, parse } from "date-fns";
 import { UserAddOutlined, PlusOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Tabs, Spin, Result } from "antd";
 import queryString from 'query-string';
-
+import axios from 'axios';
 
 import Navbar from "../components/Navbar";
 import ItineraryTimeline from "../components/timeline/ItineraryTimeline";
@@ -82,6 +82,37 @@ const Itinerary = () => {
     }
   };
 
+  const getTravelTime = async (start: number[] | undefined, end: number[] | undefined) => {
+    const apiKey = '5b3ce3597851110001cf6248c1b7cbc7755a4faf83483631ec47ea21';
+    const profile = 'driving-car'; 
+  
+    const url = `https://api.openrouteservice.org/v2/directions/${profile}?api_key=${apiKey}&start=${start?.join(',')}&end=${end?.join(',')}`;
+    // const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248c1b7cbc7755a4faf83483631ec47ea21&start=8.681495,49.41461&end=8.687872,49.420318`;
+    // const url2 = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248c1b7cbc7755a4faf83483631ec47ea21&start=13.740378,100.602109&end=8.687872,49.420318`;
+  
+    const instance = axios.create({
+      baseURL: url,
+      headers: {
+        'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+        'Content-Type': 'application/json'
+      }
+    });
+  
+    const response = await instance.get(url);
+  
+    const data = response.data;
+    if (!data.features || data.features.length === 0) {
+      throw new Error('No features in response');
+    }
+    const travelTimeInSeconds = data.features[0].properties.summary.duration;  // duration of the route in seconds
+    const travelDistanceInMeters = data.features[0].properties.summary.distance;  // distance of the route in meters
+  
+    return {
+        travelTimeInSeconds,
+        travelDistanceInMeters,
+    };
+  };
+
   const fetchItineraryData = async () => {
     try {
       setIsLoading(true);
@@ -98,6 +129,21 @@ const Itinerary = () => {
         return aDate.getTime() - bDate.getTime();
       });        
       console.log("sorted itinerary", sortedItinerary);
+      // for (let i = 0; i < sortedItinerary.length - 2; i++) {
+      //   const start = sortedItinerary[i].location;
+      //   const end = sortedItinerary[i + 1].location;
+    
+      //   const { travelTimeInSeconds, travelDistanceInMeters } = await getTravelTime(start, end);
+    
+      //   // update the travel_time field for the current place with the calculated travel time to the next place
+      //   sortedItinerary[i].travel_time = {
+      //       to_next_place: {
+      //           time: travelTimeInSeconds,
+      //           distance: travelDistanceInMeters,
+      //       },
+      //   };
+      // }   
+      console.log("with travel time itinerary", sortedItinerary); 
       setItineraryData(sortedItinerary);
       setIsLoading(false);
 

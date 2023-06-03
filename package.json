@@ -2,6 +2,7 @@
   "name": "iter-frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://dev.se.kmitl.ac.th:1337",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@fullcalendar/core": "^6.1.7",

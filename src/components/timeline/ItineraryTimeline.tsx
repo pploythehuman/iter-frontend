@@ -85,12 +85,12 @@ const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
               onDelete={onDelete}
               travel_time={placeItem.travel_time}
             />
-           {Object.values(placeItem.travel_time)[0] !== undefined && 
+           {/* {Object.values(placeItem.travel_time)[0] !== undefined && 
     <p className="itinerary-travel-time">
         <CarOutlined style={{ marginRight: '5px' }}/>
         {"Travel time: " + Object.values(placeItem.travel_time)[0]}
     </p>
-}
+} */}
 
           </div>
         );
