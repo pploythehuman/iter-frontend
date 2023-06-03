@@ -82,34 +82,35 @@ const Itinerary = () => {
     }
   };
 
+  const fetchItineraryData = async () => {
+    try {
+      setIsLoading(true);
+      const itinerary = await getItinerary(itineraryId);
+      setDestination(itinerary?.destination);
+      setCoTravellers([...itinerary?.co_travelers]);
+      setDates([itinerary?.start_date, itinerary?.end_date]);
+
+      const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
+      console.log("unsorted itinerary", detailedItinerary);
+      const sortedItinerary = [...detailedItinerary].sort((a, b) => {
+        const aDate = new Date(`${a.date}T${a.arrival_time}`);
+        const bDate = new Date(`${b.date}T${b.arrival_time}`);
+        return aDate.getTime() - bDate.getTime();
+      });        
+      console.log("sorted itinerary", sortedItinerary);
+      setItineraryData(sortedItinerary);
+      setIsLoading(false);
+
+    } catch (error) {
+      console.log("error", error);
+      setError(error);
+      setIsLoading(false)
+    }
+  };
+
   console.log("itineraryData", itineraryData);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const itinerary = await getItinerary(itineraryId);
-        setDestination(itinerary?.destination);
-        setCoTravellers([...itinerary?.co_travelers]);
-        setDates([itinerary?.start_date, itinerary?.end_date]);
-
-        const detailedItinerary: IAgenda[] = [...await getDetailedItinerary(itineraryId)];
-        console.log("unsorted itinerary", detailedItinerary);
-        const sortedItinerary = [...detailedItinerary].sort((a, b) => {
-          const aDate = new Date(`${a.date}T${a.arrival_time}`);
-          const bDate = new Date(`${b.date}T${b.arrival_time}`);
-          return aDate.getTime() - bDate.getTime();
-        });        
-        console.log("sorted itinerary", sortedItinerary);
-        setItineraryData(sortedItinerary);
-        setIsLoading(false);
-
-      } catch (error) {
-        console.log("error", error);
-        setError(error);
-        setIsLoading(false)
-      }
-    };
-    fetchData();
+    fetchItineraryData();
     setIsLoading(false);
   }, [itineraryId, activeTab]);
 
@@ -121,7 +122,6 @@ const Itinerary = () => {
   }, [placeId, itineraryData]);
 
   useEffect(() => {
-    
   }, [activeTab])
 
   const buttonClick = async () => {
@@ -131,6 +131,10 @@ const Itinerary = () => {
     // const result = await createAndAddAgenda("P03014001", {}, "2023-07-19", "9:00", "16:00", 54);
     // console.log("resul", result);
   }
+
+  const updateItineraryData = async () => {
+    fetchItineraryData();
+  };
 
   return (
     <div className="itinerary-page">
@@ -225,6 +229,7 @@ const Itinerary = () => {
                     itineraryId={itineraryId}
                     onEdit={editAgenda}
                     onDelete={deleteAgenda}
+                    updateItineraryData={updateItineraryData}
                   />
                 }
                 {activeTab === "map" && itineraryData && itineraryId && (

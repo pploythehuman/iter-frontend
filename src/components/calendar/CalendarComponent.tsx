@@ -17,6 +17,7 @@ interface CalendarComponentProps {
   itineraryId: string | undefined;
   onEdit: Function;
   onDelete: Function;
+  updateItineraryData: Function;
 }
 
 export default function CalendarComponent({
@@ -25,6 +26,7 @@ export default function CalendarComponent({
   itineraryId,
   onEdit,
   onDelete,
+  updateItineraryData
 }: CalendarComponentProps) {
   const calendarRef = useRef<any>(null);
 
@@ -320,6 +322,7 @@ export default function CalendarComponent({
           editEvent={editEvent}
           deleteEvent={deleteEvent}
           selectedPlaceId={selectedPlaceId}
+          updateItineraryData={updateItineraryData}
         />
         <FullCalendar
           ref={calendarRef}

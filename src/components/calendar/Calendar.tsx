@@ -9,9 +9,10 @@ interface MyCalendarProps {
   itineraryId: string | undefined;
   onEdit: Function;
   onDelete: Function;
+  updateItineraryData: Function;
 }
 
-const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate, itineraryId, onEdit, onDelete }) => {
+const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate, itineraryId, onEdit, onDelete, updateItineraryData }) => {
   const calendarRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -22,6 +23,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ itineraryData, selectedDate, it
         itineraryId={itineraryId}
         onEdit={onEdit}
         onDelete={onDelete}
+        updateItineraryData={updateItineraryData}
       />
     </div>
   );

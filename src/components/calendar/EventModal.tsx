@@ -36,6 +36,7 @@ interface EventModalProps {
   editEvent: Function;
   deleteEvent: Function;
   selectedPlaceId: string | null;
+  updateItineraryData: Function;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -47,6 +48,7 @@ const EventModal: React.FC<EventModalProps> = ({
   editEvent,
   deleteEvent,
   selectedPlaceId,
+  updateItineraryData
 }) => {
   console.log("event item", eventItem)
   const navigate = useNavigate();
@@ -151,6 +153,7 @@ const EventModal: React.FC<EventModalProps> = ({
       };
 
       addEvent(newEvent);
+      updateItineraryData();
       setModalVisible(false);
       clearInputs();
       clearQueryParameters();
