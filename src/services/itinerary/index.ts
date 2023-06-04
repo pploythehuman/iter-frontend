@@ -107,7 +107,7 @@ const createRecommendedItinerary = async (
       end_date: end_date,
       co_travelers: coTravellers,
       start_time: '08:00:00',
-      end_time: '19:00:00',
+      end_time: '20:00:00',
       tripType: tripType,
       targetTypes: targetTypes,
       preferredActivities: preferredActivities,
