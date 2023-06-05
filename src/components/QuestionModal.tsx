@@ -60,21 +60,18 @@ const QuestionModal: React.FC<ModalProps> = ({ visible, onCancel, onSubmit }) =>
   const handleOptionSelect = (option: string) => {
     let selected = selectedOptions[currentStep] ? [...selectedOptions[currentStep]] : [];
     const currentQuestion = questionData[currentStep];
-    // console.log("curretn question", currentQuestion);
   
     if (currentQuestion !== undefined) {
       const allowSelect = currentQuestion.allowSelect !== null ? currentQuestion.allowSelect : Infinity;
       const optionKey = option;
-      // console.log("optionKey", optionKey);
+
       if (selected.includes(option)) {
         const index = selected.indexOf(option);
-        // console.log("index", index);
+
         selected.splice(index, 1);
         
         if(currentQuestion.subQuestions) {
-          // console.log("currentQuestion.subQuestions", currentQuestion.subQuestions)
           const optionSubQuestions = currentQuestion.subQuestions[optionKey] || [];
-          // console.log("optionSubQuestions", optionSubQuestions);
           setQuestionData(prevState => prevState.filter(q => !optionSubQuestions.includes(q)));
         }
       } else if (allowSelect === 1) {
