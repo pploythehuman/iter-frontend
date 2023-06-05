@@ -33,7 +33,6 @@ const PlaceCard: React.FC<any> = ({
     messageApi.success('Booked Successfully');
   };
 
-  console.log("place_id", id);
   const renderDescription = () => {
     if (description?.length > 150) {
       return showMore
