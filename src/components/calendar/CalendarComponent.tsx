@@ -356,3 +356,30 @@ export default function CalendarComponent({
     </>
   );
 }
+
+export function checkEventOverlap(events: any[]) {
+  let newEvents = [...events];
+    newEvents = newEvents.map((event) => ({
+      ...event,
+      color: "var(--color-secondary-light)",
+    }));
+
+    for (let i = 0; i < newEvents.length; i++) {
+      for (let j = 0; j < newEvents.length; j++) {
+        if (i !== j) {
+          const startI = new Date(newEvents[i].start);
+          const endI = new Date(newEvents[i].end);
+          const startJ = new Date(newEvents[j].start);
+          const endJ = new Date(newEvents[j].end);
+          if (
+            (startI < endJ && endI > startJ) ||
+            (startJ < endI && endJ > startI)
+          ) {
+            newEvents[i] = { ...newEvents[i], color: "#ff4d4f" };
+            newEvents[j] = { ...newEvents[j], color: "#ff4d4f" };
+          }
+        }
+      }
+    }
+    return newEvents;
+}
